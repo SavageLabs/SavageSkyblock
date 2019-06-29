@@ -1,0 +1,15 @@
+name: SkyBlockPlus
+author: Trent
+version: 1.5
+api-version: 1.13
+main: me.trent.Main
+depend:
+  - WorldEdit
+  - Vault
+commands:
+  is:
+    aliases:
+      - island
+  sbp:
+    aliases:
+      - skyblockplus

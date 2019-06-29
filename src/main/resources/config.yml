@@ -1,0 +1,298 @@
+# SkyBlockPlus by: Trent & Steve @ Aysteria Development #
+
+#          SkyBlockPlus Commands & Permissions List          #
+#
+#   https://www.spigotmc.org/resources/skyblockplus.65309/   #
+
+messages:
+  is-help:
+    - '   &b&lSkyBlockPlus  &bHelp'
+    - ''
+    - '&a  /is &8-&7 opens the Island Panel'
+    - '&a  /is help &8-&7 displays this message.'
+    - '&a  /is spawn &8-&7 teleports you to spawn.'
+    - ''
+
+  reload: '&aReloaded the config.yml and the prices.yml files!'
+
+  ##########################################################################################
+  #This is the island message section
+  createIsland: '&aYou have created an island!'
+  alreadyIsland: '&aYou are already in an Island!'
+  notYours: '&aCannot break/place in this island!'
+  deleteIsland: '&cYou have deleted your island!'
+  deletedIsland: '&aThe Island you were on has been deleted!'
+  notInIsland: '&cYou are not a member of an Island!'
+  notOwner: '&cYou are not the owner of the island!'
+  cancelDeleting: '&aYou have canceled your deleting!'
+  setPermission: '&aYou have updated &9%role%&a''s permission for &9%type%&a to &d%outcome%&a!'
+  ##########################################################################################
+
+  ##########################################################################################
+  #This is the teleporting/spawn message section
+  teleportSpawn: '&aTeleported to Spawn!'
+  teleportHome: '&aTeleported to your island''s home!'
+  setSpawn: '&aYou have set the Island Spawn to this location!'
+  setHome: '&aYou have set your island''s home to this location!'
+  noSpawn: '&cThe Administrators have not set an Island Spawn yet!'
+  ##########################################################################################
+
+  ##########################################################################################
+  #This is the permission message section
+  noPermission: '&cYou do not have permissions for this command!'
+  noPermissionBiome: '&cYou do not have permissions for this biome!'
+  invalidBiome: '&cThis biome is invalid!'
+  noIslandPermissionCreate: '&aYou do not have permission to create this type of island!'
+  noPermissionKick: '&aYou do not have permission to kick this player!'
+  noPlayer: '&aPlease run the command with a player argument!'
+  noIsland: '&aPlease run the command with an island argument!'
+  forceDelete: '&aYour island has been forcefully deleted!'
+  forceDeleteDeleter: '&aYou have forcefully deleted this player''s island!!'
+
+  noPermissionIsland: '&aYou do not have permissions to use this command in the Island!'
+  setBiome: '&aYou have set the biome!'
+  ##########################################################################################
+
+  ##########################################################################################
+  #This is the island roles section
+  promotedOwner: '&aYou have promoted &b%player%&a to Owner of the island!'
+  promotedOwnerMe: '&aYou have been promoted to the Owner of the island!'
+  promotedOfficer: '&aYou have promoted &b%player%&a to an Officer of the island!'
+  promotedOfficerMe: '&aYou have been promoted to an Officer in the island!'
+  promotedNoPlayer: '&aThis player is not in your island!'
+  cannotPromoteDemoteSelf: '&aYou cannot promote/demote yourself!'
+  demotedNo: '&aYou cannot demote this player any lower than they already are!'
+  demotedNoPlayer: '&aThis player is not in your island!'
+  demotedMember: '&aYou have demoted &b%player%&a back to a member!'
+  demotedMemberMe: '&aYou have been demoted back to a member!'
+  demoted: '&aYou have demoted &b%player%&a from being an Officer in the island!'
+  demotedMe: '&aYou have been demoted from Officer in the island!'
+  ##########################################################################################
+
+  ##########################################################################################
+  #This is the island kick messages section
+  kicked: '&aYou have kicked &b%player% &afrom the island!'
+  kickedMe: '&aYou have been kicked from the island!'
+  kickedYourself: '&aYou cannot kick yourself!'
+  kickedNoPlayer: '&aThis player is not in your island!'
+  ##########################################################################################
+
+  ##########################################################################################
+  #This is the island invite message section
+  alreadyInvited: '&aThis player is already invited to your island!'
+  invited: '&aYou have been invited to &b%player%&a''s island!'
+  invitedMe: '&aYou have invited &b%player%&ato the island!'
+  inviteExpire: '&bThe invite to &a%player%&b''s island has expired!'
+  inviterNotInIsland: '&aThis player is not in an Island!'
+  notInvited: '&aYou are not invited into this Island!'
+  ##########################################################################################
+
+  ##########################################################################################
+  #This is the island join message section
+  joined: '&aYou have joined this island!'
+  couldNotJoin: '&aSomething happened and you could not join this Island! Report to the Administrators! (ERROR CODE: 1)'
+  left: '&aYou have left this island!'
+  ##########################################################################################
+
+settings:
+  min-x: 0 # the starting point on the x axis to start plotting islands
+  min-z: 0 # the starting point on the z axis to start plotting islands
+  max-x: 1000 # the ending point on the x axis to stop plotting islands
+  max-z: 1000 # the ending point on the z axis to stop plotting islands
+
+  default-biome: 'PLAINS'
+  inviteExpireTime: 10 # seconds
+  protectionRadius: 50 # default for the protectionRadius of islands, is measured in blocks, bypass with permission: 'sbp.protection.100' to give 100 blocks protection
+  max-resets: 2 # this is the default amount of resets each player can have, bypass with permission: 'sbp.resets.5' will give a total of 5 resets
+  max-hoppers: 10 #this is the default amount of hoppers on each island, bypass by adding permission: 'sbp.hoppers.100', will give the player 100 max hoppers
+  max-spawners: 10 # same as above, permission: 'sbp.spawners.100' would make the max spawner count to 100 for that player's island
+  max-members: 5 # same as above, permission: 'sbp.members.50' would make the max members to 50 for that player's island
+
+  island-spawn: 'not-set' # set using /is setspawn
+
+protection:
+  name: '&bIsland Protection'
+  rows: 1
+  break:
+    slot: 1
+    item-id: 'barrier'
+    name: '&a&lBreaking Protection'
+    lore:
+      - '&aChoose who can break on this island!'
+      - '&7Click to open'
+  place:
+    slot: 4
+    item-id: 'emerald_block'
+    name: '&b&lPlacing Protection'
+    lore:
+      - '&aChoose who can place on this island!'
+      - '&7Click to open'
+  interact:
+    slot: 9
+    item-id: 'ender_pearl'
+    name: '&9&lInteraction Protection'
+    lore:
+      - '&aChoose who can interact on this island!'
+      - '&7Click to open'
+
+protection-permissions:
+  name: '&bIS Permissions: &c&l%type%' #type either, break,place,interact
+  rows: 1
+  members-item:
+    slot: 1
+    item-id: 'iron_ingot'
+    name: '&7Member''s permissions'
+    lore:
+      - '&aChoose what members of the island can do!'
+      - '&7Click to open'
+  officers-item:
+    slot: 8
+    item-id: 'gold_ingot'
+    name: '&9Officer''s permissions'
+    lore:
+      - '&aChoose what officers of the island can do!'
+      - '&7Click to open'
+  permissions:
+    name: '&bRole: &l%role%&b &7| &cPermission: &c&l%type%'
+    rows: 1
+    allow-item:
+      slot: 1
+      item-id: 'emerald_block'
+      name: '&a&lAllow'
+      lore:
+        - '&aAllow them permission: &l%type%&a on the island!'
+        - '&7Click to allow this permission.'
+    deny-item:
+      slot: 8
+      item-id: 'redstone_block'
+      name: '&c&lDeny'
+      lore:
+        - '&cDeny them permission: &l%type%&c on the island!'
+        - '&7Click to deny this permission.'
+
+
+delete-island:
+  name: '&cDelete your current island?'
+  rows: 1
+  confirm:
+    slot: 1
+    item-id: 'emerald_block'
+    item-name: '&aYes, delete my island!'
+    item-lore:
+      - '&aClicking this will delete your island!'
+  deny:
+    slot: 9
+    item-id: 'barrier'
+    item-name: '&cNo, don''t  delete my island!'
+    item-lore:
+      - '&cClicking this will cancel deleting your island!'
+
+islands:
+  name: '&cPick an Island!'
+  rows: 1
+  items:
+    1:
+      slot: 1
+      item-id: 'stone' #stone
+      item-name: '&7Default Island'
+      amount: 1
+      item-lore:
+        - '&7This is the default island type.'
+      schematic: 'default.schem'
+      permission: 'island.1'
+
+panel:
+  name: '&bIsland Panel'
+  rows: 3 # 3 rows, 9*3 = 27 slots
+  items:
+    1:
+      slot: 1
+      item-id: 'stone' #stone
+      item-name: '&aCreate Island'
+      amount: 1
+      item-lore:
+        - ''
+        - ''
+        - ''
+      commands:
+        - 'is create'
+    2:
+      slot: 2
+      item-id: 'grass'
+      item-name: '&bIsland Upgrades'
+      amount: 1
+      item-lore:
+        - '&7You can buy purchase upgrades for the island!'
+        - ''
+        - ''
+      commands:
+        - 'is upgrade'
+    3:
+      slot: 9
+      item-id: 'barrier'
+      item-name: '&cIsland Deletion'
+      amount: 1
+      item-lore:
+        - '&7You can delete your current island.'
+        - ''
+        - ''
+      commands:
+        - 'is delete'
+    4:
+      slot: 8
+      item-id: 'ender_pearl'
+      item-name: '&eIsland Home'
+      amount: 1
+      item-lore:
+        - '&7You can teleport to your island.'
+        - ''
+        - ''
+      commands:
+        - 'is home'
+    5:
+      slot: 7
+      item-id: 'map'
+      item-name: '&aIsland Biome'
+      amount: 1
+      item-lore:
+        - '&7You can set the island''s biome.'
+        - ''
+        - ''
+      commands:
+        - 'is biome'
+    6:
+      slot: 8
+      item-id: 'compass'
+      item-name: '&aIsland Permissions'
+      amount: 1
+      item-lore:
+        - '&7You can set the island''s permissions'
+        - ''
+        - ''
+      commands:
+        - 'is perms'
+
+biomes: # this is a list of all possible biomes: https://minecraft.gamepedia.com/Biome/ID
+  name: '&cPick a Biome!'
+  rows: 1
+  items:
+    1:
+      slot: 1
+      item-id: 'log' #stone
+      item-name: '&aForest Biome'
+      amount: 1
+      item-lore:
+        - '&7This is the default island biome.'
+      permission: 'island.forest'
+      commands:
+        - 'is setbiome FOREST'
+    2:
+      slot: 2
+      item-id: 'grass' #stone
+      item-name: '&2Plains Biome'
+      amount: 1
+      item-lore:
+        - '&7This is the Plains biome.'
+      permission: 'island.plains'
+      commands:
+        - 'is setbiome PLAINS'
