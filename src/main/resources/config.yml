@@ -1,12 +1,12 @@
-# SaberSkyBlock by: Trent & Steve @ Aysteria Development #
+# Saber SkyBlock by: Trent & Steve @ Aysteria Development #
 
-#          SaberSkyBlock Commands & Permissions List          #
+#          Saber SkyBlock Commands & Permissions List          #
 #
-#   https://www.spigotmc.org/resources/SaberSkyBlock.65309/   #
+#   https://www.spigotmc.org/resources/skyblockplus.65309/   #
 
 messages:
   is-help:
-    - '   &b&lSaberSkyBlock  &bHelp'
+    - '   &b&lSaber SkyBlock  &bHelp'
     - ''
     - '&a  /is &8-&7 opens the Island Panel'
     - '&a  /is help &8-&7 displays this message.'
@@ -136,7 +136,7 @@ protection:
       - '&7Click to open'
 
 protection-permissions:
-  name: '&bIS Permissions: &c&l%type%' #type either, break,place,interact
+  name: '&bPerms: &c&l%type%' #type either, break,place,interact
   rows: 1
   members-item:
     slot: 1
@@ -153,7 +153,7 @@ protection-permissions:
       - '&aChoose what officers of the island can do!'
       - '&7Click to open'
   permissions:
-    name: '&bRole: &l%role%&b &7| &cPermission: &c&l%type%'
+    name: '&bRole:%role%&b&7 &cPerm:%type%'
     rows: 1
     allow-item:
       slot: 1
@@ -198,7 +198,7 @@ islands:
       amount: 1
       item-lore:
         - '&7This is the default island type.'
-      schematic: 'default.schem'
+      schematic: 'default.schematic'
       permission: 'island.1'
 
 panel:

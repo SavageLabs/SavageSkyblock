@@ -2,42 +2,20 @@ package me.saber.skyblock.filemanager;
 
 import me.saber.skyblock.Main;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 
 public class FileManager {
 
-    public File dataFile = new File(Main.getInstance().getDataFolder()+"/data.yml");
-    public FileConfiguration d = YamlConfiguration.loadConfiguration(dataFile);
+    public CustomFile dataFileCustom = new CustomFile(new File(Main.getInstance().getDataFolder()+"/data.yml"));
 
-    public void save(){
-        try{
-            d.save(dataFile);
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
-    public void load(){
-        d = YamlConfiguration.loadConfiguration(dataFile);
-    }
+    public File dataFile = dataFileCustom.getFile();
+    public FileConfiguration d = dataFileCustom.getFileConfig();
 
     public void setup(){
-        if (!dataFile.exists()){
 
-            try{
-                dataFile.createNewFile();
+        dataFileCustom.setup(false);
 
-                d.set("data", new ArrayList<>());
-
-                save();
-
-            }catch(IOException e){
-                e.printStackTrace();
-            }
-        }
     }
 
 }

@@ -91,5 +91,9 @@ public class IslandUtils {
         return false;
     }
 
+    public void calculateIslandLevel(Island island){
+
+    }
+
 
 }

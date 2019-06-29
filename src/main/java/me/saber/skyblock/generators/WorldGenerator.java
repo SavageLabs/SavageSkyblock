@@ -25,12 +25,12 @@ public class WorldGenerator {
 
         if (WorldGuardPersistence.isOldWorldEdit()){
             //is 6. run different methods
-            Bukkit.broadcastMessage("OLD 6.1");
+           // Bukkit.broadcastMessage("OLD 6.1");
             WorldEdit6.paste(file, location);
         }
 
         if (WorldGuardPersistence.isNewWorldEdit()){
-            Bukkit.broadcastMessage("NEW 7.1");
+           // Bukkit.broadcastMessage("NEW 7.1");
             WorldEdit7.paste(file, location);
         }
     }
