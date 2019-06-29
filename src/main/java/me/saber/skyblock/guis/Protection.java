@@ -1,6 +1,6 @@
 package me.saber.skyblock.guis;
 
-import me.saber.skyblock.Island.Island;
+import me.saber.skyblock.island.Island;
 import me.saber.skyblock.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

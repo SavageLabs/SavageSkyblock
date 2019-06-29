@@ -1,7 +1,7 @@
 package me.saber.skyblock;
 
-import me.saber.skyblock.Island.Island;
-import me.saber.skyblock.Island.IslandUtils;
+import me.saber.skyblock.island.Island;
+import me.saber.skyblock.island.IslandUtils;
 import me.saber.skyblock.commands.IslandCommands;
 import me.saber.skyblock.commands.SBPCommands;
 import me.saber.skyblock.events.IslandEvents;

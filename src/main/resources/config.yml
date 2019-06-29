@@ -8,7 +8,7 @@ messages:
   is-help:
     - '   &b&lSaber SkyBlock  &bHelp'
     - ''
-    - '&a  /is &8-&7 opens the Island Panel'
+    - '&a  /is &8-&7 opens the island Panel'
     - '&a  /is help &8-&7 displays this message.'
     - '&a  /is spawn &8-&7 teleports you to spawn.'
     - ''
@@ -18,11 +18,11 @@ messages:
   ##########################################################################################
   #This is the island message section
   createIsland: '&aYou have created an island!'
-  alreadyIsland: '&aYou are already in an Island!'
+  alreadyIsland: '&aYou are already in an island!'
   notYours: '&aCannot break/place in this island!'
   deleteIsland: '&cYou have deleted your island!'
-  deletedIsland: '&aThe Island you were on has been deleted!'
-  notInIsland: '&cYou are not a member of an Island!'
+  deletedIsland: '&aThe island you were on has been deleted!'
+  notInIsland: '&cYou are not a member of an island!'
   notOwner: '&cYou are not the owner of the island!'
   cancelDeleting: '&aYou have canceled your deleting!'
   setPermission: '&aYou have updated &9%role%&a''s permission for &9%type%&a to &d%outcome%&a!'
@@ -32,9 +32,9 @@ messages:
   #This is the teleporting/spawn message section
   teleportSpawn: '&aTeleported to Spawn!'
   teleportHome: '&aTeleported to your island''s home!'
-  setSpawn: '&aYou have set the Island Spawn to this location!'
+  setSpawn: '&aYou have set the island Spawn to this location!'
   setHome: '&aYou have set your island''s home to this location!'
-  noSpawn: '&cThe Administrators have not set an Island Spawn yet!'
+  noSpawn: '&cThe Administrators have not set an island Spawn yet!'
   ##########################################################################################
 
   ##########################################################################################
@@ -49,7 +49,7 @@ messages:
   forceDelete: '&aYour island has been forcefully deleted!'
   forceDeleteDeleter: '&aYou have forcefully deleted this player''s island!!'
 
-  noPermissionIsland: '&aYou do not have permissions to use this command in the Island!'
+  noPermissionIsland: '&aYou do not have permissions to use this command in the island!'
   setBiome: '&aYou have set the biome!'
   ##########################################################################################
 
@@ -83,14 +83,14 @@ messages:
   invited: '&aYou have been invited to &b%player%&a''s island!'
   invitedMe: '&aYou have invited &b%player%&ato the island!'
   inviteExpire: '&bThe invite to &a%player%&b''s island has expired!'
-  inviterNotInIsland: '&aThis player is not in an Island!'
-  notInvited: '&aYou are not invited into this Island!'
+  inviterNotInIsland: '&aThis player is not in an island!'
+  notInvited: '&aYou are not invited into this island!'
   ##########################################################################################
 
   ##########################################################################################
   #This is the island join message section
   joined: '&aYou have joined this island!'
-  couldNotJoin: '&aSomething happened and you could not join this Island! Report to the Administrators! (ERROR CODE: 1)'
+  couldNotJoin: '&aSomething happened and you could not join this island! Report to the Administrators! (ERROR CODE: 1)'
   left: '&aYou have left this island!'
   ##########################################################################################
 
@@ -188,13 +188,13 @@ delete-island:
       - '&cClicking this will cancel deleting your island!'
 
 islands:
-  name: '&cPick an Island!'
+  name: '&cPick an island!'
   rows: 1
   items:
     1:
       slot: 1
       item-id: 'stone' #stone
-      item-name: '&7Default Island'
+      item-name: '&7Default island'
       amount: 1
       item-lore:
         - '&7This is the default island type.'
@@ -208,7 +208,7 @@ panel:
     1:
       slot: 1
       item-id: 'stone' #stone
-      item-name: '&aCreate Island'
+      item-name: '&aCreate island'
       amount: 1
       item-lore:
         - ''

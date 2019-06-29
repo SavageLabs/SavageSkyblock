@@ -1,7 +1,7 @@
 package me.saber.skyblock.commands;
 
-import me.saber.skyblock.Island.Island;
-import me.saber.skyblock.Island.events.IslandTeleportEvent;
+import me.saber.skyblock.island.Island;
+import me.saber.skyblock.island.events.IslandTeleportEvent;
 import me.saber.skyblock.Main;
 import me.saber.skyblock.guis.*;
 import org.bukkit.Bukkit;

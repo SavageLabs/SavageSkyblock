@@ -1,2 +1,9 @@
 # Level Worth File #
-# in this file you can change how much each file does to the Island's Level #
+# in this file you can change how much each file does to the island's Level #
+
+worth:
+  blocks:
+    'DIAMOND_BLOCK': 1.0 # diamond_block is worth 1 LEVEL point...
+  spawners:
+    'ZOMBIE': 50.0
+    'PIG': 25.0

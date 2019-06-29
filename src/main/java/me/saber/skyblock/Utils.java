@@ -1,6 +1,6 @@
 package me.saber.skyblock;
 
-import me.saber.skyblock.Island.Island;
+import me.saber.skyblock.island.Island;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -170,7 +170,7 @@ public class Utils {
         //onDisable
         //layout: ownerUUID;member1,member2;x,y,z;protectionRadius
         Main.getInstance().getFileManager().d.set("data", new ArrayList<>());
-        Main.getInstance().getFileManager().save();
+        Main.getInstance().getFileManager().dataFileCustom.saveFile();
 
         List<String> islandData = new ArrayList<>();
 
@@ -210,7 +210,7 @@ public class Utils {
         }
 
         Main.getInstance().getFileManager().d.set("data", islandData);
-        Main.getInstance().getFileManager().save();
+        Main.getInstance().getFileManager().dataFileCustom.saveFile();
     }
 
 

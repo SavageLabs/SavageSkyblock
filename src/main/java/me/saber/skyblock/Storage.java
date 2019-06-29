@@ -1,6 +1,6 @@
 package me.saber.skyblock;
 
-import me.saber.skyblock.Island.Island;
+import me.saber.skyblock.island.Island;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

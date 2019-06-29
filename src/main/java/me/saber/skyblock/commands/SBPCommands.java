@@ -1,6 +1,6 @@
 package me.saber.skyblock.commands;
 
-import me.saber.skyblock.Island.Island;
+import me.saber.skyblock.island.Island;
 import me.saber.skyblock.Main;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -20,7 +20,7 @@ public class SBPCommands implements CommandExecutor {
                     if (args.length == 1) {
                         if (args[0].equalsIgnoreCase("reload")){
                             Main.getInstance().reloadConfig();
-                            Main.getInstance().getFileManager().load();
+                            Main.getInstance().getFileManager().dataFileCustom.reloadFile();
                             p.sendMessage(Main.getInstance().getUtils().getMessage("reload"));
                         }
                         if (args[0].equalsIgnoreCase("setspawn")) {
