@@ -1,4 +1,4 @@
-package me.saber.skyblock.worldGenerators;
+package me.saber.skyblock.generators;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

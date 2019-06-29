@@ -1,8 +1,8 @@
 package me.saber.skyblock;
 
 import me.saber.skyblock.Island.IslandUtils;
-import me.saber.skyblock.fileManager.FileManager;
-import me.saber.skyblock.worldGenerators.WorldGenerator;
+import me.saber.skyblock.filemanager.FileManager;
+import me.saber.skyblock.generators.WorldGenerator;
 
 public class SaberSkyBlockAPI {
 

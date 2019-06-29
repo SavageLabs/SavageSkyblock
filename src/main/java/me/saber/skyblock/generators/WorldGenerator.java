@@ -1,6 +1,6 @@
-package me.saber.skyblock.worldGenerators;
+package me.saber.skyblock.generators;
 
-import me.saber.skyblock.WG.WG;
+import me.saber.skyblock.worldguard.WorldGuardPersistence;
 import me.saber.skyblock.Main;
 import me.trent.worldedit6.WorldEdit6;
 import me.trent.worldedit7.WorldEdit7;
@@ -23,13 +23,13 @@ public class WorldGenerator {
 
         //todo make a checker for WorldEdit and WorldGuard 6.1 and 7.0
 
-        if (WG.isOldWorldEdit()){
+        if (WorldGuardPersistence.isOldWorldEdit()){
             //is 6. run different methods
             Bukkit.broadcastMessage("OLD 6.1");
             WorldEdit6.paste(file, location);
         }
 
-        if (WG.isNewWorldEdit()){
+        if (WorldGuardPersistence.isNewWorldEdit()){
             Bukkit.broadcastMessage("NEW 7.1");
             WorldEdit7.paste(file, location);
         }

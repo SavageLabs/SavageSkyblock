@@ -1,11 +1,11 @@
-package me.saber.skyblock.WG;
+package me.saber.skyblock.worldguard;
 
 import com.sk89q.worldedit.WorldEdit;
 
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import org.bukkit.Bukkit;
 
-public class WG {
+public class WorldGuardPersistence {
 
     public static WorldEdit getWorldEdit(){
         return WorldEdit.getInstance();

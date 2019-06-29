@@ -1,4 +1,4 @@
-package me.saber.skyblock.fileManager;
+package me.saber.skyblock.filemanager;
 
 import me.saber.skyblock.Main;
 import org.bukkit.configuration.file.FileConfiguration;
