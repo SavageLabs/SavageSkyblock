@@ -1,12 +1,12 @@
-# SkyBlockPlus by: Trent & Steve @ Aysteria Development #
+# SaberSkyBlock by: Trent & Steve @ Aysteria Development #
 
-#          SkyBlockPlus Commands & Permissions List          #
+#          SaberSkyBlock Commands & Permissions List          #
 #
-#   https://www.spigotmc.org/resources/skyblockplus.65309/   #
+#   https://www.spigotmc.org/resources/SaberSkyBlock.65309/   #
 
 messages:
   is-help:
-    - '   &b&lSkyBlockPlus  &bHelp'
+    - '   &b&lSaberSkyBlock  &bHelp'
     - ''
     - '&a  /is &8-&7 opens the Island Panel'
     - '&a  /is help &8-&7 displays this message.'

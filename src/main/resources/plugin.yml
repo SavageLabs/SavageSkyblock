@@ -1,8 +1,10 @@
-name: SkyBlockPlus
-author: Trent
+name: SaberSkyBlock
+authors:
+  - Driftay
+  - Trent
 version: 1.5
 api-version: 1.13
-main: me.trent.Main
+main: me.saber.skyblock.Main
 depend:
   - WorldEdit
   - Vault
