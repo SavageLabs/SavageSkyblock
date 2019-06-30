@@ -1,9 +1,7 @@
 package me.saber.skyblock.worldguard;
 
 import com.sk89q.worldedit.WorldEdit;
-
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import org.bukkit.Bukkit;
 
 public class WorldGuardPersistence {
 
@@ -14,19 +12,13 @@ public class WorldGuardPersistence {
         return WorldGuardPlugin.inst();
     }
 
+    public static String worldEditVersion;
+
     public static boolean isOldWorldEdit(){
-        String version = Bukkit.getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();
-        if (version.contains("6.")){
-            return true;
-        }
-        return false;
+        return worldEditVersion.contains("6.");
     }
     public static boolean isNewWorldEdit(){
-        String version = Bukkit.getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();
-        if (version.contains("7.")){
-            return true;
-        }
-        return false;
+        return worldEditVersion.contains("7.");
     }
 
 

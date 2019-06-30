@@ -6,10 +6,12 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.material.MaterialData;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 public class Utils {
 
@@ -333,9 +335,4 @@ public class Utils {
         return location.getWorld().getName()+","+location.getX()+","+location.getY()+","+location.getZ();
     }
 
-    public Material convertMaterial(int ID, int Data) {
-        for (Material i : EnumSet.allOf(Material.class))
-            if (i.getId() == ID) return Bukkit.getUnsafe().fromLegacy(new MaterialData(i, (byte)Data));
-        return null;
-    }
 }

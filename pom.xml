@@ -10,12 +10,6 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot-api</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
             <groupId>worldedit6</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>6</version>

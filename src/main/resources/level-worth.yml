@@ -4,6 +4,7 @@
 worth:
   blocks:
     'DIAMOND_BLOCK': 1.0 # diamond_block is worth 1 LEVEL point...
+    'CHEST': 0.5
   spawners:
     'ZOMBIE': 50.0
     'PIG': 25.0

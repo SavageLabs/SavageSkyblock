@@ -95,6 +95,8 @@ messages:
   ##########################################################################################
 
 settings:
+  island-level-calculation-time: 10 # in seconds
+
   min-x: 0 # the starting point on the x axis to start plotting islands
   min-z: 0 # the starting point on the z axis to start plotting islands
   max-x: 1000 # the ending point on the x axis to stop plotting islands

@@ -10,15 +10,47 @@ import org.bukkit.craftbukkit.v1_11_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class NMSHandler_v1_11_R1 extends NMSHandler {
 
+    @Override
+    public String getVersion() {
+        return "1_11_R1";
+    }
 
     public void calculate(Chunk chunk, Island island) {
         int level = 0;
 
         final CraftChunk craftChunk = (CraftChunk) chunk;
+
+        List<String> typeAlready = new ArrayList<>();
+
+        final int minX = chunk.getX() << 4;
+        final int minZ = chunk.getZ() << 4;
+        final int maxX = minX | 15;
+        final int maxY = chunk.getWorld().getMaxHeight();
+        final int maxZ = minZ | 15;
+
+        for (int x = minX; x <= maxX; ++x) {
+            for (int y = 0; y <= maxY; ++y) {
+                for (int z = minZ; z <= maxZ; ++z) {
+                    org.bukkit.block.Block block = chunk.getBlock(x, y, z);
+                    if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
+                        String type = block.getType().name().toUpperCase();
+                        double value = Main.getInstance().getIslandUtils().getBlockLevelWorth(type, false);
+                        if (value > 0) {
+                            island.addLevel(value);
+                            if (!typeAlready.contains(type)) {
+                                typeAlready.add(type);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
         for (final Map.Entry<BlockPosition, TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
             if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {

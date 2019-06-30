@@ -1,10 +1,9 @@
 package me.saber.skyblock.island;
 
-import me.saber.skyblock.island.events.*;
 import me.saber.skyblock.Main;
 import me.saber.skyblock.Storage;
+import me.saber.skyblock.island.events.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Biome;
@@ -72,6 +71,21 @@ public class Island {
         }
     }
 
+    public List<FakeChunk> getFakeChunks() {
+        List<FakeChunk> fakeChunks = new ArrayList<>();
+        Location center = getLocation();
+        int radius = getProtectionRadius();
+
+        new SpiralTask(center, (radius / 16)) {
+            @Override
+            public boolean work() {
+                fakeChunks.add(this.currentChunk());
+                return true;
+            }
+        }.run();
+        return fakeChunks;
+    }
+
     public double getLevel() {
         return level;
     }
@@ -87,10 +101,9 @@ public class Island {
     public boolean isBlockInIsland(int x, int z) {
         Location loc1 = getLocation().add(getProtectionRadius(), 0, getProtectionRadius());
         Location loc2 = getLocation().subtract(getProtectionRadius(), 0, getProtectionRadius());
-        if (x <= loc1.getX() && x >= loc2.getX()) {
-            if (z <= loc1.getX() && z >= loc2.getX()) {
-                return true;
-            }
+
+        if (loc1.getBlockX() >= x && loc1.getZ() >= z) {
+            return x >= loc2.getBlockX() && z >= loc2.getBlockZ();
         }
         return false;
     }
@@ -336,7 +349,7 @@ public class Island {
 
     public void setBiome(Biome biome){
         this.biome = biome;
-        List<Chunk> chunks = Main.getInstance().getUtils().getChunks(getLocation(), getProtectionRadius() / 16);
+        //List<Chunk> chunks = Main.getInstance().getUtils().getChunks(getLocation(), getProtectionRadius() / 16);
         //for (Chunk c : chunks){
         //   // chunk.getWorld().setBiome(chunk.getX() * 16, chunk.getZ() * 16, biome);
         //    Location center = new Location(c.getWorld(), c.getX() << 4, 64, c.getZ() << 4).add(7, 0, 7);
@@ -355,10 +368,7 @@ public class Island {
     }
 
     public boolean isInvited(UUID uuid){
-        if (this.invites.contains(uuid)){
-            return true;
-        }
-        return false;
+        return this.invites.contains(uuid);
     }
 
     public void removeInvite(UUID uuid){
