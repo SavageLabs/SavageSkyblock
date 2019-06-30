@@ -3,32 +3,31 @@ package me.saber.skyblock.nms;
 import me.saber.skyblock.Main;
 import me.saber.skyblock.Storage;
 import me.saber.skyblock.island.Island;
-import net.minecraft.server.v1_10_R1.*;
+import net.minecraft.server.v1_12_R1.*;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
-import org.bukkit.craftbukkit.v1_10_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_12_R1.CraftChunk;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public class NMSHandler_v1_10_R1 extends NMSHandler {
+public class NMSHandler_v1_12_R1 extends NMSHandler {
 
-
-    public void calculate(Chunk chunk, Island island) {
+    @Override
+    public void calculate(org.bukkit.Chunk chunk, Island island) {
         int level = 0;
 
         final CraftChunk craftChunk = (CraftChunk) chunk;
 
-        for (final Map.Entry<BlockPosition, TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
+        for (final Map.Entry<net.minecraft.server.v1_12_R1.BlockPosition, net.minecraft.server.v1_12_R1.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
             if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {
-                final TileEntity tileEntity = entry.getValue();
+                final net.minecraft.server.v1_12_R1.TileEntity tileEntity = entry.getValue();
 
                 String blockType;
                 boolean isSpawner = false;
 
-                if (tileEntity instanceof TileEntityMobSpawner) {
-                    blockType = ((TileEntityMobSpawner) tileEntity).getSpawner().getMobName().toUpperCase();
+                if (tileEntity instanceof net.minecraft.server.v1_12_R1.TileEntityMobSpawner) {
+                    blockType = ((net.minecraft.server.v1_12_R1.TileEntityMobSpawner) tileEntity).getSpawner().getMobName().toString().toUpperCase();
                     isSpawner = true;
                 } else {
                     blockType = tileEntity.getBlock().getName().toUpperCase();
@@ -36,7 +35,7 @@ public class NMSHandler_v1_10_R1 extends NMSHandler {
 
                 double value = Main.getInstance().getIslandUtils().getBlockLevelWorth(blockType, isSpawner);
 
-                if (value > 0){
+                if (value > 0) {
                     //got a value, add to the island's level
                     island.addLevel(value);
                 }
@@ -46,10 +45,10 @@ public class NMSHandler_v1_10_R1 extends NMSHandler {
 
     @Override
     public void removeBlockSuperFast(int X, int Y, int Z, boolean applyPhysics) {
-        net.minecraft.server.v1_10_R1.World w = ((org.bukkit.craftbukkit.v1_10_R1.CraftWorld) Storage.getSkyBlockWorld()).getHandle();
-        net.minecraft.server.v1_10_R1.Chunk chunk = w.getChunkAt(X >> 4, Z >> 4);
-        net.minecraft.server.v1_10_R1.BlockPosition bp = new net.minecraft.server.v1_10_R1.BlockPosition(X, Y, Z);
-        net.minecraft.server.v1_10_R1.IBlockData ibd = net.minecraft.server.v1_10_R1.Block.getByCombinedId(0);
+        net.minecraft.server.v1_12_R1.World w = ((org.bukkit.craftbukkit.v1_12_R1.CraftWorld) Storage.getSkyBlockWorld()).getHandle();
+        net.minecraft.server.v1_12_R1.Chunk chunk = w.getChunkAt(X >> 4, Z >> 4);
+        net.minecraft.server.v1_12_R1.BlockPosition bp = new net.minecraft.server.v1_12_R1.BlockPosition(X, Y, Z);
+        net.minecraft.server.v1_12_R1.IBlockData ibd = net.minecraft.server.v1_12_R1.Block.getByCombinedId(0);
 
         w.setTypeAndData(bp, ibd, applyPhysics ? 3 : 2);
         chunk.a(bp, ibd);
@@ -73,5 +72,4 @@ public class NMSHandler_v1_10_R1 extends NMSHandler {
                 IChatBaseComponent.ChatSerializer.a(ChatColor.translateAlternateColorCodes('&', "{\"text\":\"" + text + " \"}")), in, stay, out);
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
     }
-
 }

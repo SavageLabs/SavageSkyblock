@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 
 public abstract class NMSHandler {
 
-    public abstract int calculate(Chunk chunk, Island island);
+    public abstract void calculate(Chunk chunk, Island island);
 
     public abstract void removeBlockSuperFast(int X, int Y, int Z, boolean applyPhysics);
 

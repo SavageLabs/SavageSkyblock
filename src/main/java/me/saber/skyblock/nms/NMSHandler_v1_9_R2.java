@@ -3,20 +3,19 @@ package me.saber.skyblock.nms;
 import me.saber.skyblock.Main;
 import me.saber.skyblock.Storage;
 import me.saber.skyblock.island.Island;
-import net.minecraft.server.v1_10_R1.*;
+import net.minecraft.server.v1_9_R2.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
-import org.bukkit.craftbukkit.v1_10_R1.CraftChunk;
-import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_9_R2.CraftChunk;
+import org.bukkit.craftbukkit.v1_9_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
 
-public class NMSHandler_v1_10_R1 extends NMSHandler {
+public class NMSHandler_v1_9_R2 extends NMSHandler {
 
 
     public void calculate(Chunk chunk, Island island) {
-        int level = 0;
 
         final CraftChunk craftChunk = (CraftChunk) chunk;
 
@@ -36,7 +35,7 @@ public class NMSHandler_v1_10_R1 extends NMSHandler {
 
                 double value = Main.getInstance().getIslandUtils().getBlockLevelWorth(blockType, isSpawner);
 
-                if (value > 0){
+                if (value > 0) {
                     //got a value, add to the island's level
                     island.addLevel(value);
                 }
@@ -46,13 +45,7 @@ public class NMSHandler_v1_10_R1 extends NMSHandler {
 
     @Override
     public void removeBlockSuperFast(int X, int Y, int Z, boolean applyPhysics) {
-        net.minecraft.server.v1_10_R1.World w = ((org.bukkit.craftbukkit.v1_10_R1.CraftWorld) Storage.getSkyBlockWorld()).getHandle();
-        net.minecraft.server.v1_10_R1.Chunk chunk = w.getChunkAt(X >> 4, Z >> 4);
-        net.minecraft.server.v1_10_R1.BlockPosition bp = new net.minecraft.server.v1_10_R1.BlockPosition(X, Y, Z);
-        net.minecraft.server.v1_10_R1.IBlockData ibd = net.minecraft.server.v1_10_R1.Block.getByCombinedId(0);
-
-        w.setTypeAndData(bp, ibd, applyPhysics ? 3 : 2);
-        chunk.a(bp, ibd);
+        Storage.getSkyBlockWorld().getBlockAt(X, Y, Z).setType(org.bukkit.Material.AIR, applyPhysics);
     }
 
     @Override
@@ -73,5 +66,4 @@ public class NMSHandler_v1_10_R1 extends NMSHandler {
                 IChatBaseComponent.ChatSerializer.a(ChatColor.translateAlternateColorCodes('&', "{\"text\":\"" + text + " \"}")), in, stay, out);
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
     }
-
 }
