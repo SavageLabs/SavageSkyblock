@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,11 +44,9 @@ public class Island {
     private boolean permissionOfficerBreak = true;
     private boolean permissionOfficerInteract = true;
 
-    private int hopperCount = 0;
-    private int spawnerCount = 0;
-
     private double level = 0;
 
+    private HashMap<String, Integer> blocks = new HashMap<>();
 
     public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> memberList, List<UUID> officerList, int protectionRadius){
         this.centerX = x;
@@ -69,6 +68,35 @@ public class Island {
             Main.getInstance().getWorldGenerator().pasteSchem(getLocation(), schematic);
             Bukkit.getPlayer(getOwnerUUID()).teleport(getLocation());
         }
+    }
+
+    public void clearBlockCount() {
+        this.blocks.clear();
+    }
+
+    public void addBlockCount(String blockTypeName) {
+        if (getBlocks().get(blockTypeName.toUpperCase()) != null || getBlockCount(blockTypeName.toUpperCase()) > 0) {
+            int i = getBlockCount(blockTypeName.toUpperCase());
+            this.blocks.remove(blockTypeName.toUpperCase());
+            this.blocks.put(blockTypeName.toUpperCase(), Math.addExact(i, 1));
+        } else {
+            this.blocks.put(blockTypeName.toUpperCase(), 1);
+        }
+    }
+
+    public int getBlockCount(String blockTypeName) {
+        if (getBlocks().get(blockTypeName.toUpperCase()) != null) {
+            return getBlocks().get(blockTypeName.toUpperCase());
+        }
+        return 0;
+    }
+
+    public HashMap<String, Integer> getBlocks() {
+        return blocks;
+    }
+
+    public List<UUID> getInvites() {
+        return invites;
     }
 
     public List<FakeChunk> getFakeChunks() {
@@ -483,19 +511,44 @@ public class Island {
         this.permissionOfficerPlace = permissionOfficerPlace;
     }
 
-    public int getHopperCount() {
-        return hopperCount;
+    public void setCenterX(double centerX) {
+        this.centerX = centerX;
     }
 
-    public int getSpawnerCount() {
-        return spawnerCount;
+    public void setCenterY(double centerY) {
+        this.centerY = centerY;
     }
 
-    public void setHopperCount(int hopperCount) {
-        this.hopperCount = hopperCount;
+    public void setCenterZ(double centerZ) {
+        this.centerZ = centerZ;
     }
 
-    public void setSpawnerCount(int spawnerCount) {
-        this.spawnerCount = spawnerCount;
+    public void setIslandInstance(Island islandInstance) {
+        this.islandInstance = islandInstance;
     }
+
+    public boolean isPermissionMemberBreak() {
+        return permissionMemberBreak;
+    }
+
+    public boolean isPermissionMemberInteract() {
+        return permissionMemberInteract;
+    }
+
+    public boolean isPermissionMemberPlace() {
+        return permissionMemberPlace;
+    }
+
+    public boolean isPermissionOfficerBreak() {
+        return permissionOfficerBreak;
+    }
+
+    public boolean isPermissionOfficerPlace() {
+        return permissionOfficerPlace;
+    }
+
+    public boolean isPermissionOfficerInteract() {
+        return permissionOfficerInteract;
+    }
+
 }

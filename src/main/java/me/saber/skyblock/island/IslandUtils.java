@@ -7,9 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class IslandUtils {
 
@@ -91,71 +89,107 @@ public class IslandUtils {
         }
     }
 
+    public void calculateIslandTop() {
+        Storage.islandTopMap.clear();
+
+        HashMap<Integer, Island> map = new HashMap<>();
+
+        List<Double> levels = new ArrayList<>();
+
+        for (Island island : Storage.islandList) {
+            double level = island.getLevel();
+            levels.add(level);
+        }
+
+        Collections.sort(levels);
+        int current = 1; // 1 being top island
+        for (double d : levels) {
+            //Bukkit.broadcastMessage("level: "+d);
+            //Bukkit.broadcastMessage("current: "+current);
+            for (Island island : Storage.islandList) {
+                if (d == island.getLevel()) {
+                    map.put(current, island);
+                    current++;
+                }
+            }
+        }
+
+        Storage.islandTopMap = map;
+
+    }
+
+
+
+
     public void calculateIslandLevel(Island island){
         String ver = Bukkit.getServer().getClass().getPackage().getName().replace("org.bukkit.craftbukkit.v", "");
 
         List<FakeChunk> fakeChunkList = island.getFakeChunks();
 
-        if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_8_r3.getVersion())) {
-            island.setLevel(0);
-            for (FakeChunk fakeChunk : fakeChunkList) {
-                Main.getInstance().getReflectionManager().nmsHandler_v1_8_r3.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
-            }
-        }
-        if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_8_r2.getVersion())) {
-            island.setLevel(0);
-            for (FakeChunk fakeChunk : fakeChunkList) {
-                Main.getInstance().getReflectionManager().nmsHandler_v1_8_r2.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
-            }
-        }
-        if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_9_r1.getVersion())) {
-            island.setLevel(0);
-            for (FakeChunk fakeChunk : fakeChunkList) {
-                Main.getInstance().getReflectionManager().nmsHandler_v1_9_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
-            }
-        }
-        if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_9_r2.getVersion())) {
-            island.setLevel(0);
-            for (FakeChunk fakeChunk : fakeChunkList) {
-                Main.getInstance().getReflectionManager().nmsHandler_v1_9_r2.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
-            }
-        }
-        if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_10_r1.getVersion())) {
-            island.setLevel(0);
-            for (FakeChunk fakeChunk : fakeChunkList) {
-                Main.getInstance().getReflectionManager().nmsHandler_v1_10_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
-            }
-        }
-        if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_11_r1.getVersion())) {
-            island.setLevel(0);
-            for (FakeChunk fakeChunk : fakeChunkList) {
-                Main.getInstance().getReflectionManager().nmsHandler_v1_11_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
-            }
-        }
-        if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_12_r1.getVersion())) {
-            island.setLevel(0);
-            for (FakeChunk fakeChunk : fakeChunkList) {
-                Main.getInstance().getReflectionManager().nmsHandler_v1_12_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
-            }
-        }
-        if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_13_r1.getVersion())) {
-            island.setLevel(0);
-            for (FakeChunk fakeChunk : fakeChunkList) {
-                Main.getInstance().getReflectionManager().nmsHandler_v1_13_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
-            }
-        }
-        if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_13_r2.getVersion())) {
-            island.setLevel(0);
-            for (FakeChunk fakeChunk : fakeChunkList) {
-                Main.getInstance().getReflectionManager().nmsHandler_v1_13_r2.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
-            }
-        }
-        if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_14_r1.getVersion())) {
-            island.setLevel(0);
-            for (FakeChunk fakeChunk : fakeChunkList) {
-                Main.getInstance().getReflectionManager().nmsHandler_v1_14_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
-            }
-        }
+        island.clearBlockCount();
 
+        try {
+            if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_8_r3.getVersion())) {
+                island.setLevel(0);
+                for (FakeChunk fakeChunk : fakeChunkList) {
+                    Main.getInstance().getReflectionManager().nmsHandler_v1_8_r3.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
+                }
+            }
+            if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_8_r2.getVersion())) {
+                island.setLevel(0);
+                for (FakeChunk fakeChunk : fakeChunkList) {
+                    Main.getInstance().getReflectionManager().nmsHandler_v1_8_r2.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
+                }
+            }
+            if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_9_r1.getVersion())) {
+                island.setLevel(0);
+                for (FakeChunk fakeChunk : fakeChunkList) {
+                    Main.getInstance().getReflectionManager().nmsHandler_v1_9_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
+                }
+            }
+            if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_9_r2.getVersion())) {
+                island.setLevel(0);
+                for (FakeChunk fakeChunk : fakeChunkList) {
+                    Main.getInstance().getReflectionManager().nmsHandler_v1_9_r2.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
+                }
+            }
+            if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_10_r1.getVersion())) {
+                island.setLevel(0);
+                for (FakeChunk fakeChunk : fakeChunkList) {
+                    Main.getInstance().getReflectionManager().nmsHandler_v1_10_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
+                }
+            }
+            if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_11_r1.getVersion())) {
+                island.setLevel(0);
+                for (FakeChunk fakeChunk : fakeChunkList) {
+                    Main.getInstance().getReflectionManager().nmsHandler_v1_11_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
+                }
+            }
+            if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_12_r1.getVersion())) {
+                island.setLevel(0);
+                for (FakeChunk fakeChunk : fakeChunkList) {
+                    Main.getInstance().getReflectionManager().nmsHandler_v1_12_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
+                }
+            }
+            if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_13_r1.getVersion())) {
+                island.setLevel(0);
+                for (FakeChunk fakeChunk : fakeChunkList) {
+                    Main.getInstance().getReflectionManager().nmsHandler_v1_13_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
+                }
+            }
+            if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_13_r2.getVersion())) {
+                island.setLevel(0);
+                for (FakeChunk fakeChunk : fakeChunkList) {
+                    Main.getInstance().getReflectionManager().nmsHandler_v1_13_r2.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
+                }
+            }
+            if (ver.equalsIgnoreCase(Main.getInstance().getReflectionManager().nmsHandler_v1_14_r1.getVersion())) {
+                island.setLevel(0);
+                for (FakeChunk fakeChunk : fakeChunkList) {
+                    Main.getInstance().getReflectionManager().nmsHandler_v1_14_r1.calculate(island.getLocation().getWorld().getChunkAt(fakeChunk.getX(), fakeChunk.getZ()), island);
+                }
+            }
+        } catch (NullPointerException e) {
+        }
     }
 }

@@ -298,3 +298,18 @@ biomes: # this is a list of all possible biomes: https://minecraft.gamepedia.com
       permission: 'island.plains'
       commands:
         - 'is setbiome PLAINS'
+
+istop:
+  name: '&a&lISLAND Top'
+  rows: 3
+  items:
+    1:
+      slot: 5
+      item-id: 'log'
+      item-name: '&c&l#1. &7- &a(&l%top-1%&a)'
+      item-lore:
+        - '&aIsland Owner: &l%owner%'
+        - '&aWorth: $&l%worth%'
+        - '&aValuable Blocks: &l%value-blocks%'
+        - '&aValuable Spawners: &l%value-spawners%'
+        - ''

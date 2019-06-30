@@ -6,9 +6,12 @@ import org.bukkit.Location;
 import org.bukkit.World;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class Storage {
+
+    public static HashMap<Integer, Island> islandTopMap = new HashMap<>();
 
     public static List<Island> islandList = new ArrayList<>();
     private static World skyBlockWorld = Bukkit.getWorld("skyBlock");

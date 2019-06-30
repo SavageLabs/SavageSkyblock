@@ -11,8 +11,6 @@ import org.bukkit.craftbukkit.v1_9_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_9_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class NMSHandler_v1_9_R1 extends NMSHandler {
@@ -26,8 +24,6 @@ public class NMSHandler_v1_9_R1 extends NMSHandler {
 
         final CraftChunk craftChunk = (CraftChunk) chunk;
 
-        List<String> typeAlready = new ArrayList<>();
-
         final int minX = chunk.getX() << 4;
         final int minZ = chunk.getZ() << 4;
         final int maxX = minX | 15;
@@ -39,12 +35,12 @@ public class NMSHandler_v1_9_R1 extends NMSHandler {
                 for (int z = minZ; z <= maxZ; ++z) {
                     Block block = chunk.getBlock(x, y, z);
                     if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
-                        String type = block.getType().name().toUpperCase();
-                        double value = Main.getInstance().getIslandUtils().getBlockLevelWorth(type, false);
-                        if (value > 0) {
-                            island.addLevel(value);
-                            if (!typeAlready.contains(type)) {
-                                typeAlready.add(type);
+                        if (!Main.getInstance().getReflectionManager().tileEntities.contains(block.getType())) {
+                            String type = block.getType().name().toUpperCase();
+                            double value = Main.getInstance().getIslandUtils().getBlockLevelWorth(type, false);
+                            if (value > 0) {
+                                island.addLevel(value);
+                                island.addBlockCount(type);
                             }
                         }
                     }
@@ -69,8 +65,8 @@ public class NMSHandler_v1_9_R1 extends NMSHandler {
                 double value = Main.getInstance().getIslandUtils().getBlockLevelWorth(blockType, isSpawner);
 
                 if (value > 0) {
-                    //got a value, add to the island's level
                     island.addLevel(value);
+                    island.addBlockCount(blockType);
                 }
             }
         }
