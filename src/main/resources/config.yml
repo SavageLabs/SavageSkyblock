@@ -6,11 +6,19 @@
 
 messages:
   is-help:
-    - '   &b&lSaber SkyBlock  &bHelp'
+    - '   &b&lSavage SkyBlock  &bHelp'
     - ''
     - '&a  /is &8-&7 opens the island Panel'
     - '&a  /is help &8-&7 displays this message.'
     - '&a  /is spawn &8-&7 teleports you to spawn.'
+    - ''
+
+  isa-help: # is admin help
+    - '   &b&lSavage SkyBlock &bAdmin Help'
+    - ''
+    - '&a  /isa &8-&7 displays these messages'
+    - '&a  /isa setspawn &8-&7 sets the SkyBlock spawn.'
+    - ''
     - ''
 
   reload: '&aReloaded the config.yml and the prices.yml files!'
@@ -26,6 +34,7 @@ messages:
   notOwner: '&cYou are not the owner of the island!'
   cancelDeleting: '&aYou have canceled your deleting!'
   setPermission: '&aYou have updated &9%role%&a''s permission for &9%type%&a to &d%outcome%&a!'
+  noIsland: '&aYou do not have an Island!'
   ##########################################################################################
 
   ##########################################################################################
@@ -45,7 +54,7 @@ messages:
   noIslandPermissionCreate: '&aYou do not have permission to create this type of island!'
   noPermissionKick: '&aYou do not have permission to kick this player!'
   noPlayer: '&aPlease run the command with a player argument!'
-  noIsland: '&aPlease run the command with an island argument!'
+  noIslandArg: '&aPlease run the command with an island argument!'
   forceDelete: '&aYour island has been forcefully deleted!'
   forceDeleteDeleter: '&aYou have forcefully deleted this player''s island!!'
 
@@ -94,8 +103,33 @@ messages:
   left: '&aYou have left this island!'
   ##########################################################################################
 
+  ##########################################################################################
+  # IS-TOP sections
+  is-worth:
+    - '&b&m----------------------'
+    - ''
+    - '&aIsland: &b{island-name}'
+    - '&aIsland Level: &b{island-level}'
+    - '&aIsland Top: &b{island-top}'
+    - ''
+    - '&b&m----------------------'
+  starting-calculations:
+    - '&7&m----------------------'
+    - '&aStarting IS-TOP Calculations...'
+    - '&7&m----------------------'
+  completed-calculations:
+    - '&7&m----------------------'
+    - '&aCompleted IS-TOP Calculations!'
+    - '&7&m----------------------'
+  ##########################################################################################
+
 settings:
-  island-level-calculation-time: 10 # in seconds
+  island-level-calculation-time: 60 # in seconds
+  island-level-placeholder: '%is-level%' # can use this in chat formatting
+
+
+  use-chat-format: true
+  chat-format: '&a{is-level} &7[&9{is-top}&7] &r{old-format}'
 
   min-x: 0 # the starting point on the x axis to start plotting islands
   min-z: 0 # the starting point on the z axis to start plotting islands
