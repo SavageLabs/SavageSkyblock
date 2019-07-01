@@ -1,0 +1,210 @@
+# Saber SkyBlock GUI.yml #
+# this file contains all the configuration for the in-game GUI's #
+
+
+protection:
+  name: '&bIsland Protection'
+  rows: 1
+  break:
+    slot: 1
+    item-id: 'barrier'
+    name: '&a&lBreaking Protection'
+    lore:
+      - '&aChoose who can break on this island!'
+      - '&7Click to open'
+  place:
+    slot: 4
+    item-id: 'emerald_block'
+    name: '&b&lPlacing Protection'
+    lore:
+      - '&aChoose who can place on this island!'
+      - '&7Click to open'
+  interact:
+    slot: 9
+    item-id: 'ender_pearl'
+    name: '&9&lInteraction Protection'
+    lore:
+      - '&aChoose who can interact on this island!'
+      - '&7Click to open'
+
+protection-permissions:
+  name: '&bPerms: &c&l%type%' #type either, break,place,interact
+  rows: 1
+  members-item:
+    slot: 1
+    item-id: 'iron_ingot'
+    name: '&7Member''s permissions'
+    lore:
+      - '&aChoose what members of the island can do!'
+      - '&7Click to open'
+  officers-item:
+    slot: 8
+    item-id: 'gold_ingot'
+    name: '&9Officer''s permissions'
+    lore:
+      - '&aChoose what officers of the island can do!'
+      - '&7Click to open'
+  permissions:
+    name: '&bRole:%role%&b&7 &cPerm:%type%'
+    rows: 1
+    allow-item:
+      slot: 1
+      item-id: 'emerald_block'
+      name: '&a&lAllow'
+      lore:
+        - '&aAllow them permission: &l%type%&a on the island!'
+        - '&7Click to allow this permission.'
+    deny-item:
+      slot: 8
+      item-id: 'redstone_block'
+      name: '&c&lDeny'
+      lore:
+        - '&cDeny them permission: &l%type%&c on the island!'
+        - '&7Click to deny this permission.'
+
+
+delete-island:
+  name: '&cDelete your current island?'
+  rows: 1
+  confirm:
+    slot: 1
+    item-id: 'emerald_block'
+    item-name: '&aYes, delete my island!'
+    item-lore:
+      - '&aClicking this will delete your island!'
+  deny:
+    slot: 9
+    item-id: 'barrier'
+    item-name: '&cNo, don''t  delete my island!'
+    item-lore:
+      - '&cClicking this will cancel deleting your island!'
+
+islands:
+  name: '&cPick an island!'
+  rows: 1
+  items:
+    1:
+      slot: 1
+      item-id: 'stone' #stone
+      item-name: '&7Default island'
+      amount: 1
+      item-lore:
+        - '&7This is the default island type.'
+      schematic: 'default.schematic'
+      permission: 'island.1'
+
+panel:
+  name: '&bIsland Panel'
+  rows: 3 # 3 rows, 9*3 = 27 slots
+  items:
+    1:
+      slot: 1
+      item-id: 'stone' #stone
+      item-name: '&aCreate island'
+      amount: 1
+      item-lore:
+        - ''
+        - ''
+        - ''
+      commands:
+        - 'is create'
+    2:
+      slot: 2
+      item-id: 'grass'
+      item-name: '&bIsland Upgrades'
+      amount: 1
+      item-lore:
+        - '&7You can buy purchase upgrades for the island!'
+        - ''
+        - ''
+      commands:
+        - 'is upgrade'
+    3:
+      slot: 9
+      item-id: 'barrier'
+      item-name: '&cIsland Deletion'
+      amount: 1
+      item-lore:
+        - '&7You can delete your current island.'
+        - ''
+        - ''
+      commands:
+        - 'is delete'
+    4:
+      slot: 8
+      item-id: 'ender_pearl'
+      item-name: '&eIsland Home'
+      amount: 1
+      item-lore:
+        - '&7You can teleport to your island.'
+        - ''
+        - ''
+      commands:
+        - 'is home'
+    5:
+      slot: 7
+      item-id: 'map'
+      item-name: '&aIsland Biome'
+      amount: 1
+      item-lore:
+        - '&7You can set the island''s biome.'
+        - ''
+        - ''
+      commands:
+        - 'is biome'
+    6:
+      slot: 8
+      item-id: 'compass'
+      item-name: '&aIsland Permissions'
+      amount: 1
+      item-lore:
+        - '&7You can set the island''s permissions'
+        - ''
+        - ''
+      commands:
+        - 'is perms'
+
+biomes: # this is a list of all possible biomes: https://minecraft.gamepedia.com/Biome/ID
+  name: '&cPick a Biome!'
+  rows: 1
+  items:
+    1:
+      slot: 1
+      item-id: 'log' #stone
+      item-name: '&aForest Biome'
+      amount: 1
+      item-lore:
+        - '&7This is the default island biome.'
+      permission: 'island.forest'
+      commands:
+        - 'is setbiome FOREST'
+    2:
+      slot: 2
+      item-id: 'grass' #stone
+      item-name: '&2Plains Biome'
+      amount: 1
+      item-lore:
+        - '&7This is the Plains biome.'
+      permission: 'island.plains'
+      commands:
+        - 'is setbiome PLAINS'
+
+istop:
+  name: '&a&lISLAND TOP'
+  rows: 3
+  items:
+    1:
+      slot: 5
+      item-id: 'diamond_block'
+      item-data: 0
+      item-name: '&c&l#1. &7- &a(&l%top-1%&a)'
+      item-lore:
+        - '&aIsland Owner: &l%owner%'
+        - '&aWorth: $&l%worth%'
+        - '&aValuable Blocks: &l%value-blocks%'
+        - '&aValuable Spawners: &l%value-spawners%'
+        - ''
+        - '&a&lOfficers:'
+        - '&7- &a%officers%'
+        - '&b&lMembers:'
+        - '&7- &b%members%'

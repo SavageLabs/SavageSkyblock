@@ -72,7 +72,6 @@ public class Main extends JavaPlugin {
         saveDefaultConfig();
 
         getFileManager().setup();
-        getUtils().setup();
 
         getCommand("is").setExecutor(new IslandCommands());
         getCommand("sbp").setExecutor(new SBPCommands());
@@ -83,6 +82,7 @@ public class Main extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new DeleteIsland(), this);
         Bukkit.getPluginManager().registerEvents(new Biomes(), this);
         Bukkit.getPluginManager().registerEvents(new Protection(), this);
+        Bukkit.getPluginManager().registerEvents(new ISTop(), this);
 
         getUtils().loadIslands();
 

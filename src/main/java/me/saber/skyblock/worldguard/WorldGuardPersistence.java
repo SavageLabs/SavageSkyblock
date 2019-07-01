@@ -20,6 +20,4 @@ public class WorldGuardPersistence {
     public static boolean isNewWorldEdit(){
         return worldEditVersion.contains("7.");
     }
-
-
 }

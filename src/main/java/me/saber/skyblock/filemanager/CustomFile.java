@@ -28,11 +28,10 @@ public class CustomFile {
                 }
             }
         }
-
-        reloadFile();
+        loadFile();
     }
 
-    public void reloadFile(){
+    public void loadFile() {
         this.fileConfig = YamlConfiguration.loadConfiguration(file);
     }
 

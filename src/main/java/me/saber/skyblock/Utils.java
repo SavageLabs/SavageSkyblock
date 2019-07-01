@@ -7,7 +7,6 @@ import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -93,7 +92,7 @@ public class Utils {
     public void loadIslands(){
         //onEnable
         //layout: ownerUUID;member1,member2;x;y;z;protectionRadius
-        List<String> data = Main.getInstance().getFileManager().d.getStringList("data");
+        List<String> data = Main.getInstance().getFileManager().dataFileCustom.getFileConfig().getStringList("data");
 
         for (String islandData : data){
             String[] l = islandData.split(";");
@@ -120,6 +119,8 @@ public class Utils {
             boolean officerPlace = Boolean.parseBoolean(l[12]);
             boolean officerBreak = Boolean.parseBoolean(l[13]);
             boolean officerInteract = Boolean.parseBoolean(l[14]);
+
+            String name = l[15];
 
             Location homeLocation = null;
             if (deserializeLocation(home) != null && !home.equalsIgnoreCase("")){
@@ -148,7 +149,11 @@ public class Utils {
                 }
             }
 
-            Island island = new Island("", x, y, z, ownerUUID, memberList, officerList, protectionRadius);
+            Island island = new Island("", x, y, z, ownerUUID, memberList, officerList, protectionRadius, name);
+
+            if (name.equalsIgnoreCase("")) {
+                island.setName(getNameFromUUID(ownerUUID));
+            }
 
             island.setPermissionMemberPlace(memberPlace);
             island.setPermissionMemberBreak(memberBreak);
@@ -169,10 +174,10 @@ public class Utils {
     }
 
     public void saveIslands(){
-        //onDisable
         //layout: ownerUUID;member1,member2;x,y,z;protectionRadius
-        Main.getInstance().getFileManager().d.set("data", new ArrayList<>());
-        Main.getInstance().getFileManager().dataFileCustom.saveFile();
+
+        // Main.getInstance().getFileManager().d.set("data", new ArrayList<>());
+        // Main.getInstance().getFileManager().dataFileCustom.saveFile();
 
         List<String> islandData = new ArrayList<>();
 
@@ -186,6 +191,7 @@ public class Utils {
             int protectionRadius = island.getProtectionRadius();
             String home = serializeLocation(island.getHome());
             String biome = island.getBiome().name();
+            String name = island.getName();
 
             String memberList = "";
             String officerList = "";
@@ -208,22 +214,11 @@ public class Utils {
                     }
                 }
             }
-            islandData.add(owner.toString()+";"+memberList+";"+officerList+";"+x+";"+y+";"+z+";"+protectionRadius+";"+home+";"+biome+";"+island.canMemberPlace()+";"+island.canMemberBreak()+";"+island.canMemberInteract()+";"+island.canOfficerPlace()+";"+island.canOfficerBreak()+";"+island.canOfficerInteract());
+            islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + x + ";" + y + ";" + z + ";" + protectionRadius + ";" + home + ";" + biome + ";" + island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" + island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name);
         }
 
-        Main.getInstance().getFileManager().d.set("data", islandData);
+        Main.getInstance().getFileManager().dataFileCustom.getFileConfig().set("data", islandData);
         Main.getInstance().getFileManager().dataFileCustom.saveFile();
-    }
-
-
-    public void setup(){
-        if (!new File(Main.getInstance().getDataFolder()+"/Schematics").exists()){
-            new File(Main.getInstance().getDataFolder()+"/Schematics").mkdir();
-        }
-        if (Bukkit.getWorld("skyBlock") == null){
-            //generate it
-            Main.getInstance().getWorldGenerator().generateWorld("skyBlock");
-        }
     }
 
     public double getBalance(UUID uuid){
@@ -320,6 +315,22 @@ public class Utils {
             }
         }
         return chunks;
+    }
+
+    public String getNameFromUUID(UUID uuid) {
+        if (Bukkit.getPlayer(uuid) != null) {
+            return Bukkit.getPlayer(uuid).getName();
+        } else {
+            return Bukkit.getOfflinePlayer(uuid).getName();
+        }
+    }
+
+    public int getIntegersFromString(String string) {
+        return Integer.parseInt(string.replaceAll("[\\D]", ""));
+    }
+
+    public String stripIntegersFromString(String string) {
+        return string.replaceAll("[0-9]", "");
     }
 
     public Location deserializeLocation(String locationString){

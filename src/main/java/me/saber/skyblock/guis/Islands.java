@@ -16,15 +16,15 @@ import java.util.List;
 public class Islands implements Listener {
 
     public static void openIslands(Player p) {
-        Inventory i = Bukkit.createInventory(null, Main.getInstance().getConfig().getInt("islands.rows") * 9, Main.getInstance().getUtils().color(Main.getInstance().getConfig().getString("islands.name")));
+        Inventory i = Bukkit.createInventory(null, Main.getInstance().getFileManager().guiFile.getFileConfig().getInt("islands.rows") * 9, Main.getInstance().getUtils().color(Main.getInstance().getFileManager().guiFile.getFileConfig().getString("islands.name")));
 
-        int m = Main.getInstance().getConfig().getConfigurationSection("islands.items").getKeys(false).size();
+        int m = Main.getInstance().getFileManager().guiFile.getFileConfig().getConfigurationSection("islands.items").getKeys(false).size();
         for (int a = 1; a <= m; a++) {
-            String materialID = Main.getInstance().getConfig().getString("islands.items." + a + ".item-id");
-            int amount = Main.getInstance().getConfig().getInt("islands.items." + a + ".amount");
-            int slot = Main.getInstance().getConfig().getInt("islands.items." + a + ".slot");
-            String name = Main.getInstance().getUtils().color(Main.getInstance().getConfig().getString("islands.items." + a + ".item-name"));
-            List<String> lore = Main.getInstance().getUtils().colorList(Main.getInstance().getConfig().getStringList("islands.items." + a + ".item-lore"));
+            String materialID = Main.getInstance().getFileManager().guiFile.getFileConfig().getString("islands.items." + a + ".item-id");
+            int amount = Main.getInstance().getFileManager().guiFile.getFileConfig().getInt("islands.items." + a + ".amount");
+            int slot = Main.getInstance().getFileManager().guiFile.getFileConfig().getInt("islands.items." + a + ".slot");
+            String name = Main.getInstance().getUtils().color(Main.getInstance().getFileManager().guiFile.getFileConfig().getString("islands.items." + a + ".item-name"));
+            List<String> lore = Main.getInstance().getUtils().colorList(Main.getInstance().getFileManager().guiFile.getFileConfig().getStringList("islands.items." + a + ".item-lore"));
 
             i.setItem(slot - 1, Main.getInstance().getUtils().createItem(materialID, 0, name, lore, amount));
         }
@@ -36,7 +36,7 @@ public class Islands implements Listener {
         Player p = (Player) e.getWhoClicked();
         Inventory i = e.getClickedInventory();
         if (i != null) {
-            if (i.getName().equalsIgnoreCase(Main.getInstance().getUtils().color(Main.getInstance().getConfig().getString("islands.name")))) {
+            if (i.getName().equalsIgnoreCase(Main.getInstance().getUtils().color(Main.getInstance().getFileManager().guiFile.getFileConfig().getString("islands.name")))) {
                 e.setCancelled(true);
                 if (e.getCurrentItem() != null && !e.getCurrentItem().getType().equals(Material.AIR)) {
                     ItemStack clicked = e.getCurrentItem();
@@ -44,11 +44,11 @@ public class Islands implements Listener {
                         ItemMeta meta = clicked.getItemMeta();
                         String name = meta.getDisplayName();
 
-                        int m = Main.getInstance().getConfig().getConfigurationSection("islands.items").getKeys(false).size();
+                        int m = Main.getInstance().getFileManager().guiFile.getFileConfig().getConfigurationSection("islands.items").getKeys(false).size();
                         for (int a = 1; a <= m; a++) {
-                            String name2 = Main.getInstance().getUtils().color(Main.getInstance().getConfig().getString("islands.items." + a + ".item-name"));
-                            String schematic = Main.getInstance().getConfig().getString("islands.items."+a+".schematic");
-                            String perm = Main.getInstance().getConfig().getString("islands.items."+a+".permission");
+                            String name2 = Main.getInstance().getUtils().color(Main.getInstance().getFileManager().guiFile.getFileConfig().getString("islands.items." + a + ".item-name"));
+                            String schematic = Main.getInstance().getFileManager().guiFile.getFileConfig().getString("islands.items." + a + ".schematic");
+                            String perm = Main.getInstance().getFileManager().guiFile.getFileConfig().getString("islands.items." + a + ".permission");
 
                             if (name.equalsIgnoreCase(name2)) {
                                 //create island

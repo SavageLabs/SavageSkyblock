@@ -25,7 +25,7 @@ public class IslandUtils {
 
                 if (!createEvent.isCancelled()) {
                     Location location = Main.getInstance().getUtils().generateIslandLocation(Storage.minLocation(), Storage.maxLocation());
-                    Island island = new Island(schematicName, location.getX(), location.getY(), location.getZ(), p.getUniqueId(), new ArrayList<>(), new ArrayList<>(), Main.getInstance().getUtils().getSettingInt("protectionRadius"));
+                    Island island = new Island(schematicName, location.getX(), location.getY(), location.getZ(), p.getUniqueId(), new ArrayList<>(), new ArrayList<>(), Main.getInstance().getUtils().getSettingInt("protectionRadius"), p.getName());
 
                     p.sendMessage(Main.getInstance().getUtils().getMessage("createIsland"));
                 }
@@ -102,10 +102,8 @@ public class IslandUtils {
         }
 
         Collections.sort(levels);
-        int current = 1; // 1 being top island
+        int current = 1;
         for (double d : levels) {
-            //Bukkit.broadcastMessage("level: "+d);
-            //Bukkit.broadcastMessage("current: "+current);
             for (Island island : Storage.islandList) {
                 if (d == island.getLevel()) {
                     map.put(current, island);
@@ -113,13 +111,8 @@ public class IslandUtils {
                 }
             }
         }
-
         Storage.islandTopMap = map;
-
     }
-
-
-
 
     public void calculateIslandLevel(Island island){
         String ver = Bukkit.getServer().getClass().getPackage().getName().replace("org.bukkit.craftbukkit.v", "");

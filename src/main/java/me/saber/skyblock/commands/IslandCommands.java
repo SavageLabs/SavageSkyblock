@@ -1,9 +1,9 @@
 package me.saber.skyblock.commands;
 
-import me.saber.skyblock.island.Island;
-import me.saber.skyblock.island.events.IslandTeleportEvent;
 import me.saber.skyblock.Main;
 import me.saber.skyblock.guis.*;
+import me.saber.skyblock.island.Island;
+import me.saber.skyblock.island.events.IslandTeleportEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Biome;
 import org.bukkit.command.Command;
@@ -22,6 +22,10 @@ public class IslandCommands implements CommandExecutor {
                     Panel.openPanel(p);
                 }
                 if (args.length == 1){
+
+                    if (args[0].equalsIgnoreCase("top")) {
+                        ISTop.openISTop(p);
+                    }
 
                     if (args[0].equalsIgnoreCase("perms")){
                         if (Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())){

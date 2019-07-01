@@ -1,10 +1,9 @@
 package me.saber.skyblock.generators;
 
-import me.saber.skyblock.worldguard.WorldGuardPersistence;
 import me.saber.skyblock.Main;
+import me.saber.skyblock.worldguard.WorldGuardPersistence;
 import me.trent.worldedit6.WorldEdit6;
 import me.trent.worldedit7.WorldEdit7;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.WorldCreator;
 

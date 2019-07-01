@@ -29,7 +29,4 @@ public class Storage {
         return new Location(getSkyBlockWorld(), Main.getInstance().getUtils().getSettingInt("max-x"), defaultY, Main.getInstance().getUtils().getSettingInt("max-z"));
     }
 
-
-
-
 }

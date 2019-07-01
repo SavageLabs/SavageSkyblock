@@ -26,6 +26,8 @@ public class Island {
 
     private int protectionRadius;
 
+    private String name;
+
     private UUID ownerUUID;
     private List<UUID> memberList;
     private List<UUID> officerList;
@@ -48,7 +50,7 @@ public class Island {
 
     private HashMap<String, Integer> blocks = new HashMap<>();
 
-    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> memberList, List<UUID> officerList, int protectionRadius){
+    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> memberList, List<UUID> officerList, int protectionRadius, String name) {
         this.centerX = x;
         this.centerY = y;
         this.centerZ = z;
@@ -57,6 +59,7 @@ public class Island {
         this.officerList = officerList;
         this.protectionRadius = protectionRadius;
         this.home = getLocation();
+        this.name = name;
 
         islandInstance = this;
 
@@ -93,6 +96,14 @@ public class Island {
 
     public HashMap<String, Integer> getBlocks() {
         return blocks;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public List<UUID> getInvites() {
@@ -377,13 +388,6 @@ public class Island {
 
     public void setBiome(Biome biome){
         this.biome = biome;
-        //List<Chunk> chunks = Main.getInstance().getUtils().getChunks(getLocation(), getProtectionRadius() / 16);
-        //for (Chunk c : chunks){
-        //   // chunk.getWorld().setBiome(chunk.getX() * 16, chunk.getZ() * 16, biome);
-        //    Location center = new Location(c.getWorld(), c.getX() << 4, 64, c.getZ() << 4).add(7, 0, 7);
-        //    center.getBlock().setBiome(biome);
-        //}
-
         getLocation().getWorld().setBiome(getLocation().getBlockZ(), getLocation().getBlockZ(), biome);
     }
 
