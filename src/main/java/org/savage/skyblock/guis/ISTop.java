@@ -31,13 +31,13 @@ public class ISTop implements Listener {
             islandTopNumber = Placeholder.getIslandTopPlacement(name);
 
             if (islandTopNumber > 0) {
-                Bukkit.broadcastMessage("TOP: " + islandTopNumber);
+                //Bukkit.broadcastMessage("TOP: " + islandTopNumber);
                 if (Main.getInstance().getIslandUtils().getIslandFromPlacement(islandTopNumber) != null) {
                     Island island = Main.getInstance().getIslandUtils().getIslandFromPlacement(islandTopNumber);
-                    Bukkit.broadcastMessage("good");
+                    name = name.replace("%top-" + islandTopNumber + "%", island.getName());
                     lore = Placeholder.convertPlaceholders(lore, island);
                 } else {
-                    Bukkit.broadcastMessage("no");
+                    //  Bukkit.broadcastMessage("no");
                 }
             }
 

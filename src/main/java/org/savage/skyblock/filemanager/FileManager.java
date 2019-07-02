@@ -9,7 +9,7 @@ public class FileManager {
 
     public CustomFile dataFileCustom = new CustomFile(new File(Main.getInstance().getDataFolder()+"/data.yml"));
     public CustomFile guiFile = new CustomFile(new File(Main.getInstance().getDataFolder() + "/guis.yml"));
-    public CustomFile levelWorth = new CustomFile(new File(Main.getInstance().getDataFolder()+"/level-worth.yml"));
+    public CustomFile levelWorth = new CustomFile(new File(Main.getInstance().getDataFolder() + "/worth.yml"));
 
     public void setup(){
 

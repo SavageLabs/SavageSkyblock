@@ -11,6 +11,7 @@ import org.savage.skyblock.Main;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
 
+import java.util.List;
 import java.util.Map;
 
 public class NMSHandler_v1_13_R2 extends NMSHandler {
@@ -21,6 +22,7 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
     }
 
     public void calculate(Chunk chunk, Island island) {
+        List<Material> tileEntities = Main.getInstance().getReflectionManager().tileEntities;
 
         final CraftChunk craftChunk = (CraftChunk) chunk;
 
@@ -36,12 +38,12 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
                 for (int z = minZ; z <= maxZ; ++z) {
                     org.bukkit.block.Block block = chunk.getBlock(x, y, z);
                     if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
-                        if (!Main.getInstance().getReflectionManager().tileEntities.contains(block.getType())) {
+                        if (!tileEntities.contains(block.getType())) {
                             String type = block.getType().name().toUpperCase();
-                            double value = Main.getInstance().getIslandUtils().getBlockLevelWorth(type, false);
+                            double value = Main.getInstance().getIslandUtils().getLevelWorth(type, false);
                             if (value > 0) {
                                 island.addLevel(value);
-                                island.addBlockCount(type);
+                                island.addBlockCount(type, false);
                             }
                         }
                     }
@@ -63,11 +65,11 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
                     blockType = tileEntity.getBlock().getMaterial().toString().toUpperCase();
                 }
 
-                double value = Main.getInstance().getIslandUtils().getBlockLevelWorth(blockType, isSpawner);
+                double value = Main.getInstance().getIslandUtils().getLevelWorth(blockType, isSpawner);
 
                 if (value > 0) {
                     island.addLevel(value);
-                    island.addBlockCount(blockType);
+                    island.addBlockCount(blockType, isSpawner);
                 }
             }
         }

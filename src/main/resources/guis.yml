@@ -201,8 +201,8 @@ istop:
       item-lore:
         - '&aIsland Owner: &l%owner%'
         - '&aWorth: $&l%worth%'
-        - '&aValuable Blocks: &l%value-blocks%'
-        - '&aValuable Spawners: &l%value-spawners%'
+        - '&aValuable Blocks: $&l%block-worth%'
+        - '&aValuable Spawners: $&l%spawner-worth%'
         - ''
         - '&a&lOfficers:'
         - '&7- &a%officers%'

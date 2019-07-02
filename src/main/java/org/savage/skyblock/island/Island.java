@@ -49,7 +49,11 @@ public class Island {
     private double level = 0;
     private int topPlace = 0;
 
-    private HashMap<String, Integer> blocks = new HashMap<>();
+    private double worth = 0;
+    private double blockWorth = 0;
+    private double spawnerWorth = 0;
+
+    private HashMap<FakeItem, Integer> blocks = new HashMap<>();
 
     public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> memberList, List<UUID> officerList, int protectionRadius, String name) {
         this.centerX = x;
@@ -81,21 +85,96 @@ public class Island {
         this.blocks.clear();
     }
 
-    public void addBlockCount(String blockTypeName) {
-        if (getBlocks().get(blockTypeName.toUpperCase()) != null || getBlockCount(blockTypeName.toUpperCase()) > 0) {
-            int i = getBlockCount(blockTypeName.toUpperCase());
-            this.blocks.remove(blockTypeName.toUpperCase());
-            this.blocks.put(blockTypeName.toUpperCase(), Math.addExact(i, 1));
+
+    public boolean blocksHas(FakeItem fakeItem) {
+        for (FakeItem fakeItems : blocks.keySet()) {
+            if (fakeItem.equals(fakeItems)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public int getBlockCount(FakeItem fakeItem) {
+        for (FakeItem fakeItems : blocks.keySet()) {
+            if (fakeItem.equals(fakeItems)) {
+                return blocks.get(fakeItems);
+            }
+        }
+        return 0;
+    }
+
+    public FakeItem getDuplicateFakeItem(FakeItem fakeItem) {
+        for (FakeItem fakeItems : blocks.keySet()) {
+            if (fakeItem.equals(fakeItems)) {
+                return fakeItems;
+            }
+        }
+        return null;
+    }
+
+    public void addBlockCount(String blockTypeName, boolean spawner) {
+        FakeItem fakeItem = new FakeItem(blockTypeName, spawner);
+        if (blocksHas(fakeItem)) {
+            //already has it in the map, add to it
+            FakeItem dupe = getDuplicateFakeItem(fakeItem);
+            int amount = blocks.get(dupe);
+            this.blocks.remove(dupe);
+            this.blocks.put(dupe, amount);
         } else {
-            this.blocks.put(blockTypeName.toUpperCase(), 1);
+            //doesn't, add the initial one
+            this.blocks.put(fakeItem, 1);
         }
     }
 
-    public int getBlockCount(String blockTypeName) {
-        if (getBlocks().get(blockTypeName.toUpperCase()) != null) {
-            return getBlocks().get(blockTypeName.toUpperCase());
+    public void removeBlockCount(String blockTypeName, boolean spawner) {
+        FakeItem fakeItem = new FakeItem(blockTypeName, spawner);
+        if (blocksHas(fakeItem)) {
+            //already has it in the map, add to it
+            FakeItem dupe = getDuplicateFakeItem(fakeItem);
+            int amount = blocks.get(dupe);
+            int end = Math.subtractExact(amount, 1);
+            this.blocks.remove(dupe);
+            if (end > 0) {
+                this.blocks.put(dupe, end);
+            }
         }
-        return 0;
+    }
+
+    public double getWorth() {
+        return worth;
+    }
+
+    public void setWorth(double d) {
+        this.worth = d;
+    }
+
+    public void addWorth(double d) {
+        this.worth = (getWorth() + d);
+    }
+
+    public void addBlockWorth(double d) {
+        this.blockWorth = (getBlockWorth() + d);
+    }
+
+    public void addSpawnerWorth(double d) {
+        this.spawnerWorth = (getSpawnerWorth() + d);
+    }
+
+    public double getBlockWorth() {
+        return blockWorth;
+    }
+
+    public void setBlockWorth(double d) {
+        this.blockWorth = d;
+    }
+
+    public double getSpawnerWorth() {
+        return spawnerWorth;
+    }
+
+    public void setSpawnerWorth(double d) {
+        this.spawnerWorth = d;
     }
 
     public int getTopPlace() {
@@ -106,7 +185,7 @@ public class Island {
         this.topPlace = topPlace;
     }
 
-    public HashMap<String, Integer> getBlocks() {
+    public HashMap<FakeItem, Integer> getBlocks() {
         return blocks;
     }
 

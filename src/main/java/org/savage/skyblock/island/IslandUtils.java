@@ -8,10 +8,7 @@ import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.events.IslandCreateEvent;
 import org.savage.skyblock.island.events.IslandCreatedEvent;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class IslandUtils {
 
@@ -90,11 +87,19 @@ public class IslandUtils {
         return false;
     }
 
-    public double getBlockLevelWorth(String blockType, boolean isSpawner) {
+    public double getLevelWorth(String blockType, boolean isSpawner) {
         if (isSpawner) {
-            return Main.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("worth.spawners." + blockType);
+            return Main.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("level-worth.spawners." + blockType);
         } else {
-            return Main.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("worth.blocks." + blockType);
+            return Main.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("level-worth.blocks." + blockType);
+        }
+    }
+
+    public double getMoneyWorth(String blockType, boolean isSpawner) {
+        if (isSpawner) {
+            return Main.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("money-worth.spawners." + blockType);
+        } else {
+            return Main.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("money-worth.blocks." + blockType);
         }
     }
 
@@ -139,10 +144,30 @@ public class IslandUtils {
 
         island.clearBlockCount();
         island.setLevel(0);
+        island.setWorth(0);
 
         for (FakeChunk chunk : fakeChunkList) {
             Main.getInstance().getReflectionManager().nmsHandler.calculate(island.getLocation().getWorld().getChunkAt(chunk.getX(), chunk.getZ()), island);
         }
         fakeChunkList.clear();
+
+        //do the money worth now
+        for (Map.Entry<FakeItem, Integer> entry : island.getBlocks().entrySet()) {
+            FakeItem fakeItem = entry.getKey();
+            int amount = entry.getValue();
+            if (amount == 0) continue;
+            double val;
+            if (fakeItem.isSpawner()) {
+                val = getMoneyWorth(fakeItem.getType(), true);
+                island.addSpawnerWorth(val);
+            } else {
+                val = getMoneyWorth(fakeItem.getType(), false);
+                island.addBlockWorth(val);
+            }
+
+            //add to the island's worth
+            island.addWorth(val);
+
+        }
     }
 }

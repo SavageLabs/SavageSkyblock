@@ -21,6 +21,11 @@ public class Placeholder {
 
     public static String convertPlaceholders(String s, Island island) {
         s = s.replace("%owner%", Main.getInstance().getUtils().getNameFromUUID(island.getOwnerUUID()));
+        s = s.replace("%worth%", island.getWorth() + "");
+        s = s.replace("%block-worth%", island.getBlockWorth() + "");
+        s = s.replace("%spawner-worth%", island.getSpawnerWorth() + "");
+
+
         s = s.replace("{island-name}", island.getName());
         s = s.replace("{island-level}", island.getLevel() + "");
         s = s.replace("{island-top}", island.getTopPlace() + "");

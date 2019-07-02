@@ -50,17 +50,35 @@ public class PlayerEvents implements Listener {
 
         Block block = e.getBlockPlaced();
         String type = block.getType().name().toUpperCase();
-        double value;
+        double levelValue;
+        double moneyValue;
+        boolean spawner;
 
         if (block.getState() instanceof CreatureSpawner) {
             CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
             type = creatureSpawner.getCreatureTypeName().toUpperCase();
-            value = Main.getInstance().getIslandUtils().getBlockLevelWorth(type, true);
+            levelValue = Main.getInstance().getIslandUtils().getLevelWorth(type, true);
+            moneyValue = Main.getInstance().getIslandUtils().getMoneyWorth(type, true);
+            spawner = true;
         } else {
-            value = Main.getInstance().getIslandUtils().getBlockLevelWorth(type, false);
+            levelValue = Main.getInstance().getIslandUtils().getLevelWorth(type, false);
+            moneyValue = Main.getInstance().getIslandUtils().getMoneyWorth(type, false);
+            spawner = false;
         }
-        island.addLevel(value);
-        island.addBlockCount(type);
+
+        if (moneyValue > 0) {
+            island.addWorth(moneyValue);
+            if (spawner) {
+                island.addSpawnerWorth(moneyValue);
+            } else {
+                island.addBlockWorth(moneyValue);
+            }
+        }
+
+        if (levelValue > 0) {
+            island.addBlockCount(type, spawner);
+            island.addLevel(levelValue);
+        }
     }
 
     @EventHandler
@@ -72,16 +90,34 @@ public class PlayerEvents implements Listener {
 
         Block block = e.getBlock();
         String type = block.getType().name().toUpperCase();
-        double value;
+        double levelValue;
+        double moneyValue;
+        boolean spawner;
 
         if (block.getState() instanceof CreatureSpawner) {
             CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
             type = creatureSpawner.getCreatureTypeName().toUpperCase();
-            value = Main.getInstance().getIslandUtils().getBlockLevelWorth(type, true);
+            levelValue = Main.getInstance().getIslandUtils().getLevelWorth(type, true);
+            moneyValue = Main.getInstance().getIslandUtils().getMoneyWorth(type, true);
+            spawner = true;
         } else {
-            value = Main.getInstance().getIslandUtils().getBlockLevelWorth(type, false);
+            levelValue = Main.getInstance().getIslandUtils().getLevelWorth(type, false);
+            moneyValue = Main.getInstance().getIslandUtils().getMoneyWorth(type, false);
+            spawner = false;
         }
-        island.addLevel(-value);
-        island.addBlockCount(type);
+
+        if (moneyValue > 0) {
+            island.addWorth(-moneyValue);
+            if (spawner) {
+                island.addSpawnerWorth(-moneyValue);
+            } else {
+                island.addBlockWorth(-moneyValue);
+            }
+        }
+
+        if (levelValue > 0) {
+            island.removeBlockCount(type, spawner);
+            island.addLevel(-levelValue);
+        }
     }
 }

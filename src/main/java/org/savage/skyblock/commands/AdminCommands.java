@@ -17,6 +17,13 @@ public class AdminCommands implements CommandExecutor {
             if (sender instanceof Player) {
                 Player p = (Player)sender;
                 if (p.hasPermission("isa.admin")) {
+
+                    if (args.length == 0 || (args.length == 1 && args[0].equalsIgnoreCase("help"))) {
+                        for (String l : Main.getInstance().getUtils().colorList(Main.getInstance().getConfig().getStringList("messages.isa-help"))) {
+                            p.sendMessage(l);
+                        }
+                    }
+
                     if (args.length == 1) {
                         if (args[0].equalsIgnoreCase("reload")){
                             Main.getInstance().reloadConfig();
