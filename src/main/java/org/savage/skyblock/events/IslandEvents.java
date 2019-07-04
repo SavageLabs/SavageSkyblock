@@ -10,9 +10,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.savage.skyblock.API.IslandCreatedEvent;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
-import org.savage.skyblock.island.events.IslandCreatedEvent;
 
 public class IslandEvents implements Listener {
 

@@ -1,5 +1,6 @@
-package org.savage.skyblock.island.events;
+package org.savage.skyblock.API;
 
+import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
@@ -7,7 +8,7 @@ import org.savage.skyblock.island.Island;
 
 import java.util.UUID;
 
-public class IslandDemoteEvent extends Event implements Cancellable {
+public class IslandTeleportEvent extends Event implements Cancellable {
 
     @Override
     public boolean isCancelled() {
@@ -30,15 +31,17 @@ public class IslandDemoteEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    private UUID owner;
-    private UUID target;
     private Island island;
+    private UUID target;
+    private Location from;
+    private Location to;
     private boolean isCancelled;
 
-    public IslandDemoteEvent(Island island, UUID owner, UUID target) {
+    public IslandTeleportEvent(Island island, UUID target, Location from, Location to) {
         this.island = island;
-        this.owner = owner;
         this.target = target;
+        this.from = from;
+        this.to = to;
         this.isCancelled = false;
     }
 
@@ -46,19 +49,20 @@ public class IslandDemoteEvent extends Event implements Cancellable {
         return island;
     }
 
-    public UUID getOwner() {
-        return owner;
-    }
-
     public UUID getTarget() {
         return target;
     }
 
-    public void setOwner(UUID owner) {
-        this.owner = owner;
+    public Location getFrom() {
+        return from;
     }
 
-    public void setTarget(UUID target) {
-        this.target = target;
+    public Location getTo() {
+        return to;
     }
+
+    public void setTo(Location to) {
+        this.to = to;
+    }
+
 }
