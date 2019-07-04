@@ -35,6 +35,7 @@ public class AdminCommands implements CommandExecutor {
 
                             SkyBlock.getInstance().startTopTimer();
                             SkyBlock.getInstance().startCalculationTimer();
+                            SkyBlock.getInstance().startCacheTimer();
 
                             for (Island island : Storage.islandList) {
                                 SkyBlock.getInstance().getIslandUtils().calculateIslandLevel(island);

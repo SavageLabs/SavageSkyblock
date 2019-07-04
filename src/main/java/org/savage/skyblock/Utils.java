@@ -1,11 +1,13 @@
 package org.savage.skyblock;
 
+import com.sun.jna.Memory;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.MemoryPlayer;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -352,6 +354,31 @@ public class Utils {
 
     public String serializeLocation(Location location){
         return location.getWorld().getName()+","+location.getX()+","+location.getY()+","+location.getZ();
+    }
+
+    public boolean hasMemoryPlayer(UUID uuid){
+        for (MemoryPlayer memoryPlayer : Storage.memoryPlayerList){
+            if (memoryPlayer.getUuid().equals(uuid)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public MemoryPlayer getMemoryPlayer(UUID uuid){
+        for (MemoryPlayer memoryPlayer : Storage.memoryPlayerList){
+            if (memoryPlayer.getUuid().equals(uuid)){
+                return memoryPlayer;
+            }
+        }
+        return null;
+    }
+
+    public boolean hasPermissionAtleast(UUID uuid, String permissionBase){ // uses the cache class
+        if (hasMemoryPlayer(uuid)) {
+            return getMemoryPlayer(uuid).hasPermission(permissionBase);
+        }
+        return false;
     }
 
 }
