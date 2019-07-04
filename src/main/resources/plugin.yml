@@ -1,10 +1,9 @@
-name: SaberSkyBlock
+name: SavageSkyBlock
 authors:
   - Driftay
   - Trent
-version: 1.5
-api-version: 1.13
-main: me.saber.skyblock.Main
+version: 1.2
+main: org.savage.skyblock.SkyBlock
 depend:
   - WorldEdit
   - Vault
@@ -12,6 +11,6 @@ commands:
   is:
     aliases:
       - island
-  sbp:
+  isa:
     aliases:
-      - skyblockplus
+      - isadmin
