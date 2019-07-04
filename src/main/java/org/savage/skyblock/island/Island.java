@@ -7,7 +7,7 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.savage.skyblock.Main;
+import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.events.*;
 
@@ -34,7 +34,7 @@ public class Island {
     private boolean open = false; // meaning people can join anytime
     private boolean deleting = false;
     private Location home;
-    private Biome biome = Biome.valueOf(Main.getInstance().getUtils().getSettingString("default-biome"));
+    private Biome biome = Biome.valueOf(SkyBlock.getInstance().getUtils().getSettingString("default-biome"));
 
     private List<UUID> invites = new ArrayList<>();
 
@@ -69,11 +69,11 @@ public class Island {
         islandInstance = this;
 
         Storage.islandList.add(getIslandInstance());
-        Main.getInstance().getUtils().log("Loaded island");
+        SkyBlock.getInstance().getUtils().log("Loaded island");
 
         if (!schematic.equalsIgnoreCase("")){
             //generate the island schematic
-            Main.getInstance().getWorldGenerator().pasteSchem(getLocation(), schematic);
+            SkyBlock.getInstance().getWorldGenerator().pasteSchem(getLocation(), schematic);
             Bukkit.getPlayer(getOwnerUUID()).teleport(getLocation());
         }
 
@@ -245,8 +245,8 @@ public class Island {
         uuids.addAll(getMemberList());
         for (UUID uuid : uuids){
             if (Bukkit.getPlayer(uuid) != null && Bukkit.getPlayer(uuid).isOnline()){
-                if (Main.getInstance().getIslandUtils().getIslandFromLocation(Bukkit.getPlayer(uuid).getLocation()) != null) {
-                    if (Main.getInstance().getIslandUtils().getIslandFromLocation(Bukkit.getPlayer(uuid).getLocation()).equals(getIslandInstance())) {
+                if (SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(Bukkit.getPlayer(uuid).getLocation()) != null) {
+                    if (SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(Bukkit.getPlayer(uuid).getLocation()).equals(getIslandInstance())) {
                         //in the island
                         return true;
                     }
@@ -286,13 +286,13 @@ public class Island {
             if (!inviteEvent.isCancelled()) {
 
                 if (inviter.equals(target)) {
-                    p.sendMessage(Main.getInstance().getUtils().getMessage("cannotPromoteDemoteSelf"));
+                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("cannotPromoteDemoteSelf"));
                     return;
                 }
 
                 addInvite(target);
-                Bukkit.getPlayer(target).sendMessage(Main.getInstance().getUtils().getMessage("invited").replace("%player%", p.getName()));
-                p.sendMessage(Main.getInstance().getUtils().getMessage("invitedMe").replace("%player%", Bukkit.getPlayer(target).getName()));
+                Bukkit.getPlayer(target).sendMessage(SkyBlock.getInstance().getUtils().getMessage("invited").replace("%player%", p.getName()));
+                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("invitedMe").replace("%player%", Bukkit.getPlayer(target).getName()));
 
                 new BukkitRunnable() {
                     @Override
@@ -301,14 +301,14 @@ public class Island {
                             //still invited,
                             removeInvite(target);
                             if (Bukkit.getPlayer(target) != null && Bukkit.getPlayer(target).isOnline()) {
-                                Bukkit.getPlayer(target).sendMessage(Main.getInstance().getUtils().getMessage("inviteExpire").replace("%player%", p.getName()));
+                                Bukkit.getPlayer(target).sendMessage(SkyBlock.getInstance().getUtils().getMessage("inviteExpire").replace("%player%", p.getName()));
                             }
                         }
                     }
-                }.runTaskLater(Main.getInstance(), Main.getInstance().getUtils().getSettingInt("inviteExpireTime") * 20);
+                }.runTaskLater(SkyBlock.getInstance(), SkyBlock.getInstance().getUtils().getSettingInt("inviteExpireTime") * 20);
             }
         }else{
-            p.sendMessage(Main.getInstance().getUtils().getMessage("alreadyInvited"));
+            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("alreadyInvited"));
         }
     }
 
@@ -320,40 +320,40 @@ public class Island {
             if (getMemberList().contains(target) || getOfficerList().contains(target) || getOwnerUUID().equals(target)){
                 if (getOwnerUUID().equals(kicker) || getOfficerList().contains(kicker)) {
                     if (kicker.equals(target)){
-                        Bukkit.getPlayer(kicker).sendMessage(Main.getInstance().getUtils().getMessage("kickedYourself"));
+                        Bukkit.getPlayer(kicker).sendMessage(SkyBlock.getInstance().getUtils().getMessage("kickedYourself"));
                         return;
                     }
                     if (getOfficerList().contains(target) || getOwnerUUID().equals(target)) {
                         if (getOfficerList().contains(kicker)) {
                             //can't do it
-                            Bukkit.getPlayer(kicker).sendMessage(Main.getInstance().getUtils().getMessage("noPermissionKick"));
+                            Bukkit.getPlayer(kicker).sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionKick"));
                         }else if (getOwnerUUID().equals(kicker)){
                             //let owner kick them
-                            Bukkit.getPlayer(kicker).sendMessage(Main.getInstance().getUtils().getMessage("kicked").replace("%player%", Bukkit.getOfflinePlayer(target).getName()));
+                            Bukkit.getPlayer(kicker).sendMessage(SkyBlock.getInstance().getUtils().getMessage("kicked").replace("%player%", Bukkit.getOfflinePlayer(target).getName()));
                             if (Bukkit.getPlayer(target) != null && Bukkit.getPlayer(target).isOnline()){
-                                Bukkit.getPlayer(target).sendMessage(Main.getInstance().getUtils().getMessage("kickedMe"));
+                                Bukkit.getPlayer(target).sendMessage(SkyBlock.getInstance().getUtils().getMessage("kickedMe"));
                             }
                             officerList.remove(target);
                         }
                     }else{
                         //let officer kick them
-                        Bukkit.getPlayer(kicker).sendMessage(Main.getInstance().getUtils().getMessage("kicked").replace("%player%", Bukkit.getOfflinePlayer(target).getName()));
+                        Bukkit.getPlayer(kicker).sendMessage(SkyBlock.getInstance().getUtils().getMessage("kicked").replace("%player%", Bukkit.getOfflinePlayer(target).getName()));
                         if (Bukkit.getPlayer(target) != null && Bukkit.getPlayer(target).isOnline()){
-                            Bukkit.getPlayer(target).sendMessage(Main.getInstance().getUtils().getMessage("kickedMe"));
+                            Bukkit.getPlayer(target).sendMessage(SkyBlock.getInstance().getUtils().getMessage("kickedMe"));
                         }
                         memberList.remove(target);
                     }
                 }else{
-                    Bukkit.getPlayer(kicker).sendMessage(Main.getInstance().getUtils().getMessage("noPermissionKick"));
+                    Bukkit.getPlayer(kicker).sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionKick"));
                 }
             }else{
-                Bukkit.getPlayer(kicker).sendMessage(Main.getInstance().getUtils().getMessage("kickedNoPlayer"));
+                Bukkit.getPlayer(kicker).sendMessage(SkyBlock.getInstance().getUtils().getMessage("kickedNoPlayer"));
             }
         }
     }
 
     public void delete(){
-        Location islandSpawn = Main.getInstance().getIslandUtils().getIslandSpawn();
+        Location islandSpawn = SkyBlock.getInstance().getIslandUtils().getIslandSpawn();
         if (islandSpawn != null) {
             IslandDeleteEvent deleteEvent = new IslandDeleteEvent(getIslandInstance(), getOwnerUUID());
             Bukkit.getPluginManager().callEvent(deleteEvent);
@@ -362,7 +362,7 @@ public class Island {
 
                 int radius = getProtectionRadius();
 
-                Bukkit.getPlayer(getOwnerUUID()).teleport(Main.getInstance().getIslandUtils().getIslandSpawn());
+                Bukkit.getPlayer(getOwnerUUID()).teleport(SkyBlock.getInstance().getIslandUtils().getIslandSpawn());
 
                 List<UUID> uuids = new ArrayList<>();
                 uuids.addAll(getMemberList());
@@ -372,24 +372,24 @@ public class Island {
                     //teleport them all and send a message
                     if (Bukkit.getPlayer(uuid) != null && Bukkit.getPlayer(uuid).isOnline()) {
                         Player p = Bukkit.getPlayer(uuid);
-                        p.sendMessage(Main.getInstance().getUtils().getMessage("deletedIsland"));
-                        p.teleport(Main.getInstance().getIslandUtils().getIslandSpawn());
+                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("deletedIsland"));
+                        p.teleport(SkyBlock.getInstance().getIslandUtils().getIslandSpawn());
                     }
                 }
 
-                List<Block> blocks = Main.getInstance().getUtils().getNearbyBlocks(getLocation(), radius);
+                List<Block> blocks = SkyBlock.getInstance().getUtils().getNearbyBlocks(getLocation(), radius);
 
                 for (Block block : blocks) {
                     if (block != null && !block.getType().equals(Material.AIR)) {
                         block.setType(Material.AIR);
                     }
                 }
-                Bukkit.getPlayer(getOwnerUUID()).sendMessage(Main.getInstance().getUtils().getMessage("deleteIsland"));
+                Bukkit.getPlayer(getOwnerUUID()).sendMessage(SkyBlock.getInstance().getUtils().getMessage("deleteIsland"));
 
                 unload();
             }
         }else{
-            Bukkit.getPlayer(getOwnerUUID()).sendMessage(Main.getInstance().getUtils().getMessage("noSpawn"));
+            Bukkit.getPlayer(getOwnerUUID()).sendMessage(SkyBlock.getInstance().getUtils().getMessage("noSpawn"));
         }
     }
 
@@ -410,23 +410,23 @@ public class Island {
         if (!demoteEvent.isCancelled()) {
 
             if (uuid.equals(getOwnerUUID())) {
-                Bukkit.getPlayer(getOwnerUUID()).sendMessage(Main.getInstance().getUtils().getMessage("cannotPromoteDemoteSelf"));
+                Bukkit.getPlayer(getOwnerUUID()).sendMessage(SkyBlock.getInstance().getUtils().getMessage("cannotPromoteDemoteSelf"));
                 return;
             }
 
             if (owner != null && owner.isOnline()){
                 if (getMemberList().contains(uuid)){
-                    owner.sendMessage(Main.getInstance().getUtils().getMessage("demotedNo"));
+                    owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNo"));
                 }else{
                     if (getOfficerList().contains(uuid)){
                         officerList.remove(uuid);
                         memberList.add(uuid);
-                        owner.sendMessage(Main.getInstance().getUtils().getMessage("demotedMember").replace("%player%", Bukkit.getOfflinePlayer(uuid).getName()));
+                        owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedMember").replace("%player%", Bukkit.getOfflinePlayer(uuid).getName()));
                         if (target != null) {
-                            target.sendMessage(Main.getInstance().getUtils().getMessage("demotedMemberMe"));
+                            target.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedMemberMe"));
                         }
                     }else{
-                        owner.sendMessage(Main.getInstance().getUtils().getMessage("demotedNoPlayer"));
+                        owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNoPlayer"));
                     }
                 }
             }
@@ -446,7 +446,7 @@ public class Island {
         if (!promoteEvent.isCancelled()) {
 
             if (uuid.equals(getOwnerUUID())) {
-                Bukkit.getPlayer(getOwnerUUID()).sendMessage(Main.getInstance().getUtils().getMessage("cannotPromoteDemoteSelf"));
+                Bukkit.getPlayer(getOwnerUUID()).sendMessage(SkyBlock.getInstance().getUtils().getMessage("cannotPromoteDemoteSelf"));
                 return;
             }
 
@@ -454,9 +454,9 @@ public class Island {
                 if (getMemberList().contains(uuid)) {
                     memberList.remove(uuid);
                     officerList.add(uuid);
-                    owner.sendMessage(Main.getInstance().getUtils().getMessage("promotedOfficer").replace("%player%", Bukkit.getOfflinePlayer(uuid).getName()));
+                    owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOfficer").replace("%player%", Bukkit.getOfflinePlayer(uuid).getName()));
                     if (target != null) {
-                        target.sendMessage(Main.getInstance().getUtils().getMessage("promotedOfficerMe"));
+                        target.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOfficerMe"));
                     }
                     return;
                 } else {
@@ -465,12 +465,12 @@ public class Island {
                         officerList.remove(uuid);
                         setOwnerUUID(uuid);
                         officerList.add(owner.getUniqueId());
-                        owner.sendMessage(Main.getInstance().getUtils().getMessage("promotedOwner").replace("%player%", Bukkit.getOfflinePlayer(uuid).getName()));
+                        owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOwner").replace("%player%", Bukkit.getOfflinePlayer(uuid).getName()));
                         if (target != null) {
-                            target.sendMessage(Main.getInstance().getUtils().getMessage("promotedOwnerMe"));
+                            target.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOwnerMe"));
                         }
                     }else{
-                        owner.sendMessage(Main.getInstance().getUtils().getMessage("promotedNoPlayer"));
+                        owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedNoPlayer"));
                     }
                 }
             }

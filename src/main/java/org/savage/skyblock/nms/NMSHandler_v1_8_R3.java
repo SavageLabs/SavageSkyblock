@@ -7,7 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.CraftChunk;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.savage.skyblock.Main;
+import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
 
@@ -23,7 +23,7 @@ public class NMSHandler_v1_8_R3 extends NMSHandler {
 
     public void calculate(Chunk chunk, Island island) {
 
-        List<org.bukkit.Material> tileEntities = Main.getInstance().getReflectionManager().tileEntities;
+        List<org.bukkit.Material> tileEntities = SkyBlock.getInstance().getReflectionManager().tileEntities;
 
         final CraftChunk craftChunk = (CraftChunk) chunk;
 
@@ -40,7 +40,7 @@ public class NMSHandler_v1_8_R3 extends NMSHandler {
                     if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
                         if (!tileEntities.contains(block.getType())) {
                             String type = block.getType().name().toUpperCase();
-                            double value = Main.getInstance().getIslandUtils().getLevelWorth(type, false);
+                            double value = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, false);
                             if (value > 0) {
                                 island.addLevel(value);
                                 island.addBlockCount(type, false);
@@ -65,7 +65,7 @@ public class NMSHandler_v1_8_R3 extends NMSHandler {
                     } else {
                         blockType = tileEntity.w().getName().toUpperCase();
                     }
-                    double value = Main.getInstance().getIslandUtils().getLevelWorth(blockType, isSpawner);
+                    double value = SkyBlock.getInstance().getIslandUtils().getLevelWorth(blockType, isSpawner);
                         if (value > 0) {
                             island.addLevel(value);
                             island.addBlockCount(blockType, isSpawner);

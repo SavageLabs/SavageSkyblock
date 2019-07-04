@@ -3,6 +3,7 @@ package org.savage.skyblock;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -16,14 +17,14 @@ import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.IslandUtils;
 import org.savage.skyblock.nms.ReflectionManager;
-import org.savage.skyblock.worldguard.WorldGuardPersistence;
+import org.savage.skyblock.worldedit.WorldEditPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main extends JavaPlugin {
+public class SkyBlock extends JavaPlugin {
 
-    private static Main instance;
+    private static SkyBlock instance;
     private WorldGenerator worldGenerator;
     private Utils utils;
     private FileManager fileManager;
@@ -38,7 +39,7 @@ public class Main extends JavaPlugin {
 
     private static Economy econ = null;
 
-    public static Main getInstance() {
+    public static SkyBlock getInstance() {
         return instance;
     }
 
@@ -77,20 +78,21 @@ public class Main extends JavaPlugin {
         getCommand("is").setExecutor(new IslandCommands());
         getCommand("isa").setExecutor(new AdminCommands());
 
-        Bukkit.getPluginManager().registerEvents(new IslandEvents(), this);
-        Bukkit.getPluginManager().registerEvents(new Panel(), this);
-        Bukkit.getPluginManager().registerEvents(new Islands(), this);
-        Bukkit.getPluginManager().registerEvents(new DeleteIsland(), this);
-        Bukkit.getPluginManager().registerEvents(new Biomes(), this);
-        Bukkit.getPluginManager().registerEvents(new Protection(), this);
-        Bukkit.getPluginManager().registerEvents(new ISTop(), this);
-        Bukkit.getPluginManager().registerEvents(new PlayerEvents(), this);
+        PluginManager pm = Bukkit.getPluginManager();
+        pm.registerEvents(new IslandEvents(), this);
+        pm.registerEvents(new Panel(), this);
+        pm.registerEvents(new Islands(), this);
+        pm.registerEvents(new DeleteIsland(), this);
+        pm.registerEvents(new Biomes(), this);
+        pm.registerEvents(new Protection(), this);
+        pm.registerEvents(new ISTop(), this);
+        pm.registerEvents(new PlayerEvents(), this);
 
         getUtils().loadIslands();
 
         setupEconomy();
 
-        WorldGuardPersistence.worldEditVersion = Bukkit.getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();
+        WorldEditPersistence.worldEditVersion = Bukkit.getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();
 
         getReflectionManager().setup();
 

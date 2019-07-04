@@ -10,17 +10,17 @@ import java.util.UUID;
 public class Placeholder {
 
     public static int getIslandTopPlacement(String placeholderString) {
-        placeholderString = ChatColor.stripColor(Main.getInstance().getUtils().color(placeholderString));
+        placeholderString = ChatColor.stripColor(SkyBlock.getInstance().getUtils().color(placeholderString));
         if (placeholderString.contains("%top-")) {
             //contains the placeholder, we need to figure out the number in it
             placeholderString = placeholderString.substring(placeholderString.lastIndexOf("%top-"));
-            return Main.getInstance().getUtils().getIntegersFromString(placeholderString);
+            return SkyBlock.getInstance().getUtils().getIntegersFromString(placeholderString);
         }
         return 1;
     }
 
     public static String convertPlaceholders(String s, Island island) {
-        s = s.replace("%owner%", Main.getInstance().getUtils().getNameFromUUID(island.getOwnerUUID()));
+        s = s.replace("%owner%", SkyBlock.getInstance().getUtils().getNameFromUUID(island.getOwnerUUID()));
         s = s.replace("%worth%", island.getWorth() + "");
         s = s.replace("%block-worth%", island.getBlockWorth() + "");
         s = s.replace("%spawner-worth%", island.getSpawnerWorth() + "");
@@ -43,7 +43,7 @@ public class Placeholder {
             if (s.contains("%officers%")) {
                 List<UUID> officers = island.getOfficerList();
                 for (UUID uuid : officers) {
-                    String name = Main.getInstance().getUtils().getNameFromUUID(uuid);
+                    String name = SkyBlock.getInstance().getUtils().getNameFromUUID(uuid);
                     s = s.replace("%officers%", name);
                     l.add(s);
                 }
@@ -52,7 +52,7 @@ public class Placeholder {
             if (s.contains("%members%")) {
                 List<UUID> members = island.getMemberList();
                 for (UUID uuid : members) {
-                    String name = Main.getInstance().getUtils().getNameFromUUID(uuid);
+                    String name = SkyBlock.getInstance().getUtils().getNameFromUUID(uuid);
                     s = s.replace("%members%", name);
                     l.add(s);
                 }
@@ -63,7 +63,7 @@ public class Placeholder {
             }
         }
 
-        return Main.getInstance().getUtils().colorList(l);
+        return SkyBlock.getInstance().getUtils().colorList(l);
     }
 
 }

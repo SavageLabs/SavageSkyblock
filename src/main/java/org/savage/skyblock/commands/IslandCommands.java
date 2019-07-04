@@ -6,8 +6,8 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.savage.skyblock.Main;
 import org.savage.skyblock.Placeholder;
+import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.events.IslandTeleportEvent;
@@ -28,18 +28,18 @@ public class IslandCommands implements CommandExecutor {
                         //version command is not configurable
                         String[] list = {"&a&lSavage SkyBlock", " ", "&bVersion: " + Bukkit.getPluginManager().getPlugin("SavageSkyBlock").getDescription().getVersion()};
                         for (String s : list) {
-                            p.sendMessage(Main.getInstance().getUtils().color(s));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().color(s));
                         }
                     }
 
                     if (args[0].equalsIgnoreCase("worth")) {
-                        if (Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
-                            Island island = Main.getInstance().getIslandUtils().getIsland(p.getUniqueId());
-                            for (String t : Main.getInstance().getUtils().getMessageList("is-worth")) {
+                        if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
+                            Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                            for (String t : SkyBlock.getInstance().getUtils().getMessageList("is-worth")) {
                                 p.sendMessage(Placeholder.convertPlaceholders(t, island));
                             }
                         } else {
-                            p.sendMessage(Main.getInstance().getUtils().getMessage("noIsland"));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noIsland"));
                         }
                     }
 
@@ -48,97 +48,97 @@ public class IslandCommands implements CommandExecutor {
                     }
 
                     if (args[0].equalsIgnoreCase("perms")){
-                        if (Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())){
-                            if (Main.getInstance().getIslandUtils().isOwner(p.getUniqueId(), Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()))){
+                        if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
+                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                 Protection.openProtectionMenu(p);
                             }else{
-                                p.sendMessage(Main.getInstance().getUtils().getMessage("notOwner"));
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notOwner"));
                             }
                         }else{
-                            p.sendMessage(Main.getInstance().getUtils().getMessage("notInIsland"));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
                         }
                     }
 
                     if (args[0].equalsIgnoreCase("home")) {
-                        if (Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())){
+                        if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
 
-                            IslandTeleportEvent teleportEvent = new IslandTeleportEvent(Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()), p.getUniqueId(), p.getLocation(), Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()).getHome());
+                            IslandTeleportEvent teleportEvent = new IslandTeleportEvent(SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()), p.getUniqueId(), p.getLocation(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()).getHome());
                             Bukkit.getPluginManager().callEvent(teleportEvent);
 
                             if (!teleportEvent.isCancelled()) {
-                               // p.teleport(Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()).getHome());
+                                // p.teleport(SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()).getHome());
                                 p.teleport(teleportEvent.getTo());
-                                p.sendMessage(Main.getInstance().getUtils().getMessage("teleportHome"));
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("teleportHome"));
                             }
                         }else{
-                            p.sendMessage(Main.getInstance().getUtils().getMessage("notInIsland"));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
                         }
                     }
                     if (args[0].equalsIgnoreCase("spawn")){
-                        if (Main.getInstance().getIslandUtils().getIslandSpawn() != null) {
+                        if (SkyBlock.getInstance().getIslandUtils().getIslandSpawn() != null) {
 
-                            IslandTeleportEvent teleportEvent = new IslandTeleportEvent(Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()), p.getUniqueId(), p.getLocation(), Main.getInstance().getIslandUtils().getIslandSpawn());
+                            IslandTeleportEvent teleportEvent = new IslandTeleportEvent(SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()), p.getUniqueId(), p.getLocation(), SkyBlock.getInstance().getIslandUtils().getIslandSpawn());
                             Bukkit.getPluginManager().callEvent(teleportEvent);
 
                             if (!teleportEvent.isCancelled()) {
-                              //  p.teleport(Main.getInstance().getIslandUtils().getIslandSpawn());
+                                //  p.teleport(SkyBlock.getInstance().getIslandUtils().getIslandSpawn());
                                 p.teleport(teleportEvent.getTo());
-                                p.sendMessage(Main.getInstance().getUtils().getMessage("teleportSpawn"));
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("teleportSpawn"));
                             }
                         }else{
-                            p.sendMessage(Main.getInstance().getUtils().getMessage("noSpawn"));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noSpawn"));
                         }
                     }
                     if (args[0].equalsIgnoreCase("help")){
-                        for (String l : Main.getInstance().getUtils().colorList(Main.getInstance().getConfig().getStringList("messages.is-help"))){
+                        for (String l : SkyBlock.getInstance().getUtils().colorList(SkyBlock.getInstance().getConfig().getStringList("messages.is-help"))) {
                             p.sendMessage(l);
                         }
                     }
                     if (args[0].equalsIgnoreCase("create")){
                         //check if they have an island already
-                        if (!Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())){
+                        if (!SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
                             Islands.openIslands(p);
                         }else{
-                            p.sendMessage(Main.getInstance().getUtils().getMessage("alreadyIsland"));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("alreadyIsland"));
                         }
                     }
                     if (args[0].equalsIgnoreCase("biome")){
                         //check if they have an island already
-                        if (Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())){
-                            if(Main.getInstance().getIslandUtils().isOwner(p.getUniqueId(),Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
+                        if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
+                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                 Biomes.openBiome(p);
                             }else{
-                                p.sendMessage(Main.getInstance().getUtils().getMessage("noPermissionIsland"));
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
                             }
                         }else{
-                            p.sendMessage(Main.getInstance().getUtils().getMessage("notInIsland"));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
                         }
                     }
                     if (args[0].equalsIgnoreCase("delete")){
-                        if (Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())){
+                        if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
                             //check if owner
-                            if (Main.getInstance().getIslandUtils().isOwner(p.getUniqueId(), Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()))){
+                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                 //open the delete gui
-                                Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()).setDeleting(true);
+                                SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()).setDeleting(true);
                                 DeleteIsland.openDelete(p);
                             }else{
-                                p.sendMessage(Main.getInstance().getUtils().getMessage("notOwner"));
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notOwner"));
                             }
                         }else{
-                            p.sendMessage(Main.getInstance().getUtils().getMessage("notInIsland"));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
                         }
                     }
                     if (args[0].equalsIgnoreCase("sethome")){
-                        if (Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())){
-                            if (Main.getInstance().getIslandUtils().isOwner(p.getUniqueId(), Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()))){
+                        if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
+                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                 //set the home
-                                Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()).setHome(p.getLocation());
-                                p.sendMessage(Main.getInstance().getUtils().getMessage("setHome"));
+                                SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()).setHome(p.getLocation());
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("setHome"));
                             }else{
-                                p.sendMessage(Main.getInstance().getUtils().getMessage("notOwner"));
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notOwner"));
                             }
                         }else{
-                            p.sendMessage(Main.getInstance().getUtils().getMessage("notInIsland"));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
                         }
                     }
                 }
@@ -148,21 +148,21 @@ public class IslandCommands implements CommandExecutor {
                     String arg2 = args[1];
 
                     if (arg1.equalsIgnoreCase("setbiome")){
-                        if (Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
-                            if (Main.getInstance().getIslandUtils().isOwner(p.getUniqueId(), Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
+                        if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
+                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                 //check if arg2 is a valid biome name
                                 if (Biome.valueOf(arg2) != null && !Biome.valueOf(arg2).name().equalsIgnoreCase("")) {
                                     //is valid
-                                    Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()).setBiome(Biome.valueOf(arg2));
-                                    p.sendMessage(Main.getInstance().getUtils().getMessage("setBiome"));
+                                    SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()).setBiome(Biome.valueOf(arg2));
+                                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("setBiome"));
                                 } else {
-                                    p.sendMessage(Main.getInstance().getUtils().getMessage("invalidBiome"));
+                                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("invalidBiome"));
                                 }
                             }else{
-                                p.sendMessage(Main.getInstance().getUtils().getMessage("notOwner"));
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notOwner"));
                             }
                         }else{
-                            p.sendMessage(Main.getInstance().getUtils().getMessage("notInIsland"));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
                         }
                     }
 
@@ -170,25 +170,25 @@ public class IslandCommands implements CommandExecutor {
                         if (Bukkit.getPlayer(arg2) != null && Bukkit.getPlayer(arg2).isOnline()){
                             //join that player's island
                             Player target = Bukkit.getPlayer(arg2);
-                            if (Main.getInstance().getIslandUtils().inIsland(target.getUniqueId())){
+                            if (SkyBlock.getInstance().getIslandUtils().inIsland(target.getUniqueId())) {
                                 //in an island, check the invites
-                                Island island = Main.getInstance().getIslandUtils().getIsland(target.getUniqueId());
+                                Island island = SkyBlock.getInstance().getIslandUtils().getIsland(target.getUniqueId());
                                 if (island.isInvited(p.getUniqueId())){
                                     //check if they're not in an island firstly
-                                    if (!Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())){
+                                    if (!SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
                                         if (island.join(p.getUniqueId())){
-                                            p.sendMessage(Main.getInstance().getUtils().getMessage("joined"));
+                                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("joined"));
                                         }else{
-                                            p.sendMessage(Main.getInstance().getUtils().getMessage("couldNotJoin"));
+                                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("couldNotJoin"));
                                         }
                                     }else{
-                                        p.sendMessage(Main.getInstance().getUtils().getMessage("alreadyIsland"));
+                                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("alreadyIsland"));
                                     }
                                 }else{
-                                    p.sendMessage(Main.getInstance().getUtils().getMessage("notInvited"));
+                                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInvited"));
                                 }
                             }else{
-                                p.sendMessage(Main.getInstance().getUtils().getMessage("inviterNotInIsland"));
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("inviterNotInIsland"));
                             }
                         }
                     }
@@ -196,27 +196,27 @@ public class IslandCommands implements CommandExecutor {
                         if (Bukkit.getPlayer(arg2) != null && Bukkit.getPlayer(arg2).isOnline()) {
                             Player target = Bukkit.getPlayerExact(arg2);
                             //check for owner
-                            if (Main.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
+                            if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
                                 //check for owner or officer
-                                if (!Main.getInstance().getIslandUtils().isMember(p.getUniqueId(), Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
+                                if (!SkyBlock.getInstance().getIslandUtils().isMember(p.getUniqueId(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                     //in an island, and is not member, must be owner or officer, let them run the commands
-                                    Island island = Main.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                                    Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
                                     if (island != null) {
                                         if (arg1.equalsIgnoreCase("invite")){
                                             island.invite(p.getUniqueId(), target.getUniqueId());
                                         }
                                         if (arg1.equalsIgnoreCase("promote")) {
-                                            if (Main.getInstance().getIslandUtils().isOwner(p.getUniqueId(), island)){
+                                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), island)) {
                                                 island.promote(target.getUniqueId());
                                             }else{
-                                                p.sendMessage(Main.getInstance().getUtils().getMessage("noPermissionIsland"));
+                                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
                                             }
                                         }
                                         if (arg1.equalsIgnoreCase("demote")) {
-                                            if (Main.getInstance().getIslandUtils().isOwner(p.getUniqueId(), island)){
+                                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), island)) {
                                                 island.demote(target.getUniqueId());
                                             }else{
-                                                p.sendMessage(Main.getInstance().getUtils().getMessage("noPermissionIsland"));
+                                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
                                             }
                                         }
                                         if (arg1.equalsIgnoreCase("kick")){
@@ -224,13 +224,13 @@ public class IslandCommands implements CommandExecutor {
                                         }
                                     }
                                 } else {
-                                    p.sendMessage(Main.getInstance().getUtils().getMessage("noPermissionIsland"));
+                                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
                                 }
                             } else {
-                                p.sendMessage(Main.getInstance().getUtils().getMessage("notInIsland"));
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
                             }
                         }else{
-                            p.sendMessage(Main.getInstance().getUtils().getMessage("noPlayer"));
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPlayer"));
                         }
                     }
                 }

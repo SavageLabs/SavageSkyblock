@@ -51,25 +51,25 @@ public class Utils {
     }
 
     public String getMessage(String key){
-        return color(Main.getInstance().getConfig().getString("messages."+key));
+        return color(SkyBlock.getInstance().getConfig().getString("messages." + key));
     }
 
     public List<String> getMessageList(String key) {
-        return colorList(Main.getInstance().getConfig().getStringList("messages." + key));
+        return colorList(SkyBlock.getInstance().getConfig().getStringList("messages." + key));
     }
 
     public int getSettingInt(String key){
-        return Main.getInstance().getConfig().getInt("settings."+key);
+        return SkyBlock.getInstance().getConfig().getInt("settings." + key);
     }
     public String getSettingString(String key) {
-        return Main.getInstance().getConfig().getString("settings." + key);
+        return SkyBlock.getInstance().getConfig().getString("settings." + key);
     }
     public double getSettingDouble(String key){
-        return Main.getInstance().getConfig().getDouble("settings."+key);
+        return SkyBlock.getInstance().getConfig().getDouble("settings." + key);
     }
 
     public boolean getSettingBool(String key) {
-        return Main.getInstance().getConfig().getBoolean("settings." + key);
+        return SkyBlock.getInstance().getConfig().getBoolean("settings." + key);
     }
 
     public static Location randomLocation(Location min, Location max) {
@@ -100,7 +100,7 @@ public class Utils {
     public void loadIslands(){
         //onEnable
         //layout: ownerUUID;member1,member2;x;y;z;protectionRadius
-        List<String> data = Main.getInstance().getFileManager().dataFileCustom.getFileConfig().getStringList("data");
+        List<String> data = SkyBlock.getInstance().getFileManager().dataFileCustom.getFileConfig().getStringList("data");
 
         for (String islandData : data){
             String[] l = islandData.split(";");
@@ -184,8 +184,8 @@ public class Utils {
     public void saveIslands(){
         //layout: ownerUUID;member1,member2;x,y,z;protectionRadius
 
-        // Main.getInstance().getFileManager().d.set("data", new ArrayList<>());
-        // Main.getInstance().getFileManager().dataFileCustom.saveFile();
+        // SkyBlock.getInstance().getFileManager().d.set("data", new ArrayList<>());
+        // SkyBlock.getInstance().getFileManager().dataFileCustom.saveFile();
 
         List<String> islandData = new ArrayList<>();
 
@@ -225,20 +225,20 @@ public class Utils {
             islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + x + ";" + y + ";" + z + ";" + protectionRadius + ";" + home + ";" + biome + ";" + island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" + island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name);
         }
 
-        Main.getInstance().getFileManager().dataFileCustom.getFileConfig().set("data", islandData);
-        Main.getInstance().getFileManager().dataFileCustom.saveFile();
+        SkyBlock.getInstance().getFileManager().dataFileCustom.getFileConfig().set("data", islandData);
+        SkyBlock.getInstance().getFileManager().dataFileCustom.saveFile();
     }
 
     public double getBalance(UUID uuid){
-        return Main.getEcon().getBalance(Bukkit.getOfflinePlayer(uuid));
+        return SkyBlock.getEcon().getBalance(Bukkit.getOfflinePlayer(uuid));
     }
 
     public void takeMoney(UUID uuid, double amount){
-        Main.getEcon().withdrawPlayer(Bukkit.getOfflinePlayer(uuid), amount);
+        SkyBlock.getEcon().withdrawPlayer(Bukkit.getOfflinePlayer(uuid), amount);
     }
 
     public void addMoney(UUID uuid, double amount){
-        Main.getEcon().depositPlayer(Bukkit.getOfflinePlayer(uuid), amount);
+        SkyBlock.getEcon().depositPlayer(Bukkit.getOfflinePlayer(uuid), amount);
     }
 
 
@@ -297,8 +297,8 @@ public class Utils {
                 for(int yy = 0; yy < 128; yy++) {
                     Block block = chunk.getBlock(xx, yy, zz);
                     if (block != null && !block.getType().equals(Material.AIR)){
-                        if (block.getLocation() != null && Main.getInstance().getIslandUtils().getIslandFromLocation(block.getLocation()) != null) {
-                            if (Main.getInstance().getIslandUtils().getIslandFromLocation(block.getLocation()).equals(island)) {
+                        if (block.getLocation() != null && SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(block.getLocation()) != null) {
+                            if (SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(block.getLocation()).equals(island)) {
                                 list.add(block);
                             }
                         }

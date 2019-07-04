@@ -6,8 +6,8 @@ import org.savage.skyblock.island.IslandUtils;
 
 public class SaberSkyBlockAPI {
 
-    private Main getSkyBlockPlusInstance(){
-        return Main.getInstance();
+    private SkyBlock getSkyBlockPlusInstance() {
+        return SkyBlock.getInstance();
     }
 
     public IslandUtils getIslandUtils(){

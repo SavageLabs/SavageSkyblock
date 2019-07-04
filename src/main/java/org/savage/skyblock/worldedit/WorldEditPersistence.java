@@ -1,9 +1,9 @@
-package org.savage.skyblock.worldguard;
+package org.savage.skyblock.worldedit;
 
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
-public class WorldGuardPersistence {
+public class WorldEditPersistence {
 
     public static WorldEdit getWorldEdit(){
         return WorldEdit.getInstance();

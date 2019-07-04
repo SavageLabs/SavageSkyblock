@@ -3,7 +3,7 @@ package org.savage.skyblock.island;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.savage.skyblock.Main;
+import org.savage.skyblock.SkyBlock;
 
 public abstract class SpiralTask implements Runnable {
 
@@ -38,7 +38,7 @@ public abstract class SpiralTask implements Runnable {
         this.readyToGo = true;
 
         // get this party started
-        this.setTaskID(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(Main.getInstance(), this, 2, 2));
+        this.setTaskID(Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(SkyBlock.getInstance(), this, 2, 2));
     }
 
     private static long now() {

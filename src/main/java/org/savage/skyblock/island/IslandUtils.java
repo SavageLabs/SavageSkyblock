@@ -3,7 +3,7 @@ package org.savage.skyblock.island;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.savage.skyblock.Main;
+import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.events.IslandCreateEvent;
 import org.savage.skyblock.island.events.IslandCreatedEvent;
@@ -13,8 +13,8 @@ import java.util.*;
 public class IslandUtils {
 
     public Location getIslandSpawn() {
-        String s = Main.getInstance().getConfig().getString("settings.island-spawn");
-        return Main.getInstance().getUtils().deserializeLocation(s);
+        String s = SkyBlock.getInstance().getConfig().getString("settings.island-spawn");
+        return SkyBlock.getInstance().getUtils().deserializeLocation(s);
     }
 
     public void createIsland(Player p, String permission, String schematicName) {
@@ -25,19 +25,19 @@ public class IslandUtils {
                 Bukkit.getPluginManager().callEvent(createEvent);
 
                 if (!createEvent.isCancelled()) {
-                    Location location = Main.getInstance().getUtils().generateIslandLocation(Storage.minLocation(), Storage.maxLocation());
-                    Island island = new Island(schematicName, location.getX(), location.getY(), location.getZ(), p.getUniqueId(), new ArrayList<>(), new ArrayList<>(), Main.getInstance().getUtils().getSettingInt("protectionRadius"), p.getName());
+                    Location location = SkyBlock.getInstance().getUtils().generateIslandLocation(Storage.minLocation(), Storage.maxLocation());
+                    Island island = new Island(schematicName, location.getX(), location.getY(), location.getZ(), p.getUniqueId(), new ArrayList<>(), new ArrayList<>(), SkyBlock.getInstance().getUtils().getSettingInt("protectionRadius"), p.getName());
 
-                    p.sendMessage(Main.getInstance().getUtils().getMessage("createIsland"));
+                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("createIsland"));
 
                     Bukkit.getPluginManager().callEvent(new IslandCreatedEvent(p.getUniqueId(), island));
 
                 }
             } else {
-                p.sendMessage(Main.getInstance().getUtils().getMessage("noIslandPermissionCreate"));
+                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noIslandPermissionCreate"));
             }
         } else {
-            p.sendMessage(Main.getInstance().getUtils().getMessage("alreadyIsland"));
+            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("alreadyIsland"));
         }
     }
 
@@ -89,17 +89,17 @@ public class IslandUtils {
 
     public double getLevelWorth(String blockType, boolean isSpawner) {
         if (isSpawner) {
-            return Main.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("level-worth.spawners." + blockType);
+            return SkyBlock.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("level-worth.spawners." + blockType);
         } else {
-            return Main.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("level-worth.blocks." + blockType);
+            return SkyBlock.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("level-worth.blocks." + blockType);
         }
     }
 
     public double getMoneyWorth(String blockType, boolean isSpawner) {
         if (isSpawner) {
-            return Main.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("money-worth.spawners." + blockType);
+            return SkyBlock.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("money-worth.spawners." + blockType);
         } else {
-            return Main.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("money-worth.blocks." + blockType);
+            return SkyBlock.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("money-worth.blocks." + blockType);
         }
     }
 
@@ -147,7 +147,7 @@ public class IslandUtils {
         island.setWorth(0);
 
         for (FakeChunk chunk : fakeChunkList) {
-            Main.getInstance().getReflectionManager().nmsHandler.calculate(island.getLocation().getWorld().getChunkAt(chunk.getX(), chunk.getZ()), island);
+            SkyBlock.getInstance().getReflectionManager().nmsHandler.calculate(island.getLocation().getWorld().getChunkAt(chunk.getX(), chunk.getZ()), island);
         }
         fakeChunkList.clear();
 

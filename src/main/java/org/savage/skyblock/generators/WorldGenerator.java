@@ -4,8 +4,8 @@ import me.trent.worldedit6.WorldEdit6;
 import me.trent.worldedit7.WorldEdit7;
 import org.bukkit.Location;
 import org.bukkit.WorldCreator;
-import org.savage.skyblock.Main;
-import org.savage.skyblock.worldguard.WorldGuardPersistence;
+import org.savage.skyblock.SkyBlock;
+import org.savage.skyblock.worldedit.WorldEditPersistence;
 
 import java.io.File;
 
@@ -18,13 +18,13 @@ public class WorldGenerator {
     }
 
     public void pasteSchem(Location location, String fileName) {
-        File file = new File(Main.getInstance().getDataFolder() + "/Schematics/" + fileName);
+        File file = new File(SkyBlock.getInstance().getDataFolder() + "/Schematics/" + fileName);
 
-        if (WorldGuardPersistence.isOldWorldEdit()){
+        if (WorldEditPersistence.isOldWorldEdit()) {
             WorldEdit6.paste(file, location);
         }
 
-        if (WorldGuardPersistence.isNewWorldEdit()){
+        if (WorldEditPersistence.isNewWorldEdit()) {
             WorldEdit7.paste(file, location);
         }
     }

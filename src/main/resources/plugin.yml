@@ -3,7 +3,7 @@ authors:
   - Driftay
   - Trent
 version: 1.2
-main: org.savage.skyblock.Main
+main: org.savage.skyblock.SkyBlock
 depend:
   - WorldEdit
   - Vault

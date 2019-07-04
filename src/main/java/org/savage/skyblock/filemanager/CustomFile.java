@@ -1,7 +1,7 @@
 package org.savage.skyblock.filemanager;
 
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.savage.skyblock.Main;
+import org.savage.skyblock.SkyBlock;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class CustomFile {
         if (!getFile().exists()){
             //create
             if (loadFromProject){
-                Main.getInstance().saveResource(file.getName(), false);
+                SkyBlock.getInstance().saveResource(file.getName(), false);
             }else{
                 try{
                     getFile().createNewFile();

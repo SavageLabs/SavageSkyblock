@@ -1,15 +1,15 @@
 package org.savage.skyblock.filemanager;
 
 import org.bukkit.Bukkit;
-import org.savage.skyblock.Main;
+import org.savage.skyblock.SkyBlock;
 
 import java.io.File;
 
 public class FileManager {
 
-    public CustomFile dataFileCustom = new CustomFile(new File(Main.getInstance().getDataFolder()+"/data.yml"));
-    public CustomFile guiFile = new CustomFile(new File(Main.getInstance().getDataFolder() + "/guis.yml"));
-    public CustomFile levelWorth = new CustomFile(new File(Main.getInstance().getDataFolder() + "/worth.yml"));
+    public CustomFile dataFileCustom = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/data.yml"));
+    public CustomFile guiFile = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/guis.yml"));
+    public CustomFile levelWorth = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/worth.yml"));
 
     public void setup(){
 
@@ -17,11 +17,11 @@ public class FileManager {
         levelWorth.setup(true);
         guiFile.setup(true);
 
-        if (!new File(Main.getInstance().getDataFolder() + "/Schematics").exists()) {
-            new File(Main.getInstance().getDataFolder() + "/Schematics").mkdir();
+        if (!new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").exists()) {
+            new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").mkdir();
         }
         if (Bukkit.getWorld("skyBlock") == null) {
-            Main.getInstance().getWorldGenerator().generateWorld("skyBlock");
+            SkyBlock.getInstance().getWorldGenerator().generateWorld("skyBlock");
         }
     }
 }

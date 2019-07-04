@@ -8,23 +8,23 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.savage.skyblock.Main;
+import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
 
 public class PlayerEvents implements Listener {
 
     @EventHandler
     public void chat(AsyncPlayerChatEvent e) {
-        if (Main.getInstance().getUtils().getSettingBool("use-chat-format")) {
+        if (SkyBlock.getInstance().getUtils().getSettingBool("use-chat-format")) {
             Player p = e.getPlayer();
             String oldFormat = e.getFormat();
-            String newFormat = Main.getInstance().getUtils().getSettingString("chat-format");
+            String newFormat = SkyBlock.getInstance().getUtils().getSettingString("chat-format");
 
             double level = 0;
             int top = 0;
 
-            if (Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()) != null) {
-                Island island = Main.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+            if (SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()) != null) {
+                Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
                 level = island.getLevel();
                 top = island.getTopPlace();
             }
@@ -32,10 +32,10 @@ public class PlayerEvents implements Listener {
             newFormat = newFormat.replace("{is-level}", level + "");
             newFormat = newFormat.replace("{is-top}", top + "");
 
-            newFormat = Main.getInstance().getUtils().color(newFormat).replace("{old-format}", oldFormat);
+            newFormat = SkyBlock.getInstance().getUtils().color(newFormat).replace("{old-format}", oldFormat);
 
             if (p.hasPermission("color")) {
-                e.setMessage(Main.getInstance().getUtils().color(e.getMessage()));
+                e.setMessage(SkyBlock.getInstance().getUtils().color(e.getMessage()));
             }
             e.setFormat(newFormat);
         }
@@ -45,7 +45,7 @@ public class PlayerEvents implements Listener {
     public void placeBlock(BlockPlaceEvent e) {
         Player p = e.getPlayer();
 
-        Island island = Main.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
         if (island == null) return;
 
         Block block = e.getBlockPlaced();
@@ -57,12 +57,12 @@ public class PlayerEvents implements Listener {
         if (block.getState() instanceof CreatureSpawner) {
             CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
             type = creatureSpawner.getCreatureTypeName().toUpperCase();
-            levelValue = Main.getInstance().getIslandUtils().getLevelWorth(type, true);
-            moneyValue = Main.getInstance().getIslandUtils().getMoneyWorth(type, true);
+            levelValue = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, true);
+            moneyValue = SkyBlock.getInstance().getIslandUtils().getMoneyWorth(type, true);
             spawner = true;
         } else {
-            levelValue = Main.getInstance().getIslandUtils().getLevelWorth(type, false);
-            moneyValue = Main.getInstance().getIslandUtils().getMoneyWorth(type, false);
+            levelValue = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, false);
+            moneyValue = SkyBlock.getInstance().getIslandUtils().getMoneyWorth(type, false);
             spawner = false;
         }
 
@@ -85,7 +85,7 @@ public class PlayerEvents implements Listener {
     public void breakBlock(BlockBreakEvent e) {
         Player p = e.getPlayer();
 
-        Island island = Main.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
         if (island == null) return;
 
         Block block = e.getBlock();
@@ -97,12 +97,12 @@ public class PlayerEvents implements Listener {
         if (block.getState() instanceof CreatureSpawner) {
             CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
             type = creatureSpawner.getCreatureTypeName().toUpperCase();
-            levelValue = Main.getInstance().getIslandUtils().getLevelWorth(type, true);
-            moneyValue = Main.getInstance().getIslandUtils().getMoneyWorth(type, true);
+            levelValue = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, true);
+            moneyValue = SkyBlock.getInstance().getIslandUtils().getMoneyWorth(type, true);
             spawner = true;
         } else {
-            levelValue = Main.getInstance().getIslandUtils().getLevelWorth(type, false);
-            moneyValue = Main.getInstance().getIslandUtils().getMoneyWorth(type, false);
+            levelValue = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, false);
+            moneyValue = SkyBlock.getInstance().getIslandUtils().getMoneyWorth(type, false);
             spawner = false;
         }
 

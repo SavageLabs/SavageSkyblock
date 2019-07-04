@@ -10,7 +10,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.savage.skyblock.Main;
+import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.events.IslandCreatedEvent;
 
@@ -20,8 +20,8 @@ public class IslandEvents implements Listener {
     public void islandCreate(IslandCreatedEvent e) {
         Island island = e.getIsland();
         //when an island is created without fail
-        Main.getInstance().getIslandUtils().calculateIslandLevel(island);
-        Main.getInstance().getIslandUtils().calculateIslandTop();
+        SkyBlock.getInstance().getIslandUtils().calculateIslandLevel(island);
+        SkyBlock.getInstance().getIslandUtils().calculateIslandTop();
     }
 
     @EventHandler
@@ -29,21 +29,21 @@ public class IslandEvents implements Listener {
         Player p = e.getPlayer();
         if (p.getLocation().getY() <= -10){
             //teleport them to their island
-            Main.getInstance().safePlayers.add(p);
+            SkyBlock.getInstance().safePlayers.add(p);
             //check if they have an island first, then teleport, if not teleport to is spawn
-            if (Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()) != null){
-                p.teleport(Main.getInstance().getIslandUtils().getIsland(p.getUniqueId()).getHome());
+            if (SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()) != null) {
+                p.teleport(SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()).getHome());
             }else{
                 //is null, teleport to is spawn
-               Location spawnLoc = Main.getInstance().getIslandUtils().getIslandSpawn();
+                Location spawnLoc = SkyBlock.getInstance().getIslandUtils().getIslandSpawn();
                if (spawnLoc != null){
                    p.teleport(spawnLoc);
                }else{
-                   p.sendMessage(Main.getInstance().getUtils().getMessage("noSpawn"));
+                   p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noSpawn"));
                    p.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
                }
             }
-            Main.getInstance().safePlayers.remove(p);
+            SkyBlock.getInstance().safePlayers.remove(p);
         }
     }
 
@@ -51,7 +51,7 @@ public class IslandEvents implements Listener {
     public void damage(EntityDamageEvent e){
         if (e.getEntity() instanceof Player){
             Player p = (Player)e.getEntity();
-            if (Main.getInstance().safePlayers.contains(p)){
+            if (SkyBlock.getInstance().safePlayers.contains(p)) {
                 e.setCancelled(true);
             }
         }
@@ -64,24 +64,24 @@ public class IslandEvents implements Listener {
 
         Location loc = block.getLocation();
 
-        Island island = Main.getInstance().getIslandUtils().getIslandFromLocation(loc);
+        Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(loc);
         if (island != null){
             //check if the breaker is either the owner or the member
-            if (Main.getInstance().getIslandUtils().isMember(p.getUniqueId(), island) || Main.getInstance().getIslandUtils().isOwner(p.getUniqueId(), island) || Main.getInstance().getIslandUtils().isOfficer(p.getUniqueId(), island)){
+            if (SkyBlock.getInstance().getIslandUtils().isMember(p.getUniqueId(), island) || SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), island) || SkyBlock.getInstance().getIslandUtils().isOfficer(p.getUniqueId(), island)) {
                 //is a part of that island
-                if (Main.getInstance().getIslandUtils().isMember(p.getUniqueId(), island)){
+                if (SkyBlock.getInstance().getIslandUtils().isMember(p.getUniqueId(), island)) {
                     if (!island.canMemberBreak()){
                         e.setCancelled(true);
                     }
                 }
-                if (Main.getInstance().getIslandUtils().isOfficer(p.getUniqueId(), island)){
+                if (SkyBlock.getInstance().getIslandUtils().isOfficer(p.getUniqueId(), island)) {
                     if (!island.canOfficerBreak()){
                         e.setCancelled(true);
                     }
                 }
             }else{
                 e.setCancelled(true);
-                p.sendMessage(Main.getInstance().getUtils().getMessage("notYours"));
+                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notYours"));
             }
         }
     }
@@ -93,24 +93,24 @@ public class IslandEvents implements Listener {
 
         Location loc = block.getLocation();
 
-        Island island = Main.getInstance().getIslandUtils().getIslandFromLocation(loc);
+        Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(loc);
         if (island != null){
             //check if the breaker is either the owner or the member
-            if (Main.getInstance().getIslandUtils().isMember(p.getUniqueId(), island) || Main.getInstance().getIslandUtils().isOwner(p.getUniqueId(), island) || Main.getInstance().getIslandUtils().isOfficer(p.getUniqueId(), island)){
+            if (SkyBlock.getInstance().getIslandUtils().isMember(p.getUniqueId(), island) || SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), island) || SkyBlock.getInstance().getIslandUtils().isOfficer(p.getUniqueId(), island)) {
                 //is a part of that island
-                if (Main.getInstance().getIslandUtils().isMember(p.getUniqueId(), island)){
+                if (SkyBlock.getInstance().getIslandUtils().isMember(p.getUniqueId(), island)) {
                     if (!island.canMemberPlace()){
                         e.setCancelled(true);
                     }
                 }
-                if (Main.getInstance().getIslandUtils().isOfficer(p.getUniqueId(), island)){
+                if (SkyBlock.getInstance().getIslandUtils().isOfficer(p.getUniqueId(), island)) {
                     if (!island.canOfficerPlace()){
                         e.setCancelled(true);
                     }
                 }
             }else{
                 e.setCancelled(true);
-                p.sendMessage(Main.getInstance().getUtils().getMessage("notYours"));
+                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notYours"));
             }
         }
     }

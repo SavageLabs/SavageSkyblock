@@ -23,10 +23,10 @@ public class Storage {
     public static double defaultY = 100;
 
     public static Location minLocation(){
-        return new Location(getSkyBlockWorld(), Main.getInstance().getUtils().getSettingInt("min-x"), defaultY, Main.getInstance().getUtils().getSettingInt("min-z"));
+        return new Location(getSkyBlockWorld(), SkyBlock.getInstance().getUtils().getSettingInt("min-x"), defaultY, SkyBlock.getInstance().getUtils().getSettingInt("min-z"));
     }
     public static Location maxLocation(){
-        return new Location(getSkyBlockWorld(), Main.getInstance().getUtils().getSettingInt("max-x"), defaultY, Main.getInstance().getUtils().getSettingInt("max-z"));
+        return new Location(getSkyBlockWorld(), SkyBlock.getInstance().getUtils().getSettingInt("max-x"), defaultY, SkyBlock.getInstance().getUtils().getSettingInt("max-z"));
     }
 
 }
