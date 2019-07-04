@@ -4,6 +4,7 @@ import me.trent.worldedit6.WorldEdit6;
 import me.trent.worldedit7.WorldEdit7;
 import org.bukkit.Location;
 import org.bukkit.WorldCreator;
+import org.bukkit.WorldType;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.worldedit.WorldEditPersistence;
 
@@ -12,9 +13,18 @@ import java.io.File;
 public class WorldGenerator {
 
     public void generateWorld(String worldName) {
-        WorldCreator worldCreator = new WorldCreator(worldName);
-        worldCreator.generator(new VoidWorld().getDefaultWorldGenerator(worldName, "skyBlockVoid"));
-        worldCreator.createWorld();
+       // WorldCreator worldCreator = new WorldCreator(worldName);
+//
+       // worldCreator.generator(new VoidWorld().getDefaultWorldGenerator(worldName, "skyBlockVoid"));
+       // worldCreator.createWorld();
+
+        WorldCreator wc = new WorldCreator(worldName);
+
+        wc.type(WorldType.FLAT);
+        wc.generatorSettings("2;0;1;");
+
+        wc.createWorld();
+
     }
 
     public void pasteSchem(Location location, String fileName) {
