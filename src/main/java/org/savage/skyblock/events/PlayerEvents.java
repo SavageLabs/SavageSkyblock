@@ -1,15 +1,19 @@
 package org.savage.skyblock.events;
 
+import com.sun.jna.Memory;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.MemoryPlayer;
 
 public class PlayerEvents implements Listener {
 
@@ -38,6 +42,61 @@ public class PlayerEvents implements Listener {
                 e.setMessage(SkyBlock.getInstance().getUtils().color(e.getMessage()));
             }
             e.setFormat(newFormat);
+        }
+    }
+
+    @EventHandler
+    public void joinEvent(PlayerJoinEvent e){
+        Player p = e.getPlayer();
+
+        if (!SkyBlock.getInstance().getUtils().hasMemoryPlayer(p.getUniqueId())){
+            MemoryPlayer memoryPlayer = new MemoryPlayer(p.getUniqueId());
+        }
+    }
+
+    @EventHandler (priority = EventPriority.HIGH)
+    public void placeBlockChecker(BlockPlaceEvent e){
+        Player p = e.getPlayer();
+        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+        if (island == null) return;
+
+        Block block = e.getBlockPlaced();
+        String type = block.getType().name().toUpperCase();
+
+        int defaultHopper = SkyBlock.getInstance().getUtils().getSettingInt("default-hopper-limit");
+        int defaultSpawner = SkyBlock.getInstance().getUtils().getSettingInt("default-spawner-limit");
+
+        //check perms
+        int islandHoppers = island.getHopperCount();
+        int islandSpawners = island.getSpawnerCount();
+
+        if (type.equalsIgnoreCase("HOPPER")) {
+            if (islandHoppers >= defaultHopper) {
+                if (SkyBlock.getInstance().getUtils().hasPermissionAtleast(island.getOwnerUUID(), "skyblock.block.anvil")) {
+                    int val = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId()).getPermissionValue("skyblock.block.anvil");
+                    if (val < islandHoppers){
+                        e.setCancelled(true);
+                        p.sendMessage("2You cannot place anymore hoppers!");
+                    }
+                }else{
+                    e.setCancelled(true);
+                    p.sendMessage("You cannot place anymore hoppers!");
+                }
+            }
+        }
+        if (type.equalsIgnoreCase("SPAWNER")) {
+            if (islandSpawners >= defaultSpawner) {
+                if (SkyBlock.getInstance().getUtils().hasPermissionAtleast(island.getOwnerUUID(), "skyblock.block.spawner")) {
+                    int val = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId()).getPermissionValue("skyblock.block.spawner");
+                    if (val < islandHoppers){
+                        e.setCancelled(true);
+                        p.sendMessage("2You cannot place anymore spawners!");
+                    }
+                }else{
+                    e.setCancelled(true);
+                    p.sendMessage("You cannot place anymore spawners!");
+                }
+            }
         }
     }
 

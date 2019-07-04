@@ -4,16 +4,22 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.MemoryPlayer;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Storage {
+
+    public static List<String> permissionToCache = Arrays.asList("skyblock.block.anvil", "skyblock.block.spawner");
 
     //public static HashMap<Integer, Island> islandTopMap = new HashMap<>();
     public static int currentTop = 1;
 
     public static List<Island> islandList = new ArrayList<>();
+    public static List<MemoryPlayer> memoryPlayerList = new ArrayList<>();
+
     private static World skyBlockWorld = Bukkit.getWorld("skyBlock");
 
     public static World getSkyBlockWorld() {

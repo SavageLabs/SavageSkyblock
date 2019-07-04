@@ -3,6 +3,7 @@ package org.savage.skyblock;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -16,6 +17,7 @@ import org.savage.skyblock.generators.WorldGenerator;
 import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.IslandUtils;
+import org.savage.skyblock.island.MemoryPlayer;
 import org.savage.skyblock.nms.ReflectionManager;
 import org.savage.skyblock.worldedit.WorldEditPersistence;
 
@@ -99,6 +101,8 @@ public class SkyBlock extends JavaPlugin {
         startTopTimer();
         startCalculationTimer();
 
+        startCacheTimer();
+
     }
 
     public void onDisable(){
@@ -115,6 +119,45 @@ public class SkyBlock extends JavaPlugin {
         }
         econ = rsp.getProvider();
         return econ != null;
+    }
+
+    public void startCacheTimer(){
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                //cache some stuff...
+                //cache permissions we want
+                for (Player p : Bukkit.getOnlinePlayers()){
+                    if (getUtils().hasMemoryPlayer(p.getUniqueId())) {
+                        MemoryPlayer memoryPlayer = getUtils().getMemoryPlayer(p.getUniqueId());
+                        for (PermissionAttachmentInfo pInfo : p.getEffectivePermissions()) {
+                            String perm = pInfo.getPermission();
+
+                            for (String permBase : Storage.permissionToCache){
+                                if (perm.toLowerCase().startsWith(permBase.toLowerCase())){
+                                    //since the original permission starts with the perm we want to cache, that's our permBase
+                                    //starts with it, we know we got a permission we want to cache...
+                                    int value = getUtils().getIntegersFromString(perm);
+                                    if (value > 0) {
+                                        //value at the end of the permission is valid so we're goochi
+                                        if (memoryPlayer.hasPermission(permBase)) {
+                                            //we already have the permBase, check if the values have changed or not
+                                            if (memoryPlayer.getPermissionValue(permBase) != value){
+                                                // perm changes, update it
+                                                memoryPlayer.updatePermission(permBase, value);
+                                            }
+                                        }else{
+                                            //we don't have the permission cached, we want to cache it now...
+                                            memoryPlayer.addPermission(permBase, value);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }.runTaskTimer(this, 0, 20L);
     }
 
     public void startTopTimer() {
