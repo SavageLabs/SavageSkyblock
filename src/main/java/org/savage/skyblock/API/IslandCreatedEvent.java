@@ -1,4 +1,4 @@
-package org.savage.skyblock.island.events;
+package org.savage.skyblock.API;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

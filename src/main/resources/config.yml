@@ -124,9 +124,13 @@ messages:
   ##########################################################################################
 
 settings:
+
+  default-hopper-limit: 5 # override with permission: skyblock.block.anvil.NUMBER
+  default-spawner-limit: 5 # override with permission: skyblock.block.spawner.NUMBER
+
+
   island-level-calculation-time: 60 # in seconds
   island-level-placeholder: '%is-level%' # can use this in chat formatting
-
   broadcast-isTop-calculations: true
 
   invalid-island-top-name-placeholders: '&cInvalid Island'

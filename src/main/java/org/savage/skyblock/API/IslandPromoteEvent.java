@@ -1,4 +1,4 @@
-package org.savage.skyblock.island.events;
+package org.savage.skyblock.API;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -7,7 +7,7 @@ import org.savage.skyblock.island.Island;
 
 import java.util.UUID;
 
-public class IslandKickEvent extends Event implements Cancellable {
+public class IslandPromoteEvent extends Event implements Cancellable {
 
     @Override
     public boolean isCancelled() {
@@ -30,14 +30,14 @@ public class IslandKickEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    private UUID kicker;
+    private UUID owner;
     private UUID target;
     private Island island;
     private boolean isCancelled;
 
-    public IslandKickEvent(Island island, UUID kicker, UUID target) {
+    public IslandPromoteEvent(Island island, UUID owner, UUID target) {
         this.island = island;
-        this.kicker = kicker;
+        this.owner = owner;
         this.target = target;
         this.isCancelled = false;
     }
@@ -46,12 +46,19 @@ public class IslandKickEvent extends Event implements Cancellable {
         return island;
     }
 
-    public UUID getKicker() {
-        return kicker;
+    public UUID getOwner() {
+        return owner;
     }
 
     public UUID getTarget() {
         return target;
     }
 
+    public void setOwner(UUID owner) {
+        this.owner = owner;
+    }
+
+    public void setTarget(UUID target) {
+        this.target = target;
+    }
 }

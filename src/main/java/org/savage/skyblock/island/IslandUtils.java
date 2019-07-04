@@ -3,10 +3,10 @@ package org.savage.skyblock.island;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.savage.skyblock.API.IslandCreateEvent;
+import org.savage.skyblock.API.IslandCreatedEvent;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
-import org.savage.skyblock.island.events.IslandCreateEvent;
-import org.savage.skyblock.island.events.IslandCreatedEvent;
 
 import java.util.*;
 

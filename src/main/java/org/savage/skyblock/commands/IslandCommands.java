@@ -6,11 +6,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.savage.skyblock.API.IslandTeleportEvent;
 import org.savage.skyblock.Placeholder;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
-import org.savage.skyblock.island.events.IslandTeleportEvent;
 
 public class IslandCommands implements CommandExecutor {
 

@@ -7,9 +7,9 @@ import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.savage.skyblock.API.*;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
-import org.savage.skyblock.island.events.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -81,10 +81,35 @@ public class Island {
         Storage.currentTop++;
     }
 
+    public int getHopperCount() {
+        return getBlockCount(new FakeItem("HOPPER", false));
+    }
+
+    public int getSpawnerCount() {
+        int count = 0;
+        for (FakeItem fakeItem : blocks.keySet()) {
+            if (fakeItem.isSpawner()) {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getSpawnerCount(String spawnerType) {
+        int count = 0;
+        for (FakeItem fakeItem : blocks.keySet()) {
+            if (fakeItem.isSpawner()) {
+                if (fakeItem.getType().equalsIgnoreCase(spawnerType)) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     public void clearBlockCount() {
         this.blocks.clear();
     }
-
 
     public boolean blocksHas(FakeItem fakeItem) {
         for (FakeItem fakeItems : blocks.keySet()) {

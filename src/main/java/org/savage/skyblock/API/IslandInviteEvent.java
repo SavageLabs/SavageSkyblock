@@ -1,18 +1,13 @@
-package org.savage.skyblock.island.events;
+package org.savage.skyblock.API;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.savage.skyblock.island.Island;
 
 import java.util.UUID;
 
-/**
- * @author Trent @ Aysteria Development
- *
- * Event when creating an island
- */
-
-public class IslandCreateEvent extends Event implements Cancellable {
+public class IslandInviteEvent extends Event implements Cancellable {
 
     @Override
     public boolean isCancelled() {
@@ -35,20 +30,27 @@ public class IslandCreateEvent extends Event implements Cancellable {
         return handlers;
     }
 
-    private UUID owner;
+    private UUID inviter;
+    private UUID target;
+    private Island island;
     private boolean isCancelled;
 
-    public IslandCreateEvent(UUID owner) {
-        this.owner = owner;
+    public IslandInviteEvent(Island island, UUID inviter, UUID target) {
+        this.island = island;
+        this.inviter = inviter;
+        this.target = target;
         this.isCancelled = false;
     }
 
-    public UUID getOwner() {
-        return owner;
+    public Island getIsland() {
+        return island;
     }
 
-    public void setOwner(UUID owner) {
-        this.owner = owner;
+    public UUID getInviter() {
+        return inviter;
     }
 
+    public UUID getTarget() {
+        return target;
+    }
 }
