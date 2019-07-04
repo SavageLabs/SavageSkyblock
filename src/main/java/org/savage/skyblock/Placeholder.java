@@ -20,16 +20,28 @@ public class Placeholder {
     }
 
     public static String convertPlaceholders(String s, Island island) {
-        s = s.replace("%owner%", SkyBlock.getInstance().getUtils().getNameFromUUID(island.getOwnerUUID()));
-        s = s.replace("%worth%", island.getWorth() + "");
-        s = s.replace("%block-worth%", island.getBlockWorth() + "");
-        s = s.replace("%spawner-worth%", island.getSpawnerWorth() + "");
+        if (island != null) {
+            s = s.replace("%owner%", SkyBlock.getInstance().getUtils().getNameFromUUID(island.getOwnerUUID()));
+            s = s.replace("%level%", island.getLevel() + "");
+            s = s.replace("%worth%", island.getWorth() + "");
+            s = s.replace("%block-worth%", island.getBlockWorth() + "");
+            s = s.replace("%spawner-worth%", island.getSpawnerWorth() + "");
 
+            s = s.replace("{island-name}", island.getName());
+            s = s.replace("{island-level}", island.getLevel() + "");
+            s = s.replace("{island-top}", island.getTopPlace() + "");
+        } else {
+            String invalid = SkyBlock.getInstance().getUtils().getSettingString("invalid-island-top-lore-placeholders");
+            s = s.replace("%owner%", invalid);
+            s = s.replace("%level%", invalid);
+            s = s.replace("%worth%", invalid);
+            s = s.replace("%block-worth%", invalid);
+            s = s.replace("%spawner-worth%", invalid);
 
-        s = s.replace("{island-name}", island.getName());
-        s = s.replace("{island-level}", island.getLevel() + "");
-        s = s.replace("{island-top}", island.getTopPlace() + "");
-
+            s = s.replace("{island-name}", invalid);
+            s = s.replace("{island-level}", invalid);
+            s = s.replace("{island-top}", invalid);
+        }
         return s;
     }
 
@@ -38,23 +50,28 @@ public class Placeholder {
 
         for (String s : list) {
             boolean t = false;
+
             s = convertPlaceholders(s, island);
 
             if (s.contains("%officers%")) {
-                List<UUID> officers = island.getOfficerList();
-                for (UUID uuid : officers) {
-                    String name = SkyBlock.getInstance().getUtils().getNameFromUUID(uuid);
-                    s = s.replace("%officers%", name);
-                    l.add(s);
+                if (island != null) {
+                    List<UUID> officers = island.getOfficerList();
+                    for (UUID uuid : officers) {
+                        String name = SkyBlock.getInstance().getUtils().getNameFromUUID(uuid);
+                        s = s.replace("%officers%", name);
+                        l.add(s);
+                    }
                 }
                 t = true;
             }
             if (s.contains("%members%")) {
-                List<UUID> members = island.getMemberList();
-                for (UUID uuid : members) {
-                    String name = SkyBlock.getInstance().getUtils().getNameFromUUID(uuid);
-                    s = s.replace("%members%", name);
-                    l.add(s);
+                if (island != null) {
+                    List<UUID> members = island.getMemberList();
+                    for (UUID uuid : members) {
+                        String name = SkyBlock.getInstance().getUtils().getNameFromUUID(uuid);
+                        s = s.replace("%members%", name);
+                        l.add(s);
+                    }
                 }
                 t = true;
             }

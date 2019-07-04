@@ -124,7 +124,8 @@ public class IslandUtils {
             levels.add(level);
         }
 
-        Collections.sort(levels);
+        levels.sort(Comparator.reverseOrder());
+
         int current = 1;
         for (double d : levels) {
             for (Island island : Storage.islandList) {
@@ -145,6 +146,8 @@ public class IslandUtils {
         island.clearBlockCount();
         island.setLevel(0);
         island.setWorth(0);
+        island.setBlockWorth(0);
+        island.setSpawnerWorth(0);
 
         for (FakeChunk chunk : fakeChunkList) {
             SkyBlock.getInstance().getReflectionManager().nmsHandler.calculate(island.getLocation().getWorld().getChunkAt(chunk.getX(), chunk.getZ()), island);

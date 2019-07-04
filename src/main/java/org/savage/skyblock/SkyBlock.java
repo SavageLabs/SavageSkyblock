@@ -97,6 +97,7 @@ public class SkyBlock extends JavaPlugin {
         getReflectionManager().setup();
 
         startTopTimer();
+        startCalculationTimer();
 
     }
 
@@ -120,18 +121,31 @@ public class SkyBlock extends JavaPlugin {
         new BukkitRunnable() {
             @Override
             public void run() {
+                getIslandUtils().calculateIslandTop();
+            }
+        }.runTaskTimer(this, 0, 20L);
+    }
 
-                for (String s : getUtils().getMessageList("starting-calculations")) {
-                    Bukkit.broadcastMessage(s);
+    public void startCalculationTimer() {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                boolean broadcast = SkyBlock.getInstance().getConfig().getBoolean("settings.broadcast-isTop-calculations");
+
+                if (broadcast) {
+                    for (String s : getUtils().getMessageList("starting-calculations")) {
+                        Bukkit.broadcastMessage(s);
+                    }
                 }
 
                 for (Island island : Storage.islandList) {
                     getIslandUtils().calculateIslandLevel(island);
                 }
-                getIslandUtils().calculateIslandTop();
 
-                for (String s : getUtils().getMessageList("completed-calculations")) {
-                    Bukkit.broadcastMessage(s);
+                if (broadcast) {
+                    for (String s : getUtils().getMessageList("completed-calculations")) {
+                        Bukkit.broadcastMessage(s);
+                    }
                 }
             }
         }.runTaskTimer(this, 0, getConfig().getInt("settings.island-level-calculation-time") * 20);

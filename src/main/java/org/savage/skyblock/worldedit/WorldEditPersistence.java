@@ -1,15 +1,11 @@
 package org.savage.skyblock.worldedit;
 
 import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 public class WorldEditPersistence {
 
     public static WorldEdit getWorldEdit(){
         return WorldEdit.getInstance();
-    }
-    public static WorldGuardPlugin getWorldGuard(){
-        return WorldGuardPlugin.inst();
     }
 
     public static String worldEditVersion;

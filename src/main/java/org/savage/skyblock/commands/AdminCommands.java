@@ -6,6 +6,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.savage.skyblock.SkyBlock;
+import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
 
 public class AdminCommands implements CommandExecutor {
@@ -33,6 +34,12 @@ public class AdminCommands implements CommandExecutor {
                             Bukkit.getScheduler().cancelTasks(SkyBlock.getInstance());
 
                             SkyBlock.getInstance().startTopTimer();
+                            SkyBlock.getInstance().startCalculationTimer();
+
+                            for (Island island : Storage.islandList) {
+                                SkyBlock.getInstance().getIslandUtils().calculateIslandLevel(island);
+                            }
+
                         }
                         if (args[0].equalsIgnoreCase("setspawn")) {
                             SkyBlock.getInstance().getConfig().set("settings.island-spawn", SkyBlock.getInstance().getUtils().serializeLocation(p.getLocation()));

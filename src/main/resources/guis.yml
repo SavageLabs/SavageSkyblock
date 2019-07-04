@@ -191,20 +191,64 @@ biomes: # this is a list of all possible biomes: https://minecraft.gamepedia.com
 
 istop:
   name: '&a&lISLAND TOP'
-  rows: 3
-  items:
+  rows: 5
+  placement-item:
+    item-lore:
+      - '' # spacer
+      - '&aIsland Owner: &l%owner%'
+      - '&cLevel: &l%level%'
+      - ''
+      - '&aWorth: $&l%worth%'
+      - '&aValuable Blocks: $&l%block-worth%'
+      - '&aValuable Spawners: $&l%spawner-worth%'
+      - ''
+      - '&a&lOfficers:'
+      - '&7- &a%officers%'
+      - '&b&lMembers:'
+      - '&7- &b%members%'
+  items: # 1,13,15,21,25
     1:
       slot: 5
-      item-id: 'diamond_block'
+      item-id: 'bedrock'
       item-data: 0
       item-name: '&c&l#1. &7- &a(&l%top-1%&a)'
+      item-amount: 1
+      is-placement: true
+    2:
+      slot: 13
+      item-id: 'diamond_block'
+      item-data: 0
+      item-name: '&c&l#2. &7- &a(&l%top-2%&a)'
+      item-amount: 1
+      is-placement: true
+    3:
+      slot: 15
+      item-id: 'emerald_block'
+      item-data: 0
+      item-name: '&c&l#3. &7- &a(&l%top-3%&a)'
+      item-amount: 1
+      is-placement: true
+    4:
+      slot: 21
+      item-id: 'gold_block'
+      item-data: 0
+      item-name: '&c&l#4. &7- &a(&l%top-4%&a)'
+      item-amount: 1
+      is-placement: true
+    5:
+      slot: 25
+      item-id: 'iron_block'
+      item-data: 0
+      item-name: '&c&l#5. &7- &a(&l%top-5%&a)'
+      item-amount: 1
+      is-placement: true
+    6:
+      slot: 32
+      item-id: 'barrier'
+      item-data: 0
+      item-name: '&cTest Block'
+      item-amount: 1
+      is-placement: false
       item-lore:
-        - '&aIsland Owner: &l%owner%'
-        - '&aWorth: $&l%worth%'
-        - '&aValuable Blocks: $&l%block-worth%'
-        - '&aValuable Spawners: $&l%spawner-worth%'
-        - ''
-        - '&a&lOfficers:'
-        - '&7- &a%officers%'
-        - '&b&lMembers:'
-        - '&7- &b%members%'
+        - 'Test1'
+        - 'Test2'

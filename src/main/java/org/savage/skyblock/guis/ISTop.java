@@ -22,28 +22,35 @@ public class ISTop implements Listener {
         for (int a = 1; a <= m; a++) {
             String id = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getString("istop.items." + a + ".item-id");
             String name = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getString("istop.items." + a + ".item-name");
-            List<String> lore = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getStringList("istop.items." + a + ".item-lore");
             int slot = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getInt("istop.items." + a + ".slot");
             int data = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getInt("istop.items." + a + ".item-data");
 
-            int islandTopNumber;
+            List<String> lore;
 
-            islandTopNumber = Placeholder.getIslandTopPlacement(name);
+            boolean placement = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getBoolean("istop.items." + a + ".is-placement");
 
-            if (islandTopNumber > 0) {
-                //Bukkit.broadcastMessage("TOP: " + islandTopNumber);
-                if (SkyBlock.getInstance().getIslandUtils().getIslandFromPlacement(islandTopNumber) != null) {
-                    Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromPlacement(islandTopNumber);
-                    name = name.replace("%top-" + islandTopNumber + "%", island.getName());
-                    lore = Placeholder.convertPlaceholders(lore, island);
+            if (placement) {
+                lore = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getStringList("istop.placement-item.item-lore");
+                int placementNum = Placeholder.getIslandTopPlacement(name);
+                Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromPlacement(placementNum);
+
+                lore = Placeholder.convertPlaceholders(lore, island);
+
+                if (island != null) {
+                    name = name.replace("%top-" + placementNum + "%", island.getName());
                 } else {
-                    //  Bukkit.broadcastMessage("no");
+                    name = name.replace("%top-" + placementNum + "%", SkyBlock.getInstance().getUtils().getSettingString("invalid-island-top-name-placeholders"));
                 }
+
+            } else {
+                lore = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getStringList("istop.items." + a + ".item-lore");
             }
+
 
             ItemStack item = SkyBlock.getInstance().getUtils().createItem(id, data, name, lore, 1);
             i.setItem(slot - 1, item);
         }
+
         p.openInventory(i);
     }
 
