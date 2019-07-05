@@ -21,7 +21,6 @@ public class IslandEvents implements Listener {
         Island island = e.getIsland();
         //when an island is created without fail
         SkyBlock.getInstance().getIslandUtils().calculateIslandLevel(island);
-        SkyBlock.getInstance().getIslandUtils().calculateIslandTop();
     }
 
     @EventHandler

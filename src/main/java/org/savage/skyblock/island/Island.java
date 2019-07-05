@@ -165,6 +165,7 @@ public class Island {
         }
     }
 
+
     public boolean hasPlayer(UUID uuid){
         return getOwnerUUID().equals(uuid) || getOfficerList().contains(uuid) || getMemberList().contains(uuid);
     }

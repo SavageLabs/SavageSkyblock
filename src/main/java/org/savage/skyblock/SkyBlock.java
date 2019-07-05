@@ -165,7 +165,7 @@ public class SkyBlock extends JavaPlugin {
             public void run() {
                 getIslandUtils().calculateIslandTop();
             }
-        }.runTaskTimer(this, 0, 20L);
+        }.runTaskTimerAsynchronously(this, 0, 20L);
     }
 
     public void startCalculationTimer() {
