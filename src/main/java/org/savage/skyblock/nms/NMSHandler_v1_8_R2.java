@@ -4,10 +4,13 @@ import net.minecraft.server.v1_8_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.WorldCreator;
 import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R2.CraftChunk;
 import org.bukkit.craftbukkit.v1_8_R2.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.entity.Player;
+import org.bukkit.generator.ChunkGenerator;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
@@ -16,6 +19,11 @@ import java.util.List;
 import java.util.Map;
 
 public class NMSHandler_v1_8_R2 extends NMSHandler {
+
+    @Override
+    public void generate(String name) {
+        SkyBlock.getInstance().getWorldGenerator().generateWorld("skyBlock");
+    }
 
     @Override
     public String getVersion() {

@@ -14,6 +14,9 @@ public abstract class NMSHandler {
 
     public abstract void sendTitle(Player p, String text, int in, int stay, int out, String type);
 
+    public abstract void generate(String name);
+
     public abstract String getVersion();
+
 
 }

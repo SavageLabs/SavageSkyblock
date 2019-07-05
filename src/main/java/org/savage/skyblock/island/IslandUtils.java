@@ -143,7 +143,6 @@ public class IslandUtils {
             }
         }
         levels.clear();
-        //  Storage.islandTopMap = map;
     }
 
     public void calculateIslandLevel(Island island) {
@@ -159,7 +158,6 @@ public class IslandUtils {
         }
         fakeChunkList.clear();
 
-        //do the money worth now
         for (Map.Entry<FakeItem, Integer> entry : island.getBlocks().entrySet()) {
             FakeItem fakeItem = entry.getKey();
             int amount = entry.getValue();
