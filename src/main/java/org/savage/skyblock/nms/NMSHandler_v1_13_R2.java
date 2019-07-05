@@ -2,14 +2,17 @@ package org.savage.skyblock.nms;
 
 import me.trent.WorldAPI;
 import net.minecraft.server.v1_13_R2.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_13_R2.CraftChunk;
 import org.bukkit.craftbukkit.v1_13_R2.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
+import org.savage.skyblock.island.FakeItem;
 import org.savage.skyblock.island.Island;
 
 import java.util.List;
@@ -37,25 +40,33 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
         final int maxY = chunk.getWorld().getMaxHeight();
         final int maxZ = minZ | 15;
 
-        //for (int x = minX; x <= maxX; ++x) {
-        //    for (int y = 0; y <= maxY; ++y) {
-        //        for (int z = minZ; z <= maxZ; ++z) {
-        //            try {
-        //                org.bukkit.block.Block block = craftChunk.getBlock(x, y, z);
-        //                if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
-        //                    if (!tileEntities.contains(block.getType())) {
-        //                        String type = block.getType().name().toUpperCase();
-        //                        if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)) {
-        //                            island.addBlockCount(type, false);
-        //                        }
-        //                    }
-        //                }
-        //            }catch(IllegalArgumentException e){
-        //                continue;
-        //            }
-        //        }
-        //    }
-        //}
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                for (int x = minX; x <= maxX; ++x) {
+                    for (int y = 0; y <= maxY; ++y) {
+                        for (int z = minZ; z <= maxZ; ++z) {
+                            try {
+                                org.bukkit.block.Block block = chunk.getWorld().getBlockAt(x,y,z);
+                                if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
+                                    if (!tileEntities.contains(block.getType())) {
+                                        String type = block.getType().name().toUpperCase();
+                                        if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)) {
+                                            island.addBlockCount(type, false);
+                                           // System.out.print("\n\n\n "+type+":"+island.getBlockCount(new FakeItem("DIAMOND_BLOCK", false))+"   \n\n\n");
+                                        }
+                                    }
+                                }
+                            }catch(IllegalArgumentException e){
+                                e.printStackTrace();
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+        }.runTaskAsynchronously(SkyBlock.getInstance());
+
 
         for (final Map.Entry<BlockPosition, net.minecraft.server.v1_13_R2.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
             if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {

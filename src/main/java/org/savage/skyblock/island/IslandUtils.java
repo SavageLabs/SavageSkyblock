@@ -126,6 +126,25 @@ public class IslandUtils {
         List<Double> levels = new ArrayList<>();
 
         for (Island island : Storage.islandList) {
+            for (Map.Entry<FakeItem, Integer> entry : island.getBlocks().entrySet()) {
+                FakeItem fakeItem = entry.getKey();
+                int amount = entry.getValue();
+                if (amount == 0) continue;
+                double val;
+                if (fakeItem.isSpawner()) {
+                    val = getMoneyWorth(fakeItem.getType(), true) * amount;
+                    island.addSpawnerWorth(val);
+                    val = getLevelWorth(fakeItem.getType(), true) * amount;
+                    island.addLevel(val);
+                } else {
+                    val = getMoneyWorth(fakeItem.getType(), false) * amount;
+                    island.addBlockWorth(val);
+                    val = getLevelWorth(fakeItem.getType(), false) * amount;
+                    island.addLevel(val);
+                }
+            }
+
+
             double level = island.getLevel();
             levels.add(level);
         }
@@ -158,22 +177,5 @@ public class IslandUtils {
         }
         fakeChunkList.clear();
 
-        for (Map.Entry<FakeItem, Integer> entry : island.getBlocks().entrySet()) {
-            FakeItem fakeItem = entry.getKey();
-            int amount = entry.getValue();
-            if (amount == 0) continue;
-            double val;
-            if (fakeItem.isSpawner()) {
-                val = getMoneyWorth(fakeItem.getType(), true) * amount;
-                island.addSpawnerWorth(val);
-                val = getLevelWorth(fakeItem.getType(), true) * amount;
-                island.addLevel(val);
-            } else {
-                val = getMoneyWorth(fakeItem.getType(), false) * amount;
-                island.addBlockWorth(val);
-                val = getLevelWorth(fakeItem.getType(), false) * amount;
-                island.addLevel(val);
-            }
-        }
     }
 }
