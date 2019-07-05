@@ -119,18 +119,23 @@ public class IslandUtils {
     }
 
     public void calculateIslandTop() {
-        //Storage.islandTopMap.clear();
-
-        //HashMap<Integer, Island> map = new HashMap<>();
 
         List<Double> levels = new ArrayList<>();
 
         for (Island island : Storage.islandList) {
+
+            island.setLevel(0);
+            island.setBlockWorth(0);
+            island.setSpawnerWorth(0);
+
             for (Map.Entry<FakeItem, Integer> entry : island.getBlocks().entrySet()) {
                 FakeItem fakeItem = entry.getKey();
                 int amount = entry.getValue();
                 if (amount == 0) continue;
                 double val;
+
+                System.out.print("\n "+fakeItem.getType()+","+amount+"\n");
+
                 if (fakeItem.isSpawner()) {
                     val = getMoneyWorth(fakeItem.getType(), true) * amount;
                     island.addSpawnerWorth(val);
@@ -143,7 +148,6 @@ public class IslandUtils {
                     island.addLevel(val);
                 }
             }
-
 
             double level = island.getLevel();
             levels.add(level);
@@ -168,9 +172,6 @@ public class IslandUtils {
         List<FakeChunk> fakeChunkList = island.getFakeChunks();
 
         island.clearBlockCount();
-        island.setLevel(0);
-        island.setBlockWorth(0);
-        island.setSpawnerWorth(0);
 
         for (FakeChunk chunk : fakeChunkList) {
             SkyBlock.getInstance().getReflectionManager().nmsHandler.calculate(island.getLocation().getWorld().getChunkAt(chunk.getX(), chunk.getZ()), island);

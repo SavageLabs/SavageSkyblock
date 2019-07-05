@@ -64,34 +64,34 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
                         }
                     }
                 }
+
+
+                for (final Map.Entry<BlockPosition, net.minecraft.server.v1_13_R2.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
+                    if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {
+                        final net.minecraft.server.v1_13_R2.TileEntity tileEntity = entry.getValue();
+
+                        String blockType;
+                        boolean isSpawner = false;
+
+
+                        if (tileEntity instanceof net.minecraft.server.v1_13_R2.TileEntityMobSpawner) {
+                            blockType = ((net.minecraft.server.v1_13_R2.TileEntityMobSpawner) tileEntity).getSpawner().getMobName().toString().toUpperCase();
+                            isSpawner = true;
+                        } else {
+                            blockType = tileEntity.getBlock().getMaterial().toString().toUpperCase();
+                        }
+
+                        blockType = blockType.replace("MINECRAFT:", "");
+                        // System.out.print("\n\n type: "+blockType+", spawner: "+isSpawner+"\n\n");
+
+                        if (SkyBlock.getInstance().getIslandUtils().hasWorth(blockType, isSpawner)){
+                            island.addBlockCount(blockType, isSpawner);
+                            //  System.out.print("\n\n type: "+blockType+", spawner: "+isSpawner+"\n\n");
+                        }
+                    }
+                }
             }
         }.runTaskAsynchronously(SkyBlock.getInstance());
-
-
-        for (final Map.Entry<BlockPosition, net.minecraft.server.v1_13_R2.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
-            if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {
-                final net.minecraft.server.v1_13_R2.TileEntity tileEntity = entry.getValue();
-
-                String blockType;
-                boolean isSpawner = false;
-
-
-                if (tileEntity instanceof net.minecraft.server.v1_13_R2.TileEntityMobSpawner) {
-                    blockType = ((net.minecraft.server.v1_13_R2.TileEntityMobSpawner) tileEntity).getSpawner().getMobName().toString().toUpperCase();
-                    isSpawner = true;
-                } else {
-                    blockType = tileEntity.getBlock().getMaterial().toString().toUpperCase();
-                }
-
-                blockType = blockType.replace("MINECRAFT:", "");
-               // System.out.print("\n\n type: "+blockType+", spawner: "+isSpawner+"\n\n");
-
-                if (SkyBlock.getInstance().getIslandUtils().hasWorth(blockType, isSpawner)){
-                    island.addBlockCount(blockType, isSpawner);
-                  //  System.out.print("\n\n type: "+blockType+", spawner: "+isSpawner+"\n\n");
-                }
-            }
-        }
     }
 
     @Override

@@ -33,13 +33,13 @@ public class AdminCommands implements CommandExecutor {
 
                             Bukkit.getScheduler().cancelTasks(SkyBlock.getInstance());
 
-                            SkyBlock.getInstance().startTopTimer();
-                            SkyBlock.getInstance().startCalculationTimer();
-                            SkyBlock.getInstance().startCacheTimer();
-
                             for (Island island : Storage.islandList) {
                                 SkyBlock.getInstance().getIslandUtils().calculateIslandLevel(island);
                             }
+
+                            SkyBlock.getInstance().startTopTimer();
+                            SkyBlock.getInstance().startCalculationTimer();
+                            SkyBlock.getInstance().startCacheTimer();
 
                         }
                         if (args[0].equalsIgnoreCase("setspawn")) {
