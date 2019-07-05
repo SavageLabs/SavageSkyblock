@@ -375,6 +375,9 @@ public class Utils {
     }
 
     public boolean hasPermissionAtleast(UUID uuid, String permissionBase){ // uses the cache class
+        if (Bukkit.getPlayer(uuid) != null && Bukkit.getPlayer(uuid).isOp()){
+            return true;
+        }
         if (hasMemoryPlayer(uuid)) {
             return getMemoryPlayer(uuid).hasPermission(permissionBase);
         }

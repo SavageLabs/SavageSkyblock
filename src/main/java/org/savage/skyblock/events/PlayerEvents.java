@@ -1,6 +1,7 @@
 package org.savage.skyblock.events;
 
-import com.sun.jna.Memory;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.entity.Player;
@@ -9,9 +10,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.savage.skyblock.SkyBlock;
+import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
 
@@ -54,61 +57,69 @@ public class PlayerEvents implements Listener {
         }
     }
 
-    @EventHandler (priority = EventPriority.HIGH)
+    @EventHandler (priority = EventPriority.HIGHEST)
     public void placeBlockChecker(BlockPlaceEvent e){
         Player p = e.getPlayer();
         Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
         if (island == null) return;
 
+
         Block block = e.getBlockPlaced();
+
+        if (!p.getWorld().equals(Storage.getSkyBlockWorld())){
+            return;
+        }
+
+        if (!p.isOp() && !island.isBlockInIsland(block.getX(), block.getZ())){
+            e.setCancelled(true);
+            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("placeblockRestriction"));
+            return;
+        }
+
         String type = block.getType().name().toUpperCase();
 
         int defaultHopper = SkyBlock.getInstance().getUtils().getSettingInt("default-hopper-limit");
         int defaultSpawner = SkyBlock.getInstance().getUtils().getSettingInt("default-spawner-limit");
 
         //check perms
-        int islandHoppers = island.getHopperCount();
-        int islandSpawners = island.getSpawnerCount();
+        int islandHoppers = island.getHopperCount() + 1;
+        int islandSpawners = island.getSpawnerCount() + 1;
 
-        if (type.equalsIgnoreCase("HOPPER")) {
-            if (islandHoppers >= defaultHopper) {
-                if (SkyBlock.getInstance().getUtils().hasPermissionAtleast(island.getOwnerUUID(), "skyblock.block.anvil")) {
-                    int val = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId()).getPermissionValue("skyblock.block.anvil");
-                    if (val < islandHoppers){
+        if (!p.isOp()) {
+            if (type.equalsIgnoreCase("HOPPER")) {
+                if (islandHoppers > defaultHopper) {
+                    if (SkyBlock.getInstance().getUtils().hasPermissionAtleast(island.getOwnerUUID(), "skyblock.block.anvil")) {
+                        int val = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId()).getPermissionValue("skyblock.block.anvil");
+                        if (val < islandHoppers) {
+                            e.setCancelled(true);
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("hopper-limit"));
+                            return;
+                        }
+                    } else {
                         e.setCancelled(true);
-                        p.sendMessage("2You cannot place anymore hoppers!");
+                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("hopper-limit"));
+                        return;
                     }
-                }else{
-                    e.setCancelled(true);
-                    p.sendMessage("You cannot place anymore hoppers!");
+                }
+            }
+            if (type.contains("SPAWNER")) {
+                if (islandSpawners > defaultSpawner) {
+                    if (SkyBlock.getInstance().getUtils().hasPermissionAtleast(island.getOwnerUUID(), "skyblock.block.spawner")) {
+                        int val = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId()).getPermissionValue("skyblock.block.spawner");
+                        if (val < islandSpawners) {
+                            e.setCancelled(true);
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("spawner-limit"));
+                            return;
+                        }
+                    } else {
+                        e.setCancelled(true);
+                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("spawner-limit"));
+                        return;
+                    }
                 }
             }
         }
-        if (type.equalsIgnoreCase("SPAWNER")) {
-            if (islandSpawners >= defaultSpawner) {
-                if (SkyBlock.getInstance().getUtils().hasPermissionAtleast(island.getOwnerUUID(), "skyblock.block.spawner")) {
-                    int val = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId()).getPermissionValue("skyblock.block.spawner");
-                    if (val < islandHoppers){
-                        e.setCancelled(true);
-                        p.sendMessage("2You cannot place anymore spawners!");
-                    }
-                }else{
-                    e.setCancelled(true);
-                    p.sendMessage("You cannot place anymore spawners!");
-                }
-            }
-        }
-    }
 
-    @EventHandler
-    public void placeBlock(BlockPlaceEvent e) {
-        Player p = e.getPlayer();
-
-        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
-        if (island == null) return;
-
-        Block block = e.getBlockPlaced();
-        String type = block.getType().name().toUpperCase();
         double levelValue;
         double moneyValue;
         boolean spawner;
@@ -126,7 +137,6 @@ public class PlayerEvents implements Listener {
         }
 
         if (moneyValue > 0) {
-            island.addWorth(moneyValue);
             if (spawner) {
                 island.addSpawnerWorth(moneyValue);
             } else {
@@ -134,49 +144,78 @@ public class PlayerEvents implements Listener {
             }
         }
 
+
         if (levelValue > 0) {
             island.addBlockCount(type, spawner);
             island.addLevel(levelValue);
+        } else if (block.getType().equals(Material.HOPPER) || block.getType().equals(Material.MOB_SPAWNER)) {
+            island.addBlockCount(type, spawner);
         }
     }
 
+
     @EventHandler
-    public void breakBlock(BlockBreakEvent e) {
-        Player p = e.getPlayer();
-
-        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
-        if (island == null) return;
-
-        Block block = e.getBlock();
-        String type = block.getType().name().toUpperCase();
-        double levelValue;
-        double moneyValue;
-        boolean spawner;
-
-        if (block.getState() instanceof CreatureSpawner) {
-            CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
-            type = creatureSpawner.getCreatureTypeName().toUpperCase();
-            levelValue = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, true);
-            moneyValue = SkyBlock.getInstance().getIslandUtils().getMoneyWorth(type, true);
-            spawner = true;
-        } else {
-            levelValue = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, false);
-            moneyValue = SkyBlock.getInstance().getIslandUtils().getMoneyWorth(type, false);
-            spawner = false;
-        }
-
-        if (moneyValue > 0) {
-            island.addWorth(-moneyValue);
-            if (spawner) {
-                island.addSpawnerWorth(-moneyValue);
-            } else {
-                island.addBlockWorth(-moneyValue);
+    public void playerDamage(EntityDamageEvent e){
+        if (e.getEntity() instanceof Player){
+            if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL) || e.getCause().equals(EntityDamageEvent.DamageCause.FALLING_BLOCK)){
+                if (SkyBlock.getInstance().getConfig().getBoolean("settings.disable-fallDamage")){
+                    e.setCancelled(true);
+                }
             }
         }
+    }
 
-        if (levelValue > 0) {
-            island.removeBlockCount(type, spawner);
-            island.addLevel(-levelValue);
+    @EventHandler(priority = EventPriority.LOW)
+    public void breakBlock(BlockBreakEvent e) {
+        if (!e.isCancelled()) {
+            Player p = e.getPlayer();
+
+            Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+            if (island == null) return;
+
+            Block block = e.getBlock();
+
+            if (!p.getWorld().equals(Storage.getSkyBlockWorld())){
+                return;
+            }
+
+            if (!p.isOp() && !island.isBlockInIsland(block.getX(), block.getZ())){
+                e.setCancelled(true);
+                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("breakblockRestriction"));
+                return;
+            }
+
+            String type = block.getType().name().toUpperCase();
+            double levelValue;
+            double moneyValue;
+            boolean spawner;
+
+            if (block.getState() instanceof CreatureSpawner) {
+                CreatureSpawner creatureSpawner = (CreatureSpawner) block.getState();
+                type = creatureSpawner.getCreatureTypeName().toUpperCase();
+                levelValue = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, true);
+                moneyValue = SkyBlock.getInstance().getIslandUtils().getMoneyWorth(type, true);
+                spawner = true;
+            } else {
+                levelValue = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, false);
+                moneyValue = SkyBlock.getInstance().getIslandUtils().getMoneyWorth(type, false);
+                spawner = false;
+            }
+
+            if (moneyValue > 0) {
+                if (spawner) {
+                    island.addSpawnerWorth(-moneyValue);
+                } else {
+                    island.addBlockWorth(-moneyValue);
+                }
+            }
+
+            if (levelValue > 0) {
+                island.removeBlockCount(type, spawner);
+                island.addLevel(-levelValue);
+            } else if (block.getType().equals(Material.HOPPER) || block.getType().equals(Material.MOB_SPAWNER)) {
+                island.removeBlockCount(type, spawner);
+            }
         }
     }
 }

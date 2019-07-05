@@ -40,9 +40,8 @@ public class NMSHandler_v1_8_R3 extends NMSHandler {
                     if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
                         if (!tileEntities.contains(block.getType())) {
                             String type = block.getType().name().toUpperCase();
-                            double value = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, false);
-                            if (value > 0) {
-                                island.addLevel(value);
+
+                            if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)){
                                 island.addBlockCount(type, false);
                             }
                         }
@@ -65,11 +64,9 @@ public class NMSHandler_v1_8_R3 extends NMSHandler {
                     } else {
                         blockType = tileEntity.w().getName().toUpperCase();
                     }
-                    double value = SkyBlock.getInstance().getIslandUtils().getLevelWorth(blockType, isSpawner);
-                        if (value > 0) {
-                            island.addLevel(value);
-                            island.addBlockCount(blockType, isSpawner);
-                        }
+                    if (SkyBlock.getInstance().getIslandUtils().hasWorth(blockType, isSpawner)){
+                        island.addBlockCount(blockType, isSpawner);
+                    }
                 }
             }
         }

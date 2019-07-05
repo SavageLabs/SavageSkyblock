@@ -103,6 +103,12 @@ public class IslandUtils {
         }
     }
 
+    public boolean hasWorth(String blockType, boolean isSpawner){
+        double level = getLevelWorth(blockType, isSpawner);
+        double money = getMoneyWorth(blockType, isSpawner);
+        return level > 0 || money > 0;
+    }
+
     public Island getIslandFromPlacement(int place) {
         for (Island island : Storage.islandList) {
             if (island.getTopPlace() == place) {
@@ -145,7 +151,6 @@ public class IslandUtils {
 
         island.clearBlockCount();
         island.setLevel(0);
-        island.setWorth(0);
         island.setBlockWorth(0);
         island.setSpawnerWorth(0);
 
@@ -161,16 +166,16 @@ public class IslandUtils {
             if (amount == 0) continue;
             double val;
             if (fakeItem.isSpawner()) {
-                val = getMoneyWorth(fakeItem.getType(), true);
+                val = getMoneyWorth(fakeItem.getType(), true) * amount;
                 island.addSpawnerWorth(val);
+                val = getLevelWorth(fakeItem.getType(), true) * amount;
+                island.addLevel(val);
             } else {
-                val = getMoneyWorth(fakeItem.getType(), false);
+                val = getMoneyWorth(fakeItem.getType(), false) * amount;
                 island.addBlockWorth(val);
+                val = getLevelWorth(fakeItem.getType(), false) * amount;
+                island.addLevel(val);
             }
-
-            //add to the island's worth
-            island.addWorth(val);
-
         }
     }
 }

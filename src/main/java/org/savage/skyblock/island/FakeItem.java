@@ -14,12 +14,11 @@ public class FakeItem {
         return spawner;
     }
 
-
     public String getType() {
         return type;
     }
 
     public boolean equals(FakeItem fakeItem) {
-        return getType().equalsIgnoreCase(fakeItem.getType()) && isSpawner() == fakeItem.isSpawner();
+        return getType().equalsIgnoreCase(fakeItem.getType()) && (isSpawner() == fakeItem.isSpawner());
     }
 }

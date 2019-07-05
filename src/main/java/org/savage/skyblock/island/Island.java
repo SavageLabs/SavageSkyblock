@@ -49,7 +49,6 @@ public class Island {
     private double level = 0;
     private int topPlace = 0;
 
-    private double worth = 0;
     private double blockWorth = 0;
     private double spawnerWorth = 0;
 
@@ -87,9 +86,9 @@ public class Island {
 
     public int getSpawnerCount() {
         int count = 0;
-        for (FakeItem fakeItem : blocks.keySet()) {
+        for (FakeItem fakeItem : getBlocks().keySet()) {
             if (fakeItem.isSpawner()) {
-                count++;
+                count = Math.addExact(count, getBlocks().get(fakeItem));
             }
         }
         return count;
@@ -97,7 +96,7 @@ public class Island {
 
     public int getSpawnerCount(String spawnerType) {
         int count = 0;
-        for (FakeItem fakeItem : blocks.keySet()) {
+        for (FakeItem fakeItem : getBlocks().keySet()) {
             if (fakeItem.isSpawner()) {
                 if (fakeItem.getType().equalsIgnoreCase(spawnerType)) {
                     count++;
@@ -143,9 +142,9 @@ public class Island {
         if (blocksHas(fakeItem)) {
             //already has it in the map, add to it
             FakeItem dupe = getDuplicateFakeItem(fakeItem);
-            int amount = blocks.get(dupe);
+            int amount = getBlocks().get(dupe);
             this.blocks.remove(dupe);
-            this.blocks.put(dupe, amount);
+            this.blocks.put(dupe, Math.addExact(amount, 1));
         } else {
             //doesn't, add the initial one
             this.blocks.put(fakeItem, 1);
@@ -166,17 +165,14 @@ public class Island {
         }
     }
 
+    public boolean hasPlayer(UUID uuid){
+        return getOwnerUUID().equals(uuid) || getOfficerList().contains(uuid) || getMemberList().contains(uuid);
+    }
+
     public double getWorth() {
-        return worth;
+        return (getBlockWorth() + getSpawnerWorth());
     }
 
-    public void setWorth(double d) {
-        this.worth = d;
-    }
-
-    public void addWorth(double d) {
-        this.worth = (getWorth() + d);
-    }
 
     public void addBlockWorth(double d) {
         this.blockWorth = (getBlockWorth() + d);

@@ -132,7 +132,6 @@ public class SkyBlock extends JavaPlugin {
                         MemoryPlayer memoryPlayer = getUtils().getMemoryPlayer(p.getUniqueId());
                         for (PermissionAttachmentInfo pInfo : p.getEffectivePermissions()) {
                             String perm = pInfo.getPermission();
-
                             for (String permBase : Storage.permissionToCache){
                                 if (perm.toLowerCase().startsWith(permBase.toLowerCase())){
                                     //since the original permission starts with the perm we want to cache, that's our permBase

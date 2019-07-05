@@ -39,9 +39,7 @@ public class NMSHandler_v1_9_R1 extends NMSHandler {
                     if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
                         if (!tileEntities.contains(block.getType())) {
                             String type = block.getType().name().toUpperCase();
-                            double value = SkyBlock.getInstance().getIslandUtils().getLevelWorth(type, false);
-                            if (value > 0) {
-                                island.addLevel(value);
+                            if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)){
                                 island.addBlockCount(type, false);
                             }
                         }
