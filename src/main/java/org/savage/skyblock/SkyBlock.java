@@ -75,8 +75,6 @@ public class SkyBlock extends JavaPlugin {
 
         saveDefaultConfig();
 
-        getFileManager().setup();
-
         getCommand("is").setExecutor(new IslandCommands());
         getCommand("isa").setExecutor(new AdminCommands());
 
@@ -102,6 +100,8 @@ public class SkyBlock extends JavaPlugin {
         startCalculationTimer();
 
         startCacheTimer();
+
+        getFileManager().setup();
 
     }
 

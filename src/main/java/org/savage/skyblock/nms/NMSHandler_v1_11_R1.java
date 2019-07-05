@@ -16,6 +16,11 @@ import java.util.Map;
 public class NMSHandler_v1_11_R1 extends NMSHandler {
 
     @Override
+    public void generate(String name) {
+        SkyBlock.getInstance().getWorldGenerator().generateWorld("skyBlock");
+    }
+
+    @Override
     public String getVersion() {
         return "1_11_R1";
     }

@@ -1,6 +1,8 @@
 package org.savage.skyblock;
 
 import com.sun.jna.Memory;
+import net.lingala.zip4j.core.ZipFile;
+import net.lingala.zip4j.exception.ZipException;
 import org.bukkit.*;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
@@ -9,10 +11,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
 
+import java.io.*;
+import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class Utils {
 
@@ -178,7 +186,7 @@ public class Utils {
             }else{
                 island.setHome(island.getLocation());
             }
-            island.setBiome(Biome.valueOf(biome));
+            //island.setBiome(Biome.valueOf(biome));
         }
 
     }
@@ -382,6 +390,33 @@ public class Utils {
             return getMemoryPlayer(uuid).hasPermission(permissionBase);
         }
         return false;
+    }
+
+
+    public void copyFile(Path source, File dest) throws IOException {
+        Files.copy(source, dest.toPath());
+    }
+
+    public File getFileFromResources(String fileName) {
+
+        ClassLoader classLoader = getClass().getClassLoader();
+
+        URL resource = classLoader.getResource(fileName);
+        if (resource == null) {
+            throw new IllegalArgumentException("file is not found!");
+        } else {
+            return new File(resource.getFile());
+        }
+
+    }
+
+    public void unZipFile(String sourceFile, String destDir) {
+        try {
+            ZipFile zipFile = new ZipFile(sourceFile);
+            zipFile.extractAll(destDir);
+        } catch (ZipException e) {
+            e.printStackTrace();
+        }
     }
 
 }

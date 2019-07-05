@@ -1,5 +1,6 @@
 package org.savage.skyblock.nms;
 
+import me.trent.WorldAPI;
 import net.minecraft.server.v1_14_R1.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
@@ -15,6 +16,11 @@ import java.util.List;
 import java.util.Map;
 
 public class NMSHandler_v1_14_R1 extends NMSHandler {
+
+    @Override
+    public void generate(String name) {
+        WorldAPI.generate(name);
+    }
 
     @Override
     public String getVersion() {
@@ -33,21 +39,21 @@ public class NMSHandler_v1_14_R1 extends NMSHandler {
         final int maxY = chunk.getWorld().getMaxHeight();
         final int maxZ = minZ | 15;
 
-        for (int x = minX; x <= maxX; ++x) {
-            for (int y = 0; y <= maxY; ++y) {
-                for (int z = minZ; z <= maxZ; ++z) {
-                    org.bukkit.block.Block block = chunk.getBlock(x, y, z);
-                    if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
-                        if (!tileEntities.contains(block.getType())) {
-                            String type = block.getType().name().toUpperCase();
-                            if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)){
-                                island.addBlockCount(type, false);
-                            }
-                        }
-                    }
-                }
-            }
-        }
+       // for (int x = minX; x <= maxX; ++x) {
+       //     for (int y = 0; y <= maxY; ++y) {
+       //         for (int z = minZ; z <= maxZ; ++z) {
+       //             org.bukkit.block.Block block = chunk.getBlock(x, y, z);
+       //             if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
+       //                 if (!tileEntities.contains(block.getType())) {
+       //                     String type = block.getType().name().toUpperCase();
+       //                     if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)){
+       //                         island.addBlockCount(type, false);
+       //                     }
+       //                 }
+       //             }
+       //         }
+       //     }
+       // }
 
         for (final Map.Entry<BlockPosition, net.minecraft.server.v1_14_R1.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
             if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {
@@ -62,6 +68,8 @@ public class NMSHandler_v1_14_R1 extends NMSHandler {
                 } else {
                     blockType = tileEntity.getBlock().getMaterial().toString().toUpperCase();
                 }
+
+                blockType = blockType.replace("MINECRAFT:", "");
 
                 if (SkyBlock.getInstance().getIslandUtils().hasWorth(blockType, isSpawner)){
                     island.addBlockCount(blockType, isSpawner);
