@@ -2,7 +2,8 @@
 
 #        Saber SkyBlock Commands & Permissions List          #
 #                                                            #
-#   https://www.spigotmc.org/resources/skyblockplus.65309/   #
+#   /is - Main Island Command  #
+#   /isa - Admin Island Commands ( permission: isa.admin ) #
 
 messages:
   is-help:
@@ -11,14 +12,28 @@ messages:
     - '&a  /is &8-&7 opens the island Panel'
     - '&a  /is help &8-&7 displays this message.'
     - '&a  /is spawn &8-&7 teleports you to spawn.'
-    - ''
+    - '&a  /is invite <player> &8-&7 invite a player to the island'
+    - '&a  /is join|accept &8&- join a island'
+    - '&a  /is promote <player>'
+    - '&a  /is kick <player>'
+    - '&a  /is demote <player>'
+    - '&a  /is verison'
+    - '&a  /is worth'
+    - '&a  /is top'
+    - '&a  /is perms'
+    - '&a  /is home'
+    - '&a  /is create'
+    - '&a  /is biome'
+    - '&a  /is delete'
+    - '&a  /is sethome'
 
   isa-help: # is admin help
     - '   &b&lSavage SkyBlock &bAdmin Help'
     - ''
     - '&a  /isa &8-&7 displays these messages'
     - '&a  /isa setspawn &8-&7 sets the SkyBlock spawn.'
-    - ''
+    - '&a  /isa reload'
+    - '&a  /isa delete <player>'
     - ''
 
   reload: '&aReloaded the config.yml and the prices.yml files!'
@@ -104,6 +119,14 @@ messages:
   ##########################################################################################
 
   ##########################################################################################
+  # Island Misc message section
+  placeblockRestriction: '&cYou cannot build outside your Island''s protection range!'
+  breakblockRestriction: '&cYou cannot break outside your Island''s protection range!'
+  hopper-limit: '&cYou cannot place anymore hoppers on this island!'
+  spawner-limit: '&cYou cannot place anymore spawners on this island!'
+  ##########################################################################################
+
+  ##########################################################################################
   # IS-TOP sections
   is-worth:
     - '&b&m----------------------'
@@ -124,6 +147,10 @@ messages:
   ##########################################################################################
 
 settings:
+
+  disable-fallDamage: true # no fall damage? yes.
+
+  island-fly-permission: 'skyblock.fly' # allows flying on THEIR own Island
 
   default-hopper-limit: 5 # override with permission: skyblock.block.anvil.NUMBER
   default-spawner-limit: 5 # override with permission: skyblock.block.spawner.NUMBER
