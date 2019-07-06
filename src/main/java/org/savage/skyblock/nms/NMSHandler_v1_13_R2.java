@@ -64,8 +64,6 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
                         }
                     }
                 }
-
-
                 for (final Map.Entry<BlockPosition, net.minecraft.server.v1_13_R2.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
                     if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {
                         final net.minecraft.server.v1_13_R2.TileEntity tileEntity = entry.getValue();

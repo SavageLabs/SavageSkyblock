@@ -1,22 +1,15 @@
 package org.savage.skyblock;
 
-import com.sun.jna.Memory;
 import org.bukkit.*;
-import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
+import org.savage.skyblock.island.upgrades.Upgrade;
 
-import java.io.*;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+
 public class Utils {
 
     public void log(String message){
@@ -134,6 +127,9 @@ public class Utils {
             boolean officerInteract = Boolean.parseBoolean(l[14]);
 
             String name = l[15];
+            int memberLimit = Integer.parseInt(l[16]);
+
+            HashMap<Upgrade, Integer> upgradesMap = new HashMap<>();
 
             Location homeLocation = null;
             if (deserializeLocation(home) != null && !home.equalsIgnoreCase("")){
@@ -162,7 +158,21 @@ public class Utils {
                 }
             }
 
-            Island island = new Island("", x, y, z, ownerUUID, memberList, officerList, protectionRadius, name);
+            try {
+                String upgradeString = l[17];
+
+                for (String upgrades : upgradeString.split(",")) {
+                    int id = Integer.parseInt(upgrades.split("!")[0]);
+                    int tier = Integer.parseInt(upgrades.split("!")[1]);
+                    upgradesMap.put(Upgrade.Upgrades.getUpgrade(id), tier);
+                }
+            }catch(ArrayIndexOutOfBoundsException e){}
+
+
+
+            Island island = new Island("", x, y, z, ownerUUID, memberList, officerList, protectionRadius, name, memberLimit);
+
+            island.setUpgradeMap(upgradesMap);
 
             if (name.equalsIgnoreCase("")) {
                 island.setName(getNameFromUUID(ownerUUID));
@@ -205,7 +215,10 @@ public class Utils {
             String home = serializeLocation(island.getHome());
             String biome = island.getBiome().name();
             String name = island.getName();
+            int memberLimit = island.getMemberLimit();
+            HashMap<Upgrade, Integer> upgradesMap = island.getUpgrade_tier();
 
+            String upgradeString = "";
             String memberList = "";
             String officerList = "";
 
@@ -227,7 +240,20 @@ public class Utils {
                     }
                 }
             }
-            islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + x + ";" + y + ";" + z + ";" + protectionRadius + ";" + home + ";" + biome + ";" + island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" + island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name);
+
+            for (Upgrade upgrade : upgradesMap.keySet()){
+                int tier = upgradesMap.get(upgrade);
+                int id = upgrade.getId();
+                if (upgradeString.equalsIgnoreCase("")) {
+                    //empty
+                    upgradeString = id+"!"+tier;
+                }else{
+                    upgradeString = upgradeString+","+id+"!"+tier;
+                }
+            }
+
+            islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + x + ";" + y + ";" + z + ";" + protectionRadius + ";" + home + ";" + biome + ";" + island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" +
+                    island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name+";"+memberLimit+";"+upgradeString);
         }
 
         SkyBlock.getInstance().getFileManager().dataFileCustom.getFileConfig().set("data", islandData);

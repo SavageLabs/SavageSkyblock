@@ -26,7 +26,9 @@ public class IslandUtils {
 
                 if (!createEvent.isCancelled()) {
                     Location location = SkyBlock.getInstance().getUtils().generateIslandLocation(Storage.minLocation(), Storage.maxLocation());
-                    Island island = new Island(schematicName, location.getX(), location.getY(), location.getZ(), p.getUniqueId(), new ArrayList<>(), new ArrayList<>(), SkyBlock.getInstance().getUtils().getSettingInt("protectionRadius"), p.getName());
+                    Island island = new Island(schematicName, location.getX(), location.getY(), location.getZ(), p.getUniqueId(),
+                            new ArrayList<>(), new ArrayList<>(), SkyBlock.getInstance().getUtils().getSettingInt("default-protection-radius"), p.getName(),
+                            SkyBlock.getInstance().getUtils().getSettingInt("default-member-limit"));
 
                     p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("createIsland"));
 
@@ -89,17 +91,17 @@ public class IslandUtils {
 
     public double getLevelWorth(String blockType, boolean isSpawner) {
         if (isSpawner) {
-            return SkyBlock.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("level-worth.spawners." + blockType);
+            return SkyBlock.getInstance().getFileManager().worth.getFileConfig().getDouble("level-worth.spawners." + blockType);
         } else {
-            return SkyBlock.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("level-worth.blocks." + blockType);
+            return SkyBlock.getInstance().getFileManager().worth.getFileConfig().getDouble("level-worth.blocks." + blockType);
         }
     }
 
     public double getMoneyWorth(String blockType, boolean isSpawner) {
         if (isSpawner) {
-            return SkyBlock.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("money-worth.spawners." + blockType);
+            return SkyBlock.getInstance().getFileManager().worth.getFileConfig().getDouble("money-worth.spawners." + blockType);
         } else {
-            return SkyBlock.getInstance().getFileManager().levelWorth.getFileConfig().getDouble("money-worth.blocks." + blockType);
+            return SkyBlock.getInstance().getFileManager().worth.getFileConfig().getDouble("money-worth.blocks." + blockType);
         }
     }
 
@@ -134,7 +136,7 @@ public class IslandUtils {
                 if (amount == 0) continue;
                 double val;
 
-                System.out.print("\n "+fakeItem.getType()+","+amount+"\n");
+               // System.out.print("\n "+fakeItem.getType()+","+amount+"\n");
 
                 if (fakeItem.isSpawner()) {
                     val = getMoneyWorth(fakeItem.getType(), true) * amount;

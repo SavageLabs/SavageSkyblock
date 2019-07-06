@@ -1,0 +1,42 @@
+#   SavageSkyBlock Upgrades   #
+
+faded-item:
+  glowing: true
+  item-id: 'stained_glass_pane'
+  item-data: 15
+
+placeholders:
+  max: '&c&lMAX'
+
+upgrades-UI:
+  gui-name: '&c&lIsland Upgrades'
+  rows: 1
+  faded-slots: '2,4,6,8'
+
+upgrades:
+  protection-radius:
+    slot: 1 # position in the upgrades UI
+    item-id: 'diamond_block'
+    item-data: 0
+    item-amount: 1
+    name: '&a&lProtection Radius'
+    lore:
+      - ''
+      - '&7How far out you can build from your Island!'
+      - ''
+      - '&aCurrent Tier: &l%protection-radius_currentTier%'
+      - '&bNext Tier: &l%protection-radius_nextTier%'
+      - ''
+      - '&aCurrent Upgrade: &l%protection-radius_currentUpgrade% blocks'
+      - '&bNext Upgrade: &l%protection-radius_nextUpgrade% blocks'
+      - ''
+      - '&eCost: $&l%cost%'
+      - ''
+      - '&7&oLeft click to confirm purchase'
+    tiers:
+      1:
+        upgrade-value: 100 # the new protection radius for tier 1
+        cost: 1000
+      2:
+        upgrade-value: 150
+        cost: 5000

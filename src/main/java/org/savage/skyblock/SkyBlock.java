@@ -18,6 +18,8 @@ import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.IslandUtils;
 import org.savage.skyblock.island.MemoryPlayer;
+import org.savage.skyblock.island.upgrades.Upgrade;
+import org.savage.skyblock.island.upgrades.UpgradesUI;
 import org.savage.skyblock.nms.ReflectionManager;
 import org.savage.skyblock.worldedit.WorldEditPersistence;
 
@@ -87,6 +89,7 @@ public class SkyBlock extends JavaPlugin {
         pm.registerEvents(new Protection(), this);
         pm.registerEvents(new ISTop(), this);
         pm.registerEvents(new PlayerEvents(), this);
+        pm.registerEvents(new UpgradesUI(), this);
 
         getUtils().loadIslands();
 
@@ -125,6 +128,24 @@ public class SkyBlock extends JavaPlugin {
         new BukkitRunnable(){
             @Override
             public void run() {
+
+                for (Island island : Storage.islandList) {
+                    if (island == null) continue;
+                    for (Upgrade upgrade : island.getUpgrade_tier().keySet()) {
+                        if (upgrade == null) continue;
+
+                        int val = Upgrade.Upgrades.getTierValue(upgrade, island.getUpgradeTier(upgrade), null);
+
+                        if (upgrade.getId() == 1){
+                            //protection radius
+                            if (val > island.getProtectionRadius()){
+                                //update
+                                island.setProtectionRadius(val);
+                            }
+                        }
+                    }
+                }
+
                 //cache some stuff...
                 //cache permissions we want
                 for (Player p : Bukkit.getOnlinePlayers()){
@@ -153,6 +174,28 @@ public class SkyBlock extends JavaPlugin {
                                 }
                             }
                         }
+
+                        //apply permission island stuff
+                        Island island = getIslandUtils().getIsland(p.getUniqueId());
+                        if (island != null){
+                            if (island.getOwnerUUID().equals(p.getUniqueId())) { // has to be owner to apply these
+                                if (memoryPlayer.hasPermission("skyblock.members")) {
+                                    int val = memoryPlayer.getPermissionValue("skyblock.members");
+                                    if (val > island.getMemberLimit()) {
+                                        //update
+                                        island.setMemberLimit(val);
+                                    }
+                                }
+                                if (memoryPlayer.hasPermission("skyblock.protection")) {
+                                    int val = memoryPlayer.getPermissionValue("skyblock.protection");
+                                    if (val > island.getProtectionRadius()) {
+                                        //update
+                                        island.setProtectionRadius(val);
+                                    }
+                                }
+                            }
+                        }
+
                     }
                 }
             }

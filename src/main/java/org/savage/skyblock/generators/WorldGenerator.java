@@ -15,14 +15,7 @@ import java.io.File;
 public class WorldGenerator {
 
     public void generateWorld(String worldName) { // simple generator for all versions
-        //WorldCreator wc = new WorldCreator(worldName);
-//
-        //wc.type(WorldType.FLAT);
-        //wc.generatorSettings("2;0;1;"); // void
-        //wc.createWorld();
-
         World world = WorldCreator.name(worldName).type(WorldType.FLAT).environment(World.Environment.NORMAL).generator(new VoidWorld()).createWorld();
-
     }
 
     public void pasteSchem(Location location, String fileName) {

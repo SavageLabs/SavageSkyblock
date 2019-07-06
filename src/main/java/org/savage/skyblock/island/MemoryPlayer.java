@@ -11,6 +11,9 @@ public class MemoryPlayer {
     private UUID uuid;
     private HashMap<String, Integer> permissionMap = new HashMap<>();
 
+    private int resets; //todo; setup saving/loading of player data
+
+
     public MemoryPlayer(UUID uuid){
         this.uuid = uuid;
         Storage.memoryPlayerList.add(this);
@@ -41,6 +44,14 @@ public class MemoryPlayer {
             return getPermissionMap().get(permission);
         }
         return 0;
+    }
+
+    public int getResets() {
+        return resets;
+    }
+
+    public void setResets(int resets) {
+        this.resets = resets;
     }
 
     public HashMap<String, Integer> getPermissionMap() {
