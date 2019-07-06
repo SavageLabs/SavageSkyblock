@@ -8,9 +8,71 @@
     <artifactId>SavageSkyBlock</artifactId>
     <version>1.2</version>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <timestamp>${maven.build.timestamp}</timestamp>
+        <maven.build.timestamp.format>yyyy-MM-dd--HH-mm</maven.build.timestamp.format>
+    </properties>
+
+<build>
+    <defaultGoal>clean install deploy</defaultGoal>
+    <finalName>${project.name}</finalName>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <resources>
+        <resource>
+            <filtering>true</filtering>
+            <directory>src/main/resources/</directory>
+        </resource>
+    </resources>
+
+    <plugins>
+    <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.5.1</version>
+        <configuration>
+            <source>1.8</source>
+            <target>1.8</target>
+        </configuration>
+    </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>2.4.3</version>
+            <configuration>
+                <createDependencyReducedPom>false</createDependencyReducedPom>
+                <relocations>
+                    <relocation>
+                        <pattern>me.trent</pattern>
+                        <shadedPattern>shade.me.trent</shadedPattern>
+
+                        <pattern>me.trent.WorldAPI</pattern>
+                        <shadedPattern>shade.me.trent</shadedPattern>
+                    </relocation>
+                </relocations>
+            </configuration>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>2.3.2</version>
+            <configuration>
+                <finalName>SavageSkyBlock</finalName>
+            </configuration>
+        </plugin>
+    </plugins>
+
+</build>
+
 
     <dependencies>
-
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot</artifactId>
@@ -115,6 +177,7 @@
             <groupId>worldedit6</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>6</version>
+            <type>jar</type>
             <scope>system</scope>
             <systemPath>${project.basedir}/dependencies/WorldEdit6API.jar</systemPath>
         </dependency>
@@ -122,6 +185,7 @@
             <groupId>worldedit7</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>7</version>
+            <type>jar</type>
             <scope>system</scope>
             <systemPath>${project.basedir}/dependencies/WorldEdit7API.jar</systemPath>
         </dependency>
@@ -129,6 +193,7 @@
             <groupId>me.trent</groupId>
             <artifactId>WorldAPI_1_13_R2</artifactId>
             <version>1</version>
+            <type>jar</type>
             <scope>system</scope>
             <systemPath>${project.basedir}/dependencies/WorldAPI_1_13_R2.jar</systemPath>
         </dependency>
@@ -174,52 +239,6 @@
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
     </repositories>
-
-
-    <build>
-    <defaultGoal>clean package</defaultGoal>
-        <plugins>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
-                <configuration>
-                    <release>8</release>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.1.0</version>
-                <executions>
-                    <execution>
-                        <phase>install</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <createDependencyReducedPom>false</createDependencyReducedPom>
-                            <relocations>
-                                <relocation>
-                                    <pattern>me.trent.WorldAPI</pattern>
-                                    <pattern>me.trent.worldedit6.WorldEdit6</pattern>
-                                    <pattern>me.trent.worldedit7.WorldEdit7</pattern>
-                                </relocation>
-                            </relocations>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-    </build>
 
 
 </project>
