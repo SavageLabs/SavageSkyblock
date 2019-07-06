@@ -10,6 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.savage.skyblock.API.*;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
+import org.savage.skyblock.island.upgrades.Upgrade;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,9 +53,12 @@ public class Island {
     private double blockWorth = 0;
     private double spawnerWorth = 0;
 
+    private int memberLimit;
+
+    private HashMap<Upgrade, Integer> upgrade_tier = new HashMap<>();
     private HashMap<FakeItem, Integer> blocks = new HashMap<>();
 
-    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> memberList, List<UUID> officerList, int protectionRadius, String name) {
+    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> memberList, List<UUID> officerList, int protectionRadius, String name, int memberLimit) {
         this.centerX = x;
         this.centerY = y;
         this.centerZ = z;
@@ -64,6 +68,7 @@ public class Island {
         this.protectionRadius = protectionRadius;
         this.home = getLocation();
         this.name = name;
+        this.memberLimit = memberLimit;
 
         islandInstance = this;
 
@@ -104,6 +109,36 @@ public class Island {
             }
         }
         return count;
+    }
+
+    public void setUpgradeMap(HashMap<Upgrade, Integer> upgrade_tier) {
+        this.upgrade_tier = upgrade_tier;
+    }
+
+    public int getUpgradeTier(Upgrade upgrade){
+        if (getUpgrade_tier().get(upgrade) != null){
+            return getUpgrade_tier().get(upgrade);
+        }
+        return 0;
+    }
+
+    public void setUpgradeTier(Upgrade upgrade, int tier){
+        if (getUpgrade_tier().get(upgrade) != null){
+            this.upgrade_tier.remove(upgrade);
+        }
+        this.upgrade_tier.put(upgrade, tier);
+    }
+
+    public HashMap<Upgrade, Integer> getUpgrade_tier() {
+        return upgrade_tier;
+    }
+
+    public int getMemberLimit() {
+        return memberLimit;
+    }
+
+    public void setMemberLimit(int memberLimit) {
+        this.memberLimit = memberLimit;
     }
 
     public void clearBlockCount() {
@@ -168,6 +203,12 @@ public class Island {
 
     public boolean hasPlayer(UUID uuid){
         return getOwnerUUID().equals(uuid) || getOfficerList().contains(uuid) || getMemberList().contains(uuid);
+    }
+
+    public List<UUID> getAllPlayers(){
+        List<UUID> l = getOfficerList();
+        l.addAll(getMemberList());
+        return l;
     }
 
     public double getWorth() {

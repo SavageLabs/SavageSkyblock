@@ -124,6 +124,12 @@ messages:
   breakblockRestriction: '&cYou cannot break outside your Island''s protection range!'
   hopper-limit: '&cYou cannot place anymore hoppers on this island!'
   spawner-limit: '&cYou cannot place anymore spawners on this island!'
+
+  upgrade_purchased: '&8&l(&c&l!&8&l) &aUpgraded &l%upgrade%&a to tier &b&l%tier%&a!'
+  upgrade_denied: '&8&l(&c&l!&8&l) &cError, not enough money for this upgrade!'
+  upgrade_max: '&8&l(&c&l!&8&l) &cThis upgrade is already &lMaxed&c!'
+
+  upgrade_purchased_everyone: '&8&l(&c&l!&8&l) &e%player% &aupgraded &l%upgrade%&a to tier &b&l%tier%&a!'
   ##########################################################################################
 
   ##########################################################################################
@@ -154,7 +160,8 @@ settings:
 
   default-hopper-limit: 5 # override with permission: skyblock.block.anvil.NUMBER
   default-spawner-limit: 5 # override with permission: skyblock.block.spawner.NUMBER
-
+  default-member-limit: 5 # override with permission: skyblock.members.NUMBER, permission overrides Upgrade
+  default-protection-radius: 50 # 50^4, block radius around each corner of island, override with permission: skyblock.protection.NUMBER
 
   island-level-calculation-time: 60 # in seconds
   island-level-placeholder: '%is-level%' # can use this in chat formatting
@@ -173,10 +180,5 @@ settings:
 
   default-biome: 'PLAINS'
   inviteExpireTime: 10 # seconds
-  protectionRadius: 50 # default for the protectionRadius of islands, is measured in blocks, bypass with permission: 'sbp.protection.100' to give 100 blocks protection
-  max-resets: 2 # this is the default amount of resets each player can have, bypass with permission: 'sbp.resets.5' will give a total of 5 resets
-  max-hoppers: 10 #this is the default amount of hoppers on each island, bypass by adding permission: 'sbp.hoppers.100', will give the player 100 max hoppers
-  max-spawners: 10 # same as above, permission: 'sbp.spawners.100' would make the max spawner count to 100 for that player's island
-  max-members: 5 # same as above, permission: 'sbp.members.50' would make the max members to 50 for that player's island
 
-  island-spawn: 'not-set' # set using /is setspawn
+  island-spawn: 'not-set' # set using /isa setspawn

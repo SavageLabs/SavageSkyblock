@@ -11,6 +11,7 @@ import org.savage.skyblock.Placeholder;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.upgrades.UpgradesUI;
 
 public class IslandCommands implements CommandExecutor {
 
@@ -29,6 +30,14 @@ public class IslandCommands implements CommandExecutor {
                         String[] list = {"&a&lSavage SkyBlock", " ", "&bVersion: " + Bukkit.getPluginManager().getPlugin("SavageSkyBlock").getDescription().getVersion()};
                         for (String s : list) {
                             p.sendMessage(SkyBlock.getInstance().getUtils().color(s));
+                        }
+                    }
+
+                    if (args[0].equalsIgnoreCase("upgrades")){
+                        if (SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()) != null){
+                            UpgradesUI.openUpgradesUI(p);
+                        }else{
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noIsland"));
                         }
                     }
 
