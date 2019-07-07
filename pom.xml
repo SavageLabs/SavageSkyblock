@@ -35,36 +35,14 @@
         </configuration>
     </plugin>
         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>2.4.3</version>
+            <artifactId>maven-assembly-plugin</artifactId>
             <configuration>
-                <createDependencyReducedPom>false</createDependencyReducedPom>
-                <relocations>
-                    <relocation>
-                        <pattern>me.trent</pattern>
-                        <shadedPattern>shade.me.trent</shadedPattern>
+                <archive>
 
-                        <pattern>me.trent.WorldAPI</pattern>
-                        <shadedPattern>shade.me.trent</shadedPattern>
-                    </relocation>
-                </relocations>
-            </configuration>
-            <executions>
-                <execution>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>shade</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jar-plugin</artifactId>
-            <version>2.3.2</version>
-            <configuration>
-                <finalName>SavageSkyBlock</finalName>
+                </archive>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
             </configuration>
         </plugin>
     </plugins>
@@ -74,128 +52,103 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.spigotmc</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.8.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.10</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc.</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.8.3-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.8.3.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.11</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc..</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.8.6.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.12.1</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc...</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.8.8-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.8.8.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.12.2</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc....</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.9-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.9.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.13.1</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc.....</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.9.4-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.9.4.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.13.2</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc......</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.10.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.10.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.13</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc.......</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.11-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.11.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.14</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc........</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.12-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.12.1.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.8.3</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc.........</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.12.2.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.8.6</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc..............</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.13-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.13.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.8.8</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc...............</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.13.1-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.13.1.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.8</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc.............</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.13.2-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.13.2.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.9.4</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.spigotmc..........</groupId>
-            <artifactId>spigot</artifactId>
-            <version>1.14.1-R0.1-SNAPSHOT</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/lib/serverJars/1.14.jar</systemPath>
+            <groupId>org.spigot</groupId>
+            <artifactId>spigot-nms-1.9</artifactId>
+            <version>1.0</version>
+            <scope>provided</scope>
         </dependency>
-
-
         <dependency>
             <groupId>worldedit6</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>6</version>
-            <type>jar</type>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/dependencies/WorldEdit6API.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>worldedit7</groupId>
             <artifactId>worldedit-bukkit</artifactId>
             <version>7</version>
-            <type>jar</type>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/dependencies/WorldEdit7API.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>me.trent</groupId>
             <artifactId>WorldAPI_1_13_R2</artifactId>
             <version>1</version>
-            <type>jar</type>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/dependencies/WorldAPI_1_13_R2.jar</systemPath>
         </dependency>
 
 
