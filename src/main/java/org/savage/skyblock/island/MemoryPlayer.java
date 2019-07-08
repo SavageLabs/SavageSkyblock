@@ -23,6 +23,12 @@ public class MemoryPlayer {
         return getPermissionMap().get(permissionBase) != null;
     }
 
+    public void removePermission(String permissionBase){
+        if (hasPermission(permissionBase)){
+            this.permissionMap.remove(permissionBase);
+        }
+    }
+
     public void addPermission(String permissionBase, int value){
         //permssionBase is the permission node without the value at the end
         //example: skyblock.block.anvil

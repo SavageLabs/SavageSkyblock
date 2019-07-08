@@ -174,6 +174,14 @@ public class SkyBlock extends JavaPlugin {
                                 }
                             }
                         }
+                        for (String permBase : memoryPlayer.getPermissionMap().keySet()){
+                            int val = memoryPlayer.getPermissionValue(permBase);
+                            String fullPerm = permBase+"."+val;
+                            if (!p.hasPermission(fullPerm)){
+                                //remove the permission node that was cached
+                                memoryPlayer.removePermission(permBase);
+                            }
+                        }
 
                         //apply permission island stuff
                         Island island = getIslandUtils().getIsland(p.getUniqueId());
@@ -195,7 +203,6 @@ public class SkyBlock extends JavaPlugin {
                                 }
                             }
                         }
-
                     }
                 }
             }
