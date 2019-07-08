@@ -1,6 +1,6 @@
 package org.savage.skyblock.nms;
 
-import me.trent.WorldAPI;
+import me.trent.worldapi.WorldAPI_1_13_R2;
 import net.minecraft.server.v1_13_R2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,7 +21,7 @@ import java.util.Map;
 public class NMSHandler_v1_13_R2 extends NMSHandler {
 
     public void generate(String name){
-        WorldAPI.generate(name);
+        WorldAPI_1_13_R2.generate(name);
     }
 
     @Override

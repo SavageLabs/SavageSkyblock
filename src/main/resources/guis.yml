@@ -118,7 +118,7 @@ panel:
         - ''
         - ''
       commands:
-        - 'is upgrade'
+        - 'is upgrades'
     3:
       slot: 9
       item-id: 'barrier'
