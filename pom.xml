@@ -152,10 +152,15 @@
             <version>1.0</version>
         </dependency>
 
+
+
+
+
+
         <dependency>
             <groupId>com.github.TrentTheDude</groupId>
             <artifactId>WildStacker-API</artifactId>
-            <version>-17552fe051-1</version>
+            <version>master-50981b1c51-1</version>
         </dependency>
 
 

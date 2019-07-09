@@ -11,16 +11,15 @@ public class PluginHook {
         return Bukkit.getPluginManager().getPlugin(pluginName).isEnabled();
     }
 
-
-    private static WildStacker getWildStackerAPI(){
+    private static WildStacker getWildStacker(){
         return WildStackerAPI.getWildStacker();
     }
 
 
     public static int getSpawnerCount(Location location){
         if (isEnabled("WildStacker")) {
-           if (getWildStackerAPI().getSystemManager().getStackedSpawner(location) != null){
-                return getWildStackerAPI().getSystemManager().getStackedSpawner(location).getStackAmount();
+           if (getWildStacker().getSystemManager().getStackedSpawner(location) != null){
+                return getWildStacker().getSystemManager().getStackedSpawner(location).getStackAmount();
             }
         }
         return 1;
