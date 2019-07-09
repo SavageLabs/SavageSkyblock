@@ -41,9 +41,9 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
         final int maxY = chunk.getWorld().getMaxHeight();
         final int maxZ = minZ | 15;
 
-        new BukkitRunnable(){
-            @Override
-            public void run() {
+
+        new Thread(new Runnable() {
+            public void run(){
                 for (int x = minX; x <= maxX; ++x) {
                     for (int y = 0; y <= maxY; ++y) {
                         for (int z = minZ; z <= maxZ; ++z) {
@@ -54,7 +54,7 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
                                         String type = block.getType().name().toUpperCase();
                                         if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)) {
                                             island.addBlockCount(type, false, 1);
-                                           // System.out.print("\n\n\n "+type+":"+island.getBlockCount(new FakeItem("DIAMOND_BLOCK", false))+"   \n\n\n");
+                                            // System.out.print("\n\n\n "+type+":"+island.getBlockCount(new FakeItem("DIAMOND_BLOCK", false))+"   \n\n\n");
                                         }
                                     }
                                 }
@@ -65,6 +65,10 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
                         }
                     }
                 }
+            }
+        }).start();
+
+
                 for (final Map.Entry<BlockPosition, net.minecraft.server.v1_13_R2.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
                     if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {
                         final net.minecraft.server.v1_13_R2.TileEntity tileEntity = entry.getValue();
@@ -89,8 +93,6 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
                     }
                 }
             }
-        }.runTaskAsynchronously(SkyBlock.getInstance());
-    }
 
     @Override
     public void removeBlockSuperFast(int X, int Y, int Z, boolean applyPhysics) {

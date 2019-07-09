@@ -41,9 +41,8 @@ public class NMSHandler_v1_13_R1 extends NMSHandler {
         final int maxY = chunk.getWorld().getMaxHeight();
         final int maxZ = minZ | 15;
 
-        new BukkitRunnable(){
-            @Override
-            public void run() {
+        new Thread(new Runnable() {
+            public void run(){
                 for (int x = minX; x <= maxX; ++x) {
                     for (int y = 0; y <= maxY; ++y) {
                         for (int z = minZ; z <= maxZ; ++z) {
@@ -66,7 +65,7 @@ public class NMSHandler_v1_13_R1 extends NMSHandler {
                     }
                 }
             }
-        }.runTaskAsynchronously(SkyBlock.getInstance());
+        }).start();
 
         for (final Map.Entry<net.minecraft.server.v1_13_R1.BlockPosition, net.minecraft.server.v1_13_R1.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
             if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {

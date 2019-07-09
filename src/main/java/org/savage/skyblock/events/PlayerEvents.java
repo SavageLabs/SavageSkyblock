@@ -42,6 +42,15 @@ public class PlayerEvents implements Listener {
             if (SkyBlock.getInstance().getUtils().getSettingBool("send-island-enter-message")){
                 p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-enter").replace("%island%", island.getName()));
             }
+
+            if (SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()).equals(island)){
+                //is their island, check for is fly permission
+                if (p.hasPermission(SkyBlock.getInstance().getUtils().getSettingString("island-fly-permission"))) {
+                    p.setAllowFlight(true);
+                }
+            }
+
+
             //send the worldBorder packet to the incoming player
             SkyBlock.getInstance().getReflectionManager().nmsHandler.sendBorder(p, island.getCenterX(), island.getCenterZ(), island.getProtectionRadius());
         }
@@ -54,6 +63,15 @@ public class PlayerEvents implements Listener {
         if (p != null && island != null){
             if (SkyBlock.getInstance().getUtils().getSettingBool("send-island-leave-message")){
                 p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-leave").replace("%island%", island.getName()));
+            }
+        }
+        if (SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation()) != SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId())){
+            //not their island
+            if (p.hasPermission(SkyBlock.getInstance().getUtils().getSettingString("island-fly-permission"))) {
+                p.setAllowFlight(false);
+                if (p.isFlying()){
+                    p.setFlying(false);
+                }
             }
         }
     }
@@ -92,6 +110,12 @@ public class PlayerEvents implements Listener {
 
         if (!SkyBlock.getInstance().getUtils().hasMemoryPlayer(p.getUniqueId())){
             MemoryPlayer memoryPlayer = new MemoryPlayer(p.getUniqueId());
+        }
+
+        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+        if (island.equals(SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation()))){
+            //logged into their island
+            Bukkit.getPluginManager().callEvent(new IslandEnterEvent(p, island));
         }
     }
 
