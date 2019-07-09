@@ -26,7 +26,7 @@ public class IslandUtils {
 
                 if (!createEvent.isCancelled()) {
                     Location location = SkyBlock.getInstance().getUtils().generateIslandLocation(Storage.minLocation(), Storage.maxLocation());
-                    Island island = new Island(schematicName, location.getX(), location.getY(), location.getZ(), p.getUniqueId(),
+                    Island island = new Island(schematicName, location.getBlockX(), location.getBlockY(), location.getBlockZ(), p.getUniqueId(), new ArrayList<>(),
                             new ArrayList<>(), new ArrayList<>(), SkyBlock.getInstance().getUtils().getSettingInt("default-protection-radius"), p.getName(),
                             SkyBlock.getInstance().getUtils().getSettingInt("default-member-limit"));
 
@@ -45,7 +45,7 @@ public class IslandUtils {
 
     public Island getIsland(UUID uuid) {
         for (Island island : Storage.islandList) {
-            if (island.getOwnerUUID().equals(uuid) || island.getMemberList().contains(uuid) || island.getOfficerList().contains(uuid)) {
+            if (island.getOwnerUUID().equals(uuid) || island.getMemberList().contains(uuid) || island.getCoownerList().contains(uuid) || island.getOfficerList().contains(uuid)) {
                 return island;
             }
         }
@@ -67,6 +67,15 @@ public class IslandUtils {
         return null;
     }
 
+    public boolean isIslandName(String name){
+        for (Island island : Storage.islandList){
+            if (island.getName().equalsIgnoreCase(name)){
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     public boolean isOwner(UUID uuid, Island island) {
         return island.getOwnerUUID().equals(uuid);
@@ -80,9 +89,13 @@ public class IslandUtils {
         return island.getOfficerList().contains(uuid);
     }
 
+    public boolean isCoOwner(UUID uuid, Island island) {
+        return island.getCoownerList().contains(uuid);
+    }
+
     public boolean inIsland(UUID uuid) {
         for (Island island : Storage.islandList) {
-            if (island.getOwnerUUID().equals(uuid) || island.getMemberList().contains(uuid) || island.getOfficerList().contains(uuid)) {
+            if (isOwner(uuid, island) || isCoOwner(uuid, island) || isOfficer(uuid, island) || isMember(uuid, island)){
                 return true;
             }
         }
@@ -91,17 +104,17 @@ public class IslandUtils {
 
     public double getLevelWorth(String blockType, boolean isSpawner) {
         if (isSpawner) {
-            return SkyBlock.getInstance().getFileManager().worth.getFileConfig().getDouble("level-worth.spawners." + blockType);
+            return SkyBlock.getInstance().getFileManager().getWorth().getFileConfig().getDouble("level-worth.spawners." + blockType);
         } else {
-            return SkyBlock.getInstance().getFileManager().worth.getFileConfig().getDouble("level-worth.blocks." + blockType);
+            return SkyBlock.getInstance().getFileManager().getWorth().getFileConfig().getDouble("level-worth.blocks." + blockType);
         }
     }
 
     public double getMoneyWorth(String blockType, boolean isSpawner) {
         if (isSpawner) {
-            return SkyBlock.getInstance().getFileManager().worth.getFileConfig().getDouble("money-worth.spawners." + blockType);
+            return SkyBlock.getInstance().getFileManager().getWorth().getFileConfig().getDouble("money-worth.spawners." + blockType);
         } else {
-            return SkyBlock.getInstance().getFileManager().worth.getFileConfig().getDouble("money-worth.blocks." + blockType);
+            return SkyBlock.getInstance().getFileManager().getWorth().getFileConfig().getDouble("money-worth.blocks." + blockType);
         }
     }
 

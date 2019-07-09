@@ -30,14 +30,14 @@ public class Placeholder {
 
             if (s.contains("nextTier%")) {
                 if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
-                    s = s.replace(n+"nextTier%", SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getString("placeholders.max"));
+                    s = s.replace(n+"nextTier%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
                 } else {
                     s = s.replace(n+"nextTier%", (island.getUpgradeTier(upgrade) + 1) + "");
                 }
             }
             if (s.contains("nextUpgrade%")) {
                 if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
-                    s = s.replace(n+"nextUpgrade%", SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getString("placeholders.max"));
+                    s = s.replace(n+"nextUpgrade%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
                 } else {
                     s = s.replace(n+"nextUpgrade%", (Upgrade.Upgrades.getTierValue(upgrade, (island.getUpgradeTier(upgrade)+1), null)) + "");
                 }
@@ -45,7 +45,7 @@ public class Placeholder {
 
         if (s.contains("%cost%")){
             if ((island.getUpgradeTier(upgrade)+1) > Upgrade.Upgrades.getMaxTier(upgrade)){
-                s = s.replace("%cost%", SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getString("placeholders.max"));
+                s = s.replace("%cost%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
             }else{
                 s = s.replace("%cost%", (Upgrade.Upgrades.getTierCost(upgrade, island.getUpgradeTier(upgrade))+1)+"");
             }
@@ -115,7 +115,7 @@ public class Placeholder {
             }
         }
 
-        return SkyBlock.getInstance().getUtils().colorList(l);
+        return SkyBlock.getInstance().getUtils().color(l);
     }
 
 }

@@ -23,8 +23,8 @@ import java.util.UUID;
 public class UpgradesUI implements Listener {
 
     public static ItemStack createFadedItem(){
-        String id = SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getString("faded-item.item-id");
-        int data = SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getInt("faded-item.item-data");
+        String id = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("faded-item.item-id");
+        int data = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getInt("faded-item.item-data");
 
         ItemStack item = Materials.requestXMaterial(id, (byte)data).parseItem();
         ItemMeta meta = item.getItemMeta();
@@ -40,9 +40,11 @@ public class UpgradesUI implements Listener {
         Player p = (Player)e.getWhoClicked();
         Inventory top = p.getOpenInventory().getTopInventory();
         Inventory bottom = p.getOpenInventory().getBottomInventory();
+        String iName = e.getView().getTitle();
         Inventory i = e.getClickedInventory();
 
-        if (top != null && top.getName().equalsIgnoreCase(SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getString("upgrades-UI.gui-name")))){
+       // if (top != null && top.getTitle().equalsIgnoreCase(SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getString("upgrades-UI.gui-name")))){
+        if (top != null && iName.equalsIgnoreCase(SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("upgrades-UI.gui-name")))){
             e.setCancelled(true);
             if (i != null && i.equals(top)){
                 ItemStack clicked = e.getCurrentItem();
@@ -55,7 +57,7 @@ public class UpgradesUI implements Listener {
                     double money = SkyBlock.getInstance().getUtils().getBalance(p.getUniqueId());
 
                     if (island != null) {
-                        YamlConfiguration f = SkyBlock.getInstance().getFileManager().upgrades.getFileConfig();
+                        YamlConfiguration f = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig();
                         for (Upgrade upgrade : Upgrade.values()) {
                             String upgradeName = upgrade.getName();
                             if (f.getConfigurationSection("upgrades."+upgradeName) == null) continue;
@@ -130,15 +132,15 @@ public class UpgradesUI implements Listener {
     }
 
     public static void openUpgradesUI(Player p){
-        Inventory i = Bukkit.createInventory(null, SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getInt("upgrades-UI.rows")*9,
-                SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getString("upgrades-UI.gui-name")));
+        Inventory i = Bukkit.createInventory(null, SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getInt("upgrades-UI.rows")*9,
+                SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("upgrades-UI.gui-name")));
 
-        for (String s : SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getString("upgrades-UI.faded-slots").split(",")){
+        for (String s : SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("upgrades-UI.faded-slots").split(",")){
             int slot = Integer.parseInt(s);
             i.setItem(slot -1, createFadedItem());
         }
 
-        YamlConfiguration f = SkyBlock.getInstance().getFileManager().upgrades.getFileConfig();
+        YamlConfiguration f = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig();
 
         Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
 

@@ -28,7 +28,7 @@ public class Utils {
         return original.substring(0, 1).toUpperCase() + original.substring(1);
     }
 
-    public List<String> colorList(List<String> list){
+    public List<String> color(List<String> list){
         List<String> color = new ArrayList<>();
         for (String s : list){
             color.add(color(s));
@@ -42,18 +42,18 @@ public class Utils {
         ItemStack itemStack = new ItemStack(material);
         ItemMeta meta = itemStack.getItemMeta();
         meta.setDisplayName(color(name));
-        meta.setLore(colorList(lore));
+        meta.setLore(color(lore));
         itemStack.setAmount(amount);
         itemStack.setItemMeta(meta);
         return itemStack;
     }
 
     public String getMessage(String key){
-        return color(SkyBlock.getInstance().getConfig().getString("messages." + key));
+        return color(SkyBlock.getInstance().getFileManager().getMessages().getFileConfig().getString("messages." + key));
     }
 
     public List<String> getMessageList(String key) {
-        return colorList(SkyBlock.getInstance().getConfig().getStringList("messages." + key));
+        return color(SkyBlock.getInstance().getFileManager().getMessages().getFileConfig().getStringList("messages." + key));
     }
 
     public int getSettingInt(String key){
@@ -98,17 +98,17 @@ public class Utils {
     public void loadIslands(){
         //onEnable
         //layout: ownerUUID;member1,member2;x;y;z;protectionRadius
-        List<String> data = SkyBlock.getInstance().getFileManager().dataFileCustom.getFileConfig().getStringList("data");
+        List<String> data = SkyBlock.getInstance().getFileManager().getData().getFileConfig().getStringList("data");
 
         for (String islandData : data){
             String[] l = islandData.split(";");
             UUID ownerUUID = UUID.fromString(l[0]);
-            double x = Double.parseDouble(l[3]);
-            double y = Double.parseDouble(l[4]);
-            double z = Double.parseDouble(l[5]);
-            int protectionRadius = Integer.parseInt(l[6]);
-            String home = l[7];
-            String biome = l[8];
+            double x = Double.parseDouble(l[4]);
+            double y = Double.parseDouble(l[5]);
+            double z = Double.parseDouble(l[6]);
+            int protectionRadius = Integer.parseInt(l[7]);
+            String home = l[8];
+            String biome = l[9];
 
             //private boolean permissionMemberPlace = true;
             //    private boolean permissionMemberBreak = true;
@@ -118,20 +118,21 @@ public class Utils {
             //    private boolean permissionOfficerBreak = true;
             //    private boolean permissionOfficerInteract = true;
 
-            boolean memberPlace = Boolean.parseBoolean(l[9]);
-            boolean memberBreak = Boolean.parseBoolean(l[10]);
-            boolean memberInteract = Boolean.parseBoolean(l[11]);
+            boolean memberPlace = Boolean.parseBoolean(l[10]);
+            boolean memberBreak = Boolean.parseBoolean(l[11]);
+            boolean memberInteract = Boolean.parseBoolean(l[12]);
 
-            boolean officerPlace = Boolean.parseBoolean(l[12]);
-            boolean officerBreak = Boolean.parseBoolean(l[13]);
-            boolean officerInteract = Boolean.parseBoolean(l[14]);
+            boolean officerPlace = Boolean.parseBoolean(l[13]);
+            boolean officerBreak = Boolean.parseBoolean(l[14]);
+            boolean officerInteract = Boolean.parseBoolean(l[15]);
 
-            String name = l[15];
-            int memberLimit = Integer.parseInt(l[16]);
+            String name = l[16];
+            int memberLimit = Integer.parseInt(l[17]);
 
             HashMap<Upgrade, Integer> upgradesMap = new HashMap<>();
 
             Location homeLocation = null;
+
             if (deserializeLocation(home) != null && !home.equalsIgnoreCase("")){
                 homeLocation = deserializeLocation(home);
             }
@@ -139,9 +140,11 @@ public class Utils {
 
             String[] l2 = l[1].split(";");
             String[] l3 = l[2].split(";");
+            String[] l4 = l[3].split(";");
 
             List<UUID> memberList = new ArrayList<>();
             List<UUID> officerList = new ArrayList<>();
+            List<UUID> coOwnerList = new ArrayList<>();
 
             if (!Arrays.asList(l2).isEmpty()) {
                 for (String s : l2) {
@@ -157,9 +160,16 @@ public class Utils {
                     }
                 }
             }
+            if (!Arrays.asList(l4).isEmpty()) {
+                for (String s : l4) {
+                    if (!s.equalsIgnoreCase("")) {
+                        coOwnerList.add(UUID.fromString(s));
+                    }
+                }
+            }
 
             try {
-                String upgradeString = l[17];
+                String upgradeString = l[18];
 
                 for (String upgrades : upgradeString.split(",")) {
                     int id = Integer.parseInt(upgrades.split("!")[0]);
@@ -169,8 +179,7 @@ public class Utils {
             }catch(ArrayIndexOutOfBoundsException e){}
 
 
-
-            Island island = new Island("", x, y, z, ownerUUID, memberList, officerList, protectionRadius, name, memberLimit);
+            Island island = new Island("", x, y, z, ownerUUID, coOwnerList, memberList, officerList, protectionRadius, name, memberLimit);
 
             island.setUpgradeMap(upgradesMap);
 
@@ -211,6 +220,7 @@ public class Utils {
             double z = island.getCenterZ();
             List<UUID> members = island.getMemberList();
             List<UUID> officers = island.getOfficerList();
+            List<UUID> coowners = island.getCoownerList();
             int protectionRadius = island.getProtectionRadius();
             String home = serializeLocation(island.getHome());
             String biome = island.getBiome().name();
@@ -221,6 +231,7 @@ public class Utils {
             String upgradeString = "";
             String memberList = "";
             String officerList = "";
+            String coOwnerList = "";
 
             if (!members.isEmpty()){
                 for (UUID uuid : members){
@@ -240,6 +251,15 @@ public class Utils {
                     }
                 }
             }
+            if (!coowners.isEmpty()){
+                for (UUID uuid : coowners){
+                    if (coOwnerList.equalsIgnoreCase("")){
+                        coOwnerList = uuid.toString();
+                    }else{
+                        coOwnerList = coOwnerList+","+uuid.toString();
+                    }
+                }
+            }
 
             for (Upgrade upgrade : upgradesMap.keySet()){
                 int tier = upgradesMap.get(upgrade);
@@ -252,12 +272,12 @@ public class Utils {
                 }
             }
 
-            islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + x + ";" + y + ";" + z + ";" + protectionRadius + ";" + home + ";" + biome + ";" + island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" +
+            islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + coOwnerList+ ";" + x + ";" + y + ";" + z + ";" + protectionRadius + ";" + home + ";" + biome + ";" + island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" +
                     island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name+";"+memberLimit+";"+upgradeString);
         }
 
-        SkyBlock.getInstance().getFileManager().dataFileCustom.getFileConfig().set("data", islandData);
-        SkyBlock.getInstance().getFileManager().dataFileCustom.saveFile();
+        SkyBlock.getInstance().getFileManager().getData().getFileConfig().set("data", islandData);
+        SkyBlock.getInstance().getFileManager().getData().saveFile();
     }
 
     public double getBalance(UUID uuid){

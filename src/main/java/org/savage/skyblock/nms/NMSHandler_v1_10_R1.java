@@ -1,11 +1,15 @@
 package org.savage.skyblock.nms;
 
 import net.minecraft.server.v1_10_R1.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Chunk;
+import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_10_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.savage.skyblock.PluginHook;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
@@ -37,21 +41,26 @@ public class NMSHandler_v1_10_R1 extends NMSHandler {
         final int maxY = chunk.getWorld().getMaxHeight();
         final int maxZ = minZ | 15;
 
-        for (int x = minX; x <= maxX; ++x) {
-            for (int y = 0; y <= maxY; ++y) {
-                for (int z = minZ; z <= maxZ; ++z) {
-                    org.bukkit.block.Block block = chunk.getBlock(x, y, z);
-                    if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
-                        if (!tileEntities.contains(block.getType())) {
-                            String type = block.getType().name().toUpperCase();
-                            if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)){
-                                island.addBlockCount(type, false);
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                for (int x = minX; x <= maxX; ++x) {
+                    for (int y = 0; y <= maxY; ++y) {
+                        for (int z = minZ; z <= maxZ; ++z) {
+                            org.bukkit.block.Block block = chunk.getBlock(x, y, z);
+                            if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
+                                if (!tileEntities.contains(block.getType())) {
+                                    String type = block.getType().name().toUpperCase();
+                                    if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)){
+                                        island.addBlockCount(type, false, 1);
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-        }
+        }.runTaskAsynchronously(SkyBlock.getInstance());
 
         for (final Map.Entry<BlockPosition, TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
             if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {
@@ -60,15 +69,18 @@ public class NMSHandler_v1_10_R1 extends NMSHandler {
                 String blockType;
                 boolean isSpawner = false;
 
-                if (tileEntity instanceof TileEntityMobSpawner) {
-                    blockType = ((TileEntityMobSpawner) tileEntity).getSpawner().getMobName().toUpperCase();
-                    isSpawner = true;
+                if (tileEntity instanceof net.minecraft.server.v1_10_R1.TileEntityMobSpawner) {
+                    net.minecraft.server.v1_10_R1.TileEntityMobSpawner spawner = (net.minecraft.server.v1_10_R1.TileEntityMobSpawner)tileEntity;
+                    blockType = spawner.getSpawner().getMobName().toUpperCase();
+
+                    int amount = PluginHook.getSpawnerCount(new Location(Bukkit.getWorld(spawner.getWorld().worldData.getName()), spawner.getPosition().getX(), spawner.getPosition().getY(), spawner.getPosition().getZ()));
+                    island.addBlockCount(blockType, true, amount);
+                    continue;
                 } else {
                     blockType = tileEntity.getBlock().getName().toUpperCase();
                 }
-
-                if (SkyBlock.getInstance().getIslandUtils().hasWorth(blockType, isSpawner)){
-                    island.addBlockCount(blockType, isSpawner);
+                if (SkyBlock.getInstance().getIslandUtils().hasWorth(blockType, false)){
+                    island.addBlockCount(blockType, false, 1);
                 }
             }
         }

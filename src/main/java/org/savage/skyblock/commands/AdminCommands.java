@@ -20,7 +20,7 @@ public class AdminCommands implements CommandExecutor {
                 if (p.hasPermission("isa.admin")) {
 
                     if (args.length == 0 || (args.length == 1 && args[0].equalsIgnoreCase("help"))) {
-                        for (String l : SkyBlock.getInstance().getUtils().colorList(SkyBlock.getInstance().getConfig().getStringList("messages.isa-help"))) {
+                        for (String l : SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getConfig().getStringList("messages.isa-help"))) {
                             p.sendMessage(l);
                         }
                     }
@@ -28,7 +28,7 @@ public class AdminCommands implements CommandExecutor {
                     if (args.length == 1) {
                         if (args[0].equalsIgnoreCase("reload")){
                             SkyBlock.getInstance().reloadConfig();
-                            SkyBlock.getInstance().getFileManager().dataFileCustom.loadFile(); //todo; might have to remove this if it overrides data saves
+                            SkyBlock.getInstance().getFileManager().getData().loadFile(); //todo; might have to remove this if it overrides data saves
                             p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("reload"));
 
                             Bukkit.getScheduler().cancelTasks(SkyBlock.getInstance());

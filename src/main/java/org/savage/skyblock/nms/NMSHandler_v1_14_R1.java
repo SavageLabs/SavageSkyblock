@@ -2,13 +2,15 @@ package org.savage.skyblock.nms;
 
 import me.trent.worldapi.WorldAPI_1_13_R2;
 import net.minecraft.server.v1_14_R1.*;
-import org.bukkit.ChatColor;
+import net.minecraft.server.v1_14_R1.WorldBorder;
+import org.bukkit.*;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.savage.skyblock.PluginHook;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
@@ -52,7 +54,7 @@ public class NMSHandler_v1_14_R1 extends NMSHandler {
                                     if (!tileEntities.contains(block.getType())) {
                                         String type = block.getType().name().toUpperCase();
                                         if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)) {
-                                            island.addBlockCount(type, false);
+                                            island.addBlockCount(type, false, 1);
                                             // System.out.print("\n\n\n "+type+":"+island.getBlockCount(new FakeItem("DIAMOND_BLOCK", false))+"   \n\n\n");
                                         }
                                     }
@@ -75,16 +77,17 @@ public class NMSHandler_v1_14_R1 extends NMSHandler {
                 boolean isSpawner = false;
 
                 if (tileEntity instanceof net.minecraft.server.v1_14_R1.TileEntityMobSpawner) {
-                    blockType = ((net.minecraft.server.v1_14_R1.TileEntityMobSpawner) tileEntity).getSpawner().getMobName().toString().toUpperCase();
-                    isSpawner = true;
+                    net.minecraft.server.v1_14_R1.TileEntityMobSpawner spawner = (net.minecraft.server.v1_14_R1.TileEntityMobSpawner)tileEntity;
+                    blockType = spawner.getSpawner().getMobName().toString().toUpperCase();
+                    blockType = blockType.replace("MINECRAFT:", "");
+                    int amount = PluginHook.getSpawnerCount(new Location(Bukkit.getWorld(spawner.getWorld().worldData.getName()), spawner.getPosition().getX(), spawner.getPosition().getY(), spawner.getPosition().getZ()));
+                    island.addBlockCount(blockType, true, amount);
+                    continue;
                 } else {
                     blockType = tileEntity.getBlock().getMaterial().toString().toUpperCase();
                 }
-
-                blockType = blockType.replace("MINECRAFT:", "");
-
-                if (SkyBlock.getInstance().getIslandUtils().hasWorth(blockType, isSpawner)){
-                    island.addBlockCount(blockType, isSpawner);
+                if (SkyBlock.getInstance().getIslandUtils().hasWorth(blockType, false)){
+                    island.addBlockCount(blockType, false, 1);
                 }
             }
         }

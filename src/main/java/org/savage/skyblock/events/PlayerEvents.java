@@ -13,12 +13,50 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.savage.skyblock.API.IslandEnterEvent;
+import org.savage.skyblock.API.IslandLeaveEvent;
+import org.savage.skyblock.API.IslandTeleportEvent;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
 
 public class PlayerEvents implements Listener {
+
+    @EventHandler
+    public void teleportEvent(PlayerTeleportEvent e){
+        //check if the island they're teleport from is not null
+        Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(e.getFrom());
+        if (island != null){
+            //good we can now call our own event from this one
+            Bukkit.getPluginManager().callEvent(new IslandTeleportEvent(island, e.getPlayer().getUniqueId(), e.getFrom(), e.getTo()));
+        }
+    }
+
+    @EventHandler
+    public void enterIsland(IslandEnterEvent e){
+        Player p = e.getPlayer();
+        Island island = e.getIsland();
+        if (p != null && island != null){
+            if (SkyBlock.getInstance().getUtils().getSettingBool("send-island-enter-message")){
+                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-enter").replace("%island%", island.getName()));
+            }
+            //send the worldBorder packet to the incoming player
+            SkyBlock.getInstance().getReflectionManager().nmsHandler.sendBorder(p, island.getCenterX(), island.getCenterZ(), island.getProtectionRadius());
+        }
+    }
+
+    @EventHandler
+    public void leaveIsland(IslandLeaveEvent e){
+        Player p = e.getPlayer();
+        Island island = e.getIsland();
+        if (p != null && island != null){
+            if (SkyBlock.getInstance().getUtils().getSettingBool("send-island-leave-message")){
+                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-leave").replace("%island%", island.getName()));
+            }
+        }
+    }
 
     @EventHandler
     public void chat(AsyncPlayerChatEvent e) {
@@ -146,10 +184,10 @@ public class PlayerEvents implements Listener {
 
 
         if (levelValue > 0) {
-            island.addBlockCount(type, spawner);
+            island.addBlockCount(type, spawner, 1);
             island.addLevel(levelValue);
         } else if (block.getType().equals(Material.HOPPER) || block.getType().equals(Material.MOB_SPAWNER)) {
-            island.addBlockCount(type, spawner);
+            island.addBlockCount(type, spawner, 1);
         }
     }
 
@@ -211,10 +249,10 @@ public class PlayerEvents implements Listener {
             }
 
             if (levelValue > 0) {
-                island.removeBlockCount(type, spawner);
+                island.removeBlockCount(type, spawner, 1);
                 island.addLevel(-levelValue);
             } else if (block.getType().equals(Material.HOPPER) || block.getType().equals(Material.MOB_SPAWNER)) {
-                island.removeBlockCount(type, spawner);
+                island.removeBlockCount(type, spawner, 1);
             }
         }
     }
