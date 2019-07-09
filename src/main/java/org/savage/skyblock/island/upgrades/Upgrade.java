@@ -8,8 +8,7 @@ public enum Upgrade {
     PROTECTION_RADIUS(1, "protection-radius"),
     MEMBER_LIMIT(2, "member-limit"),
     SPAWNER_RATE(3, "spawner-rate"),
-    ISLAND_FLY(4, "island-fly"),
-    HOPPER_LIMIT(5, "hopper-limit");
+    HOPPER_LIMIT(4, "hopper-limit");
 
     private int id;
     private String name;

@@ -1,5 +1,7 @@
 package org.savage.skyblock;
 
+import com.bgsoftware.wildstacker.api.WildStacker;
+import com.bgsoftware.wildstacker.api.WildStackerAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
@@ -9,19 +11,17 @@ public class PluginHook {
         return Bukkit.getPluginManager().getPlugin(pluginName).isEnabled();
     }
 
-    /*
+
     private static WildStacker getWildStackerAPI(){
         return WildStackerAPI.getWildStacker();
     }
 
-     */
 
     public static int getSpawnerCount(Location location){
         if (isEnabled("WildStacker")) {
-           // if (getWildStackerAPI().getSystemManager().getStackedSpawner(location) != null){
-          //      return getWildStackerAPI().getSystemManager().getStackedSpawner(location).getStackAmount();
-          //  }
-            return 1;
+           if (getWildStackerAPI().getSystemManager().getStackedSpawner(location) != null){
+                return getWildStackerAPI().getSystemManager().getStackedSpawner(location).getStackAmount();
+            }
         }
         return 1;
     }
