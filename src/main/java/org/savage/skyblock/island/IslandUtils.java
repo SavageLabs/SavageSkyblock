@@ -52,6 +52,10 @@ public class IslandUtils {
         return null;
     }
 
+    public boolean hasAdminPermissions(Player p, Island island){
+        return isOwner(p.getUniqueId(), island) || isCoOwner(p.getUniqueId(), island);
+    }
+
     public Island getIslandFromLocation(Location location) {
         for (Island island : Storage.islandList) {
             Location islandLocation = island.getLocation();

@@ -75,18 +75,30 @@ messages:
 
   ##########################################################################################
   #This is the island roles section
+  promoteMax: '&cThis player is already a CoOwner, to make them owner of the island run /is transfer <player>'
+
   promotedOwner: '&aYou have promoted &b%player%&a to Owner of the island!'
   promotedOwnerMe: '&aYou have been promoted to the Owner of the island!'
+
   promotedOfficer: '&aYou have promoted &b%player%&a to an Officer of the island!'
   promotedOfficerMe: '&aYou have been promoted to an Officer in the island!'
+
+  promotedCoOwner: '&aYou have promoted &b%player%&a to a Co Owner of the island!'
+  promotedCoOwnerMe: '&aYou have been promoted to a Co Owner in the island!'
+
   promotedNoPlayer: '&aThis player is not in your island!'
   cannotPromoteDemoteSelf: '&aYou cannot promote/demote yourself!'
+
   demotedNo: '&aYou cannot demote this player any lower than they already are!'
+
   demotedNoPlayer: '&aThis player is not in your island!'
+
+  demotedOfficer: '&aYou have demoted &b%player%&a to a Officer!'
+  demotedOfficerMe: '&aYou have been demoted back to a Officer!'
+
   demotedMember: '&aYou have demoted &b%player%&a back to a member!'
   demotedMemberMe: '&aYou have been demoted back to a member!'
-  demoted: '&aYou have demoted &b%player%&a from being an Officer in the island!'
-  demotedMe: '&aYou have been demoted from Officer in the island!'
+
   ##########################################################################################
 
   ##########################################################################################

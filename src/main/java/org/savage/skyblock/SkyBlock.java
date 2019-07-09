@@ -4,6 +4,8 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -115,6 +117,8 @@ public class SkyBlock extends JavaPlugin {
 
     public void onDisable(){
         getUtils().saveIslands();
+
+        Bukkit.getScheduler().cancelTasks(this);
     }
 
     private boolean setupEconomy() {
