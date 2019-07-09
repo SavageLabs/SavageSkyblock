@@ -156,15 +156,8 @@
             <groupId>com.github.TrentTheDude</groupId>
             <artifactId>WildStacker-API</artifactId>
             <version>-17552fe051-1</version>
-            <scope>provided</scope>
-
-            <exclusions>
-                <exclusion>
-                    <artifactId>bukkit</artifactId>
-                    <groupId>org.bukkit</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
+
 
 
         <dependency>
