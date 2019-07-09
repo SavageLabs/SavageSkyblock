@@ -28,7 +28,7 @@ public class FileManager {
             new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").mkdir();
         }
 
-        SkyBlock.getInstance().saveResource("default-1.8_1.12.2.schematic", true);
+        SkyBlock.getInstance().saveResource("default.schematic", true);
        // //load the schems into the plugin's directory
 
        // File schem1 = new File(SkyBlock.getInstance().getDataFolder()+"/default-1.8_1.12.2.schematic");
