@@ -9,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.savage.skyblock.PluginHook;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
@@ -35,16 +34,14 @@ public class NMSHandler_v1_14_R1 extends NMSHandler {
 
         final CraftChunk craftChunk = (CraftChunk) chunk;
 
-
         final int minX = chunk.getX() << 4;
         final int minZ = chunk.getZ() << 4;
         final int maxX = minX | 15;
         final int maxY = chunk.getWorld().getMaxHeight();
         final int maxZ = minZ | 15;
 
-        new BukkitRunnable(){
-            @Override
-            public void run() {
+        new Thread(new Runnable() {
+            public void run(){
                 for (int x = minX; x <= maxX; ++x) {
                     for (int y = 0; y <= maxY; ++y) {
                         for (int z = minZ; z <= maxZ; ++z) {
@@ -67,7 +64,7 @@ public class NMSHandler_v1_14_R1 extends NMSHandler {
                     }
                 }
             }
-        }.runTaskAsynchronously(SkyBlock.getInstance());
+        }).start();
 
         for (final Map.Entry<BlockPosition, net.minecraft.server.v1_14_R1.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
             if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {
