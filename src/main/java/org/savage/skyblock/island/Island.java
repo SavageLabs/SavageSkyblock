@@ -32,6 +32,7 @@ public class Island {
     private UUID ownerUUID;
     private List<UUID> memberList;
     private List<UUID> officerList;
+    private List<UUID> coownerList;
     private boolean open = false; // meaning people can join anytime
     private boolean deleting = false;
     private Location home;
@@ -58,11 +59,12 @@ public class Island {
     private HashMap<Upgrade, Integer> upgrade_tier = new HashMap<>();
     private HashMap<FakeItem, Integer> blocks = new HashMap<>();
 
-    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> memberList, List<UUID> officerList, int protectionRadius, String name, int memberLimit) {
+    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> coownerList, List<UUID> memberList, List<UUID> officerList, int protectionRadius, String name, int memberLimit) {
         this.centerX = x;
         this.centerY = y;
         this.centerZ = z;
         this.ownerUUID = ownerUUID;
+        this.coownerList = coownerList;
         this.memberList = memberList;
         this.officerList = officerList;
         this.protectionRadius = protectionRadius;
@@ -77,8 +79,20 @@ public class Island {
 
         if (!schematic.equalsIgnoreCase("")){
             //generate the island schematic
+            Player p = Bukkit.getPlayer(getOwnerUUID());
+            if (p != null && p.isOnline()){
+                p.closeInventory();
+                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-loading"));
+            }
+
             SkyBlock.getInstance().getWorldGenerator().pasteSchem(getLocation(), schematic);
-            Bukkit.getPlayer(getOwnerUUID()).teleport(getLocation());
+
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    Bukkit.getPlayer(getOwnerUUID()).teleport(getLocation());
+                }
+            }.runTaskLater(SkyBlock.getInstance(), 10L);
         }
 
         setTopPlace(Storage.currentTop);
@@ -172,27 +186,27 @@ public class Island {
         return null;
     }
 
-    public void addBlockCount(String blockTypeName, boolean spawner) {
+    public void addBlockCount(String blockTypeName, boolean spawner, int toAdd) {
         FakeItem fakeItem = new FakeItem(blockTypeName, spawner);
         if (blocksHas(fakeItem)) {
             //already has it in the map, add to it
             FakeItem dupe = getDuplicateFakeItem(fakeItem);
             int amount = getBlocks().get(dupe);
             this.blocks.remove(dupe);
-            this.blocks.put(dupe, Math.addExact(amount, 1));
+            this.blocks.put(dupe, Math.addExact(amount, toAdd));
         } else {
             //doesn't, add the initial one
-            this.blocks.put(fakeItem, 1);
+            this.blocks.put(fakeItem, toAdd);
         }
     }
 
-    public void removeBlockCount(String blockTypeName, boolean spawner) {
+    public void removeBlockCount(String blockTypeName, boolean spawner, int toRemove) {
         FakeItem fakeItem = new FakeItem(blockTypeName, spawner);
         if (blocksHas(fakeItem)) {
             //already has it in the map, add to it
             FakeItem dupe = getDuplicateFakeItem(fakeItem);
             int amount = blocks.get(dupe);
-            int end = Math.subtractExact(amount, 1);
+            int end = Math.subtractExact(amount, toRemove);
             this.blocks.remove(dupe);
             if (end > 0) {
                 this.blocks.put(dupe, end);
@@ -202,12 +216,14 @@ public class Island {
 
 
     public boolean hasPlayer(UUID uuid){
-        return getOwnerUUID().equals(uuid) || getOfficerList().contains(uuid) || getMemberList().contains(uuid);
+        return getOwnerUUID().equals(uuid) || getOfficerList().contains(uuid) || getCoownerList().contains(uuid) || getMemberList().contains(uuid);
     }
 
     public List<UUID> getAllPlayers(){
         List<UUID> l = getOfficerList();
         l.addAll(getMemberList());
+        l.addAll(getCoownerList());
+        l.add(getOwnerUUID());
         return l;
     }
 
@@ -306,6 +322,7 @@ public class Island {
         uuids.add(getOwnerUUID());
         uuids.addAll(getOfficerList());
         uuids.addAll(getMemberList());
+        uuids.addAll(getCoownerList());
         for (UUID uuid : uuids){
             if (Bukkit.getPlayer(uuid) != null && Bukkit.getPlayer(uuid).isOnline()){
                 if (SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(Bukkit.getPlayer(uuid).getLocation()) != null) {
@@ -457,7 +474,7 @@ public class Island {
     }
 
     public Location getLocation(){
-        return new Location(Bukkit.getWorld("skyBlock"), getCenterX(), getCenterY(), getCenterZ());
+        return new Location(Storage.getSkyBlockWorld(), getCenterX(), getCenterY(), getCenterZ());
     }
 
     public void demote(UUID uuid){
@@ -567,6 +584,14 @@ public class Island {
 
     public List<UUID> getOfficerList() {
         return officerList;
+    }
+
+    public List<UUID> getCoownerList() {
+        return coownerList;
+    }
+
+    public void setCoownerList(List<UUID> coownerList) {
+        this.coownerList = coownerList;
     }
 
     public void setHome(Location home) {

@@ -2,6 +2,7 @@ package org.savage.skyblock;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
+import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.PluginManager;
@@ -25,6 +26,7 @@ import org.savage.skyblock.worldedit.WorldEditPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
 
 public class SkyBlock extends JavaPlugin {
 
@@ -75,6 +77,13 @@ public class SkyBlock extends JavaPlugin {
         islandUtils = new IslandUtils();
         reflectionManager = new ReflectionManager();
 
+        if (!setupEconomy()){
+            Bukkit.getLogger().log(Level.SEVERE,  "          --- SavageSkyBlock ---");
+            Bukkit.getLogger().log(Level.SEVERE, "Error: Could not find Vault...");
+            Bukkit.getLogger().log(Level.SEVERE, "Disabling SavageSkyBlock");
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
+
         saveDefaultConfig();
 
         getCommand("is").setExecutor(new IslandCommands());
@@ -91,20 +100,16 @@ public class SkyBlock extends JavaPlugin {
         pm.registerEvents(new PlayerEvents(), this);
         pm.registerEvents(new UpgradesUI(), this);
 
-        getUtils().loadIslands();
-
-        setupEconomy();
-
         WorldEditPersistence.worldEditVersion = Bukkit.getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();
 
-        getReflectionManager().setup();
+        getReflectionManager().setup(); // load NMS
+        getFileManager().setup(); // load flat files
+        getUtils().loadIslands(); // load Islands
 
         startTopTimer();
         startCalculationTimer();
 
         startCacheTimer();
-
-        getFileManager().setup();
 
     }
 

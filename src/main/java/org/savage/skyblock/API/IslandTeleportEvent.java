@@ -1,9 +1,12 @@
 package org.savage.skyblock.API;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
 
 import java.util.UUID;
@@ -43,6 +46,21 @@ public class IslandTeleportEvent extends Event implements Cancellable {
         this.from = from;
         this.to = to;
         this.isCancelled = false;
+
+        if (getFrom() != null && getTo() != null) {
+            Island islandFrom = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(getFrom());
+            Island islandTo = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(getTo());
+
+            if (islandFrom != islandTo){
+                Player p = Bukkit.getPlayer(getTarget());
+                if (islandFrom != null){
+                    Bukkit.getPluginManager().callEvent(new IslandLeaveEvent(p, islandFrom));
+                }
+                if (islandTo != null){
+                    Bukkit.getPluginManager().callEvent(new IslandEnterEvent(p, islandTo));
+                }
+            }
+        }
     }
 
     public Island getIsland() {

@@ -5,22 +5,44 @@ import java.io.File;
 
 public class FileManager {
 
-    public CustomFile dataFileCustom = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/data.yml"));
-    public CustomFile guiFile = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/guis.yml"));
-    public CustomFile worth = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/worth.yml"));
-    public CustomFile upgrades = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/upgrades.yml"));
+    private CustomFile data = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/data.yml"));
+    private CustomFile guis = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/guis.yml"));
+    private CustomFile worth = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/worth.yml"));
+    private CustomFile upgrades = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/upgrades.yml"));
+    private CustomFile messages = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/messages.yml"));
 
     public void setup() {
 
-        dataFileCustom.setup(false);
+        data.setup(false);
         worth.setup(true);
-        guiFile.setup(true);
+        guis.setup(true);
         upgrades.setup(true);
+        messages.setup(true);
 
         if (!new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").exists()) {
             new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").mkdir();
         }
 
         SkyBlock.getInstance().getReflectionManager().nmsHandler.generate("skyBlock");
+    }
+
+    public CustomFile getData() {
+        return data;
+    }
+
+    public CustomFile getGuis() {
+        return guis;
+    }
+
+    public CustomFile getMessages() {
+        return messages;
+    }
+
+    public CustomFile getUpgrades() {
+        return upgrades;
+    }
+
+    public CustomFile getWorth() {
+        return worth;
     }
 }

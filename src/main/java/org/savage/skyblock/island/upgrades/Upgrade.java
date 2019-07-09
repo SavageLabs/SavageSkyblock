@@ -32,7 +32,7 @@ public enum Upgrade {
         public static int getTierValue(Upgrade upgrade, int tier, Island island){
             String name = upgrade.getName();
             if (island == null){
-                return SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getInt("upgrades."+name+".tiers."+tier+".upgrade-value");
+                return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getInt("upgrades."+name+".tiers."+tier+".upgrade-value");
             }
             if (upgrade.getId() == 1){
                 return island.getProtectionRadius();
@@ -43,12 +43,12 @@ public enum Upgrade {
 
         public static double getTierCost(Upgrade upgrade, int tier){
             String name = upgrade.getName();
-            return SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getDouble("upgrades."+name+".tiers."+tier+".cost");
+            return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getDouble("upgrades."+name+".tiers."+tier+".cost");
         }
 
         public static int getMaxTier(Upgrade upgrade){
             String name = upgrade.getName();
-            return SkyBlock.getInstance().getFileManager().upgrades.getFileConfig().getConfigurationSection("upgrades."+name+".tiers").getKeys(false).size();
+            return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getConfigurationSection("upgrades."+name+".tiers").getKeys(false).size();
         }
 
         public static Upgrade getUpgrade(int id){

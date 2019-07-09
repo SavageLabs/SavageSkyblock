@@ -16,21 +16,21 @@ import java.util.List;
 public class ISTop implements Listener {
 
     public static void openISTop(Player p) {
-        Inventory i = Bukkit.createInventory(null, SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getInt("istop.rows") * 9, SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getString("istop.name")));
+        Inventory i = Bukkit.createInventory(null, SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("istop.rows") * 9, SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("istop.name")));
 
-        int m = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getConfigurationSection("istop.items").getKeys(false).size();
+        int m = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getConfigurationSection("istop.items").getKeys(false).size();
         for (int a = 1; a <= m; a++) {
-            String id = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getString("istop.items." + a + ".item-id");
-            String name = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getString("istop.items." + a + ".item-name");
-            int slot = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getInt("istop.items." + a + ".slot");
-            int data = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getInt("istop.items." + a + ".item-data");
+            String id = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("istop.items." + a + ".item-id");
+            String name = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("istop.items." + a + ".item-name");
+            int slot = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("istop.items." + a + ".slot");
+            int data = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("istop.items." + a + ".item-data");
 
             List<String> lore;
 
-            boolean placement = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getBoolean("istop.items." + a + ".is-placement");
+            boolean placement = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getBoolean("istop.items." + a + ".is-placement");
 
             if (placement) {
-                lore = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getStringList("istop.placement-item.item-lore");
+                lore = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getStringList("istop.placement-item.item-lore");
                 int placementNum = Placeholder.getIslandTopPlacement(name);
                 Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromPlacement(placementNum);
 
@@ -43,7 +43,7 @@ public class ISTop implements Listener {
                 }
 
             } else {
-                lore = SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getStringList("istop.items." + a + ".item-lore");
+                lore = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getStringList("istop.items." + a + ".item-lore");
             }
 
 
@@ -57,11 +57,12 @@ public class ISTop implements Listener {
     @EventHandler
     public void click(InventoryClickEvent e) {
         Player p = (Player) e.getWhoClicked();
-
         Inventory top = p.getOpenInventory().getTopInventory();
         Inventory bottom = p.getOpenInventory().getBottomInventory();
 
-        if (top != null && top.getName().equalsIgnoreCase(SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().guiFile.getFileConfig().getString("istop.name")))) {
+        String iName = e.getView().getTitle();
+        if (iName == null) return;
+        if (top != null && iName.equalsIgnoreCase(SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("istop.name")))) {
             e.setCancelled(true);
         }
     }
