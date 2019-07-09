@@ -447,9 +447,9 @@ public class Island {
                 List<UUID> uuids = new ArrayList<>();
                 uuids.addAll(getMemberList());
                 uuids.addAll(getOfficerList());
+                uuids.addAll(getCoownerList());
 
                 for (UUID uuid : uuids) {
-                    //teleport them all and send a message
                     if (Bukkit.getPlayer(uuid) != null && Bukkit.getPlayer(uuid).isOnline()) {
                         Player p = Bukkit.getPlayer(uuid);
                         p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("deletedIsland"));
@@ -458,12 +458,10 @@ public class Island {
                 }
 
                 List<Block> blocks = SkyBlock.getInstance().getUtils().getNearbyBlocks(getLocation(), radius);
-
-                for (Block block : blocks) {
-                    if (block != null && !block.getType().equals(Material.AIR)) {
-                        block.setType(Material.AIR);
-                    }
+                for (Block b : blocks){
+                    SkyBlock.getInstance().getReflectionManager().nmsHandler.removeBlockSuperFast(b.getX(), b.getY(), b.getZ(), false);
                 }
+
                 Bukkit.getPlayer(getOwnerUUID()).sendMessage(SkyBlock.getInstance().getUtils().getMessage("deleteIsland"));
 
                 unload();
@@ -477,84 +475,148 @@ public class Island {
         return new Location(Storage.getSkyBlockWorld(), getCenterX(), getCenterY(), getCenterZ());
     }
 
-    public void demote(UUID uuid){
-        Player owner = Bukkit.getPlayer(getOwnerUUID());
-        Player target = null;
-        if (Bukkit.getOfflinePlayer(uuid).isOnline()){
-            target = Bukkit.getPlayer(uuid);
+
+    public void demote(UUID admin, UUID target){
+        Player adminPlayer = Bukkit.getPlayer(admin);
+        if (!getMemberList().contains(target) && !getOfficerList().contains(target)){
+            adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNoPlayer"));
+            return;
         }
+        String targetName;
+        if (Bukkit.getPlayer(target) != null){
+            targetName = Bukkit.getPlayer(target).getName();
+        }else{
+            targetName = Bukkit.getOfflinePlayer(target).getName();
+        }
+        if (targetName == null){
+            adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNoPlayer"));
+            return;
+        }
+        if (getOwnerUUID().equals(admin) || getCoownerList().contains(admin)){
+            //is either owner or coowner,
 
-        IslandDemoteEvent demoteEvent = new IslandDemoteEvent(getIslandInstance(), getOwnerUUID(), uuid);
-        Bukkit.getPluginManager().callEvent(demoteEvent);
+            if (getOfficerList().contains(target)) {
+                    //target is an officer, demote to member
+                    IslandDemoteEvent demoteEvent = new IslandDemoteEvent(getIslandInstance(), admin, target);
+                    Bukkit.getPluginManager().callEvent(demoteEvent);
 
-        if (!demoteEvent.isCancelled()) {
+                    this.officerList.remove(target);
+                    this.memberList.add(target);
 
-            if (uuid.equals(getOwnerUUID())) {
-                Bukkit.getPlayer(getOwnerUUID()).sendMessage(SkyBlock.getInstance().getUtils().getMessage("cannotPromoteDemoteSelf"));
-                return;
-            }
-
-            if (owner != null && owner.isOnline()){
-                if (getMemberList().contains(uuid)){
-                    owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNo"));
-                }else{
-                    if (getOfficerList().contains(uuid)){
-                        officerList.remove(uuid);
-                        memberList.add(uuid);
-                        owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedMember").replace("%player%", Bukkit.getOfflinePlayer(uuid).getName()));
-                        if (target != null) {
-                            target.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedMemberMe"));
-                        }
-                    }else{
-                        owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNoPlayer"));
+                    adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedMember").replace("%player%", targetName));
+                    Player targetPlayer = Bukkit.getPlayerExact(targetName);
+                    if (targetPlayer != null && targetPlayer.isOnline()) {
+                        targetPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedMemberMe"));
                     }
                 }
+            if (getCoownerList().contains(target)){
+                if (getOwnerUUID().equals(admin)){
+                    //is owner trying to demote a coowner
+                    IslandDemoteEvent demoteEvent = new IslandDemoteEvent(getIslandInstance(), admin, target);
+                    Bukkit.getPluginManager().callEvent(demoteEvent);
+
+                    this.coownerList.remove(target);
+                    this.officerList.add(target);
+
+                    adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedOfficer").replace("%player%", targetName));
+                    Player targetPlayer = Bukkit.getPlayerExact(targetName);
+                    if (targetPlayer != null && targetPlayer.isOnline()) {
+                        targetPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedOfficerMe"));
+                    }
+                }else{
+                    adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+                }
             }
+
+        }else{
+            adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
         }
     }
 
-    public void promote(UUID uuid){
-        Player owner = Bukkit.getPlayer(getOwnerUUID());
-        Player target = null;
-        if (Bukkit.getOfflinePlayer(uuid).isOnline()){
-            target = Bukkit.getPlayer(uuid);
+    //todo make a transfer ownership method
+
+    public void promote(UUID admin, UUID target){
+        Player adminPlayer = Bukkit.getPlayer(admin);
+        if (!getMemberList().contains(target) && !getOfficerList().contains(target)){
+            adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNoPlayer"));
+            return;
         }
-
-        IslandPromoteEvent promoteEvent = new IslandPromoteEvent(getIslandInstance(), getOwnerUUID(), uuid);
-        Bukkit.getPluginManager().callEvent(promoteEvent);
-
-        if (!promoteEvent.isCancelled()) {
-
-            if (uuid.equals(getOwnerUUID())) {
-                Bukkit.getPlayer(getOwnerUUID()).sendMessage(SkyBlock.getInstance().getUtils().getMessage("cannotPromoteDemoteSelf"));
+        String targetName;
+        if (Bukkit.getPlayer(target) != null){
+            targetName = Bukkit.getPlayer(target).getName();
+        }else{
+            targetName = Bukkit.getOfflinePlayer(target).getName();
+        }
+        if (targetName == null){
+            adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNoPlayer"));
+            return;
+        }
+        if (getOwnerUUID().equals(admin) || getCoownerList().contains(admin)){
+            //is either owner or coowner,
+            if (getMemberList().contains(target)){
+                //target is a member, the admin can promote them
+                //promote member to an officer
+                IslandPromoteEvent promoteEvent = new IslandPromoteEvent(getIslandInstance(), admin, target);
+                Bukkit.getPluginManager().callEvent(promoteEvent);
+                if (!this.officerList.contains(target)){
+                    this.officerList.add(target);
+                }
+                this.memberList.remove(target);
+                adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOfficer").replace("%player%", targetName));
+                Player targetPlayer = Bukkit.getPlayerExact(targetName);
+                if (targetPlayer != null && targetPlayer.isOnline()){
+                    targetPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOfficerMe"));
+                }
                 return;
+                //Send player has been promoted to officer
             }
 
-            if (owner != null && owner.isOnline()) {
-                if (getMemberList().contains(uuid)) {
-                    memberList.remove(uuid);
-                    officerList.add(uuid);
-                    owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOfficer").replace("%player%", Bukkit.getOfflinePlayer(uuid).getName()));
-                    if (target != null) {
-                        target.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOfficerMe"));
-                    }
-                    return;
-                } else {
-                    if (getOfficerList().contains(uuid)) {
-                        //is an officer, promote to owner
-                        officerList.remove(uuid);
-                        setOwnerUUID(uuid);
-                        officerList.add(owner.getUniqueId());
-                        owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOwner").replace("%player%", Bukkit.getOfflinePlayer(uuid).getName()));
-                        if (target != null) {
-                            target.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOwnerMe"));
+                if (getOfficerList().contains(target)) {
+                    if (getOwnerUUID().equals(admin)) {
+                        //target is an officer, promote them to coOwner
+                        IslandPromoteEvent promoteEvent = new IslandPromoteEvent(getIslandInstance(), admin, target);
+                        Bukkit.getPluginManager().callEvent(promoteEvent);
+
+                        if (!this.coownerList.contains(target)){
+                            this.coownerList.add(target);
+                        }
+                        this.officerList.remove(target);
+                        adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedCoOwner").replace("%player%", targetName));
+                        Player targetPlayer = Bukkit.getPlayerExact(targetName);
+                        if (targetPlayer != null && targetPlayer.isOnline()) {
+                            targetPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedCoOwnerMe"));
                         }
                     }else{
-                        owner.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedNoPlayer"));
+                        adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
                     }
                 }
-            }
+                if (getCoownerList().contains(target)){
+                    if (getOwnerUUID().equals(admin)){
+                        //is owner trying to promote a coowner,
+                        adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promoteMax"));
+                    }else{
+                        adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+                    }
+                }
+
+        }else{
+            //Send not enough permission todo;
+            adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
         }
+    }
+
+    public void addCoOwner(UUID uuid){
+        this.coownerList.add(uuid);
+    }
+
+    public void removeOfficer(UUID uuid){
+        this.officerList.remove(uuid);
+    }
+    public void removeCoOwner(UUID uuid){
+        this.coownerList.remove(uuid);
+    }
+    public void removeMember(UUID uuid){
+        this.memberList.remove(uuid);
     }
 
     public void setBiome(Biome biome){

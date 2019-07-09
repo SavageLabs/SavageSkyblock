@@ -27,7 +27,7 @@ public class IslandCommands implements CommandExecutor {
 
                     if (args[0].equalsIgnoreCase("version")) {
                         //version command is not configurable
-                        String[] list = {"&a&lSavage SkyBlock", " ", "&bVersion: " + Bukkit.getPluginManager().getPlugin("SavageSkyBlock").getDescription().getVersion()};
+                        String[] list = {"&a&lSavage SkyBlock", " ", "&bVersion: " + Bukkit.getPluginManager().getPlugin("SavageSkyBlock").getDescription().getVersion(), "&bBy: Trent™"};
                         for (String s : list) {
                             p.sendMessage(SkyBlock.getInstance().getUtils().color(s));
                         }
@@ -58,7 +58,7 @@ public class IslandCommands implements CommandExecutor {
 
                     if (args[0].equalsIgnoreCase("perms")){
                         if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
-                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
+                            if (SkyBlock.getInstance().getIslandUtils().hasAdminPermissions(p, SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                 Protection.openProtectionMenu(p);
                             }else{
                                 p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notOwner"));
@@ -114,7 +114,7 @@ public class IslandCommands implements CommandExecutor {
                     if (args[0].equalsIgnoreCase("biome")){
                         //check if they have an island already
                         if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
-                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
+                            if (SkyBlock.getInstance().getIslandUtils().hasAdminPermissions(p, SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                 Biomes.openBiome(p);
                             }else{
                                 p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
@@ -139,7 +139,7 @@ public class IslandCommands implements CommandExecutor {
                     }
                     if (args[0].equalsIgnoreCase("sethome")){
                         if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
-                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
+                            if (SkyBlock.getInstance().getIslandUtils().hasAdminPermissions(p, SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                 //set the home
                                 if (SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation()).equals(SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                     SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()).setHome(p.getLocation());
@@ -159,8 +159,38 @@ public class IslandCommands implements CommandExecutor {
                 if (args.length == 2){
                     //is kick <player>
                     //is setname <name>
+                    //is transfer <player>
                     String arg1 = args[0];
                     String arg2 = args[1];
+
+                    if (arg1.equalsIgnoreCase("transfer")){
+                        //transferring ownership
+                        Player targetPlayer = Bukkit.getPlayerExact(arg2);
+                        if (targetPlayer != null && targetPlayer.isOnline()){
+                            //check for their island
+                            Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                            if (island != null){
+                                if (island.getOwnerUUID().equals(p.getUniqueId())){
+                                    //if they are owner, let them transfer island ownership to the specified person
+                                    if (SkyBlock.getInstance().getIslandUtils().getIsland(targetPlayer.getUniqueId()) == island){
+                                        //in the same island, change it now
+                                        island.setOwnerUUID(targetPlayer.getUniqueId());
+                                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOwner").replace("%player%", targetPlayer.getName()));
+                                        targetPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("promotedOwnerMe"));
+                                        island.addCoOwner(p.getUniqueId());
+
+                                        island.removeCoOwner(targetPlayer.getUniqueId());
+                                        island.removeOfficer(targetPlayer.getUniqueId());
+                                        island.removeMember(targetPlayer.getUniqueId());
+                                    }else{
+                                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNoPlayer"));
+                                    }
+                                }else{
+                                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+                                }
+                            }
+                        }
+                    }
 
                     if (arg1.equalsIgnoreCase("setname") || arg1.equalsIgnoreCase("name") || arg1.equalsIgnoreCase("rename")){
                         if (arg2 != null && !arg2.equalsIgnoreCase("")){
@@ -168,7 +198,7 @@ public class IslandCommands implements CommandExecutor {
                             if (!SkyBlock.getInstance().getIslandUtils().isIslandName(arg2)){
                                 Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
                                 if (island != null){
-                                    if (island.getOwnerUUID().equals(p.getUniqueId())) {
+                                    if (SkyBlock.getInstance().getIslandUtils().hasAdminPermissions(p, island)){
                                         island.setName(arg2);
                                         p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-name-set").replace("%name%", arg2));
                                     }else{
@@ -187,7 +217,7 @@ public class IslandCommands implements CommandExecutor {
 
                     if (arg1.equalsIgnoreCase("setbiome")){
                         if (SkyBlock.getInstance().getIslandUtils().inIsland(p.getUniqueId())) {
-                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
+                            if (SkyBlock.getInstance().getIslandUtils().hasAdminPermissions(p, SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()))) {
                                 //check if arg2 is a valid biome name
                                 if (Biome.valueOf(arg2) != null && !Biome.valueOf(arg2).name().equalsIgnoreCase("")) {
                                     //is valid
@@ -244,15 +274,11 @@ public class IslandCommands implements CommandExecutor {
                                             island.invite(p.getUniqueId(), target.getUniqueId());
                                         }
                                         if (arg1.equalsIgnoreCase("promote")) {
-                                            if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), island)) {
-                                                island.promote(target.getUniqueId());
-                                            }else{
-                                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
-                                            }
+                                            island.promote(p.getUniqueId(), target.getUniqueId());
                                         }
                                         if (arg1.equalsIgnoreCase("demote")) {
                                             if (SkyBlock.getInstance().getIslandUtils().isOwner(p.getUniqueId(), island)) {
-                                                island.demote(target.getUniqueId());
+                                                island.demote(p.getUniqueId(), target.getUniqueId());
                                             }else{
                                                 p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
                                             }

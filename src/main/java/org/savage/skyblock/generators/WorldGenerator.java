@@ -2,7 +2,6 @@ package org.savage.skyblock.generators;
 
 import me.trent.worldedit6.WorldEdit6;
 import me.trent.worldedit7.WorldEdit7;
-
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.WorldCreator;

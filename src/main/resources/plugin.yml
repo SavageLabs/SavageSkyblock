@@ -1,17 +1,19 @@
 name: SavageSkyBlock
 authors:
-  - Driftay
   - Trent
 version: '1.3'
 
 main: org.savage.skyblock.SkyBlock
+
 depend:
   - WorldEdit
   - Vault
+
 softdepend:
   - WildStacker
 
 load: POSTWORLD
+
 commands:
   is:
     aliases:

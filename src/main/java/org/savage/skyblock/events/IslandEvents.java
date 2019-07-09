@@ -10,11 +10,19 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.savage.skyblock.API.IslandCreatedEvent;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
 
 public class IslandEvents implements Listener {
+
+    @EventHandler
+    public void rel(PluginDisableEvent e){
+        if (e.getPlugin().equals(SkyBlock.getInstance())){
+            Bukkit.getScheduler().cancelTasks(SkyBlock.getInstance());
+        }
+    }
 
     @EventHandler
     public void islandCreate(IslandCreatedEvent e) {
