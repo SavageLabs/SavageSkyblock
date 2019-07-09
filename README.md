@@ -1,4 +1,7 @@
 # SavageSkyblock #
+
+Information Doc: https://docs.google.com/document/d/12fwGgU35YeNu8Iu8LPHXqZyNfrpGX0htTdaK3vRWhAg/edit
+
 The Complete SkyBlock Plugin With Enhanced Features
 
 
