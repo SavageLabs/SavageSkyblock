@@ -153,6 +153,14 @@
         </dependency>
 
         <dependency>
+            <groupId>com.github.TrentTheDude</groupId>
+            <artifactId>WildStacker-API</artifactId>
+            <version>-17552fe051-1</version>
+            <scope>provided</scope>
+        </dependency>
+
+
+        <dependency>
             <groupId>com.sk89q.worldguard</groupId>
             <artifactId>worldguard-legacy</artifactId>
             <version>7.0.0-SNAPSHOT</version>
@@ -179,6 +187,11 @@
     </dependencies>
 
     <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
         <repository>
             <id>enginehub-maven</id>
             <url>http://maven.enginehub.org/repo/</url>
