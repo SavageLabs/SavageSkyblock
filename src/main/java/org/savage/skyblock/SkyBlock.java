@@ -88,6 +88,7 @@ public class SkyBlock extends JavaPlugin {
 
         saveDefaultConfig();
 
+
         getCommand("is").setExecutor(new IslandCommands());
         getCommand("isa").setExecutor(new AdminCommands());
 

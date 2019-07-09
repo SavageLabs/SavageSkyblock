@@ -119,6 +119,17 @@ public class PlayerEvents implements Listener {
         }
     }
 
+    @EventHandler
+    public void playerDamage(EntityDamageEvent e){
+        if (e.getEntity() instanceof Player){
+            if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL) || e.getCause().equals(EntityDamageEvent.DamageCause.FALLING_BLOCK)){
+                if (SkyBlock.getInstance().getConfig().getBoolean("settings.disable-fallDamage")){
+                    e.setCancelled(true);
+                }
+            }
+        }
+    }
+
     @EventHandler (priority = EventPriority.HIGHEST)
     public void placeBlockChecker(BlockPlaceEvent e){
         Player p = e.getPlayer();
@@ -212,18 +223,6 @@ public class PlayerEvents implements Listener {
             island.addLevel(levelValue);
         } else if (block.getType().equals(Material.HOPPER) || block.getType().equals(Material.MOB_SPAWNER)) {
             island.addBlockCount(type, spawner, 1);
-        }
-    }
-
-
-    @EventHandler
-    public void playerDamage(EntityDamageEvent e){
-        if (e.getEntity() instanceof Player){
-            if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL) || e.getCause().equals(EntityDamageEvent.DamageCause.FALLING_BLOCK)){
-                if (SkyBlock.getInstance().getConfig().getBoolean("settings.disable-fallDamage")){
-                    e.setCancelled(true);
-                }
-            }
         }
     }
 

@@ -7,6 +7,8 @@
 
 settings:
 
+  fast-break-permission: 'skyblock.fastbreak' # allows players to break blocks fast, similar to Creative Mode
+
   send-island-enter-message: true # send the "island-enter" message from messages.yml?
   send-island-leave-message: true # send the "island-leave" message from messages.yml?
 
