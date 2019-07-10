@@ -113,7 +113,8 @@ public class PlayerEvents implements Listener {
         }
 
         Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
-        if (island.equals(SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation()))){
+        Island island1 = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation());
+        if (island != null && island1 != null){
             //logged into their island
             Bukkit.getPluginManager().callEvent(new IslandEnterEvent(p, island));
         }

@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_14_R1.CraftChunk;
 import org.bukkit.craftbukkit.v1_14_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.savage.skyblock.PluginHook;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
@@ -40,13 +41,13 @@ public class NMSHandler_v1_14_R1 extends NMSHandler {
         final int maxY = chunk.getWorld().getMaxHeight();
         final int maxZ = minZ | 15;
 
-        new Thread(new Runnable() {
-            public void run(){
+        new BukkitRunnable() {
+            public void run() {
                 for (int x = minX; x <= maxX; ++x) {
                     for (int y = 0; y <= maxY; ++y) {
                         for (int z = minZ; z <= maxZ; ++z) {
                             try {
-                                org.bukkit.block.Block block = chunk.getWorld().getBlockAt(x,y,z);
+                                org.bukkit.block.Block block = chunk.getWorld().getBlockAt(x, y, z);
                                 if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
                                     if (!tileEntities.contains(block.getType())) {
                                         String type = block.getType().name().toUpperCase();
@@ -56,7 +57,7 @@ public class NMSHandler_v1_14_R1 extends NMSHandler {
                                         }
                                     }
                                 }
-                            }catch(IllegalArgumentException e){
+                            } catch (IllegalArgumentException e) {
                                 e.printStackTrace();
                                 return;
                             }
@@ -64,7 +65,7 @@ public class NMSHandler_v1_14_R1 extends NMSHandler {
                     }
                 }
             }
-        }).start();
+        }.runTaskAsynchronously(SkyBlock.getInstance());
 
         for (final Map.Entry<BlockPosition, net.minecraft.server.v1_14_R1.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {
             if (island.isBlockInIsland(entry.getKey().getX(), entry.getKey().getZ())) {
@@ -102,6 +103,10 @@ public class NMSHandler_v1_14_R1 extends NMSHandler {
         worldBorder.setSize(radius * 2);
         worldBorder.setWarningDistance(0);
         final EntityPlayer entityPlayer = ((CraftPlayer) p).getHandle();
+        //System.out.print("\n\n "+worldBorder.getCenterX()+","+worldBorder.getCenterZ()+"\n\n");
+        //System.out.print("\n\n "+entityPlayer.getName()+","+entityPlayer.playerConnection.toString()+"\n\n");
+        //entityPlayer is good, same with WorldBorder, has to be with the packet or the Enum
+
         entityPlayer.playerConnection.sendPacket(new PacketPlayOutWorldBorder(worldBorder, PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_SIZE));
         entityPlayer.playerConnection.sendPacket(new PacketPlayOutWorldBorder(worldBorder, PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_CENTER));
         entityPlayer.playerConnection.sendPacket(new PacketPlayOutWorldBorder(worldBorder, PacketPlayOutWorldBorder.EnumWorldBorderAction.SET_WARNING_BLOCKS));

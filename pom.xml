@@ -136,26 +136,21 @@
             <scope>provided</scope>
         </dependency>
 
+
+
+
+
         <dependency>
-            <groupId>me.trent.worldedit6</groupId>
-            <artifactId>WorldEdit6API</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>me.trent.worldedit7</groupId>
+            <groupId>com.github.TrentTheDude</groupId>
             <artifactId>WorldEdit7API</artifactId>
-            <version>1.0</version>
+            <version>dfb43afb5b</version>
         </dependency>
+
         <dependency>
-            <groupId>me.trent.worldapi</groupId>
-            <artifactId>WorldAPI_1_13_R2</artifactId>
-            <version>1.0</version>
+            <groupId>com.github.TrentTheDude</groupId>
+            <artifactId>WorldEdit6API</artifactId>
+            <version>c3dfc62fd2</version>
         </dependency>
-
-
-
-
-
 
         <dependency>
             <groupId>com.github.TrentTheDude</groupId>
@@ -163,6 +158,11 @@
             <version>master-50981b1c51-1</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.TrentTheDude</groupId>
+            <artifactId>WorldAPI_1_13_R2</artifactId>
+            <version>238201ef5f</version>
+        </dependency>
 
 
         <dependency>
