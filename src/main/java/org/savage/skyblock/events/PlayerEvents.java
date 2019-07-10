@@ -50,7 +50,6 @@ public class PlayerEvents implements Listener {
                 }
             }
 
-
             //send the worldBorder packet to the incoming player
             SkyBlock.getInstance().getReflectionManager().nmsHandler.sendBorder(p, island.getCenterX(), island.getCenterZ(), island.getProtectionRadius());
         }
@@ -109,7 +108,7 @@ public class PlayerEvents implements Listener {
         Player p = e.getPlayer();
 
         if (!SkyBlock.getInstance().getUtils().hasMemoryPlayer(p.getUniqueId())){
-            MemoryPlayer memoryPlayer = new MemoryPlayer(p.getUniqueId());
+            new MemoryPlayer(p.getUniqueId());
         }
 
         Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());

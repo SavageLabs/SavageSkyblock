@@ -110,14 +110,6 @@ public class Utils {
             String home = l[8];
             String biome = l[9];
 
-            //private boolean permissionMemberPlace = true;
-            //    private boolean permissionMemberBreak = true;
-            //    private boolean permissionMemberInteract = true;
-            //
-            //    private boolean permissionOfficerPlace = true;
-            //    private boolean permissionOfficerBreak = true;
-            //    private boolean permissionOfficerInteract = true;
-
             boolean memberPlace = Boolean.parseBoolean(l[10]);
             boolean memberBreak = Boolean.parseBoolean(l[11]);
             boolean memberInteract = Boolean.parseBoolean(l[12]);
@@ -207,7 +199,6 @@ public class Utils {
             }
             //island.setBiome(Biome.valueOf(biome));
         }
-
     }
 
     public void saveIslands(){
@@ -277,7 +268,9 @@ public class Utils {
                 }
             }
 
-            islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + coOwnerList+ ";" + x + ";" + y + ";" + z + ";" + protectionRadius + ";" + home + ";" + biome + ";" + island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" +
+            islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + coOwnerList+ ";" + x + ";" + y + ";" + z + ";" +
+                    protectionRadius + ";" + home + ";" + biome + ";" +
+                    island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" +
                     island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name+";"+memberLimit+";"+upgradeString);
         }
 

@@ -23,31 +23,31 @@ public class Placeholder {
         return 1;
     }
 
-    public static String convertPlaceholders(String s, Island island, Upgrade upgrade){
-        String n = "%"+upgrade.getName()+"_";
-            s = s.replace(n+"currentTier%", island.getUpgradeTier(upgrade) + "");
-            s = s.replace(n+"currentUpgrade%", Upgrade.Upgrades.getTierValue(upgrade, island.getUpgradeTier(upgrade), island) + "");
+    public static String convertPlaceholders(String s, Island island, Upgrade upgrade) {
+        String n = "%" + upgrade.getName() + "_";
+        s = s.replace(n + "currentTier%", island.getUpgradeTier(upgrade) + "");
+        s = s.replace(n + "currentUpgrade%", Upgrade.Upgrades.getTierValue(upgrade, island.getUpgradeTier(upgrade), island) + "");
 
-            if (s.contains("nextTier%")) {
-                if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
-                    s = s.replace(n+"nextTier%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
-                } else {
-                    s = s.replace(n+"nextTier%", (island.getUpgradeTier(upgrade) + 1) + "");
-                }
+        if (s.contains("nextTier%")) {
+            if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
+                s = s.replace(n + "nextTier%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
+            } else {
+                s = s.replace(n + "nextTier%", (island.getUpgradeTier(upgrade) + 1) + "");
             }
-            if (s.contains("nextUpgrade%")) {
-                if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
-                    s = s.replace(n+"nextUpgrade%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
-                } else {
-                    s = s.replace(n+"nextUpgrade%", (Upgrade.Upgrades.getTierValue(upgrade, (island.getUpgradeTier(upgrade)+1), null)) + "");
-                }
+        }
+        if (s.contains("nextUpgrade%")) {
+            if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
+                s = s.replace(n + "nextUpgrade%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
+            } else {
+                s = s.replace(n + "nextUpgrade%", (Upgrade.Upgrades.getTierValue(upgrade, (island.getUpgradeTier(upgrade) + 1), null)) + "");
+            }
         }
 
-        if (s.contains("%cost%")){
-            if ((island.getUpgradeTier(upgrade)+1) > Upgrade.Upgrades.getMaxTier(upgrade)){
+        if (s.contains("%cost%")) {
+            if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
                 s = s.replace("%cost%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
-            }else{
-                s = s.replace("%cost%", (Upgrade.Upgrades.getTierCost(upgrade, island.getUpgradeTier(upgrade))+1)+"");
+            } else {
+                s = s.replace("%cost%", (Upgrade.Upgrades.getTierCost(upgrade, island.getUpgradeTier(upgrade)) + 1) + "");
             }
         }
 
@@ -81,6 +81,8 @@ public class Placeholder {
     }
 
     public static List<String> convertPlaceholders(List<String> list, Island island) {
+        if (island == null) return new ArrayList<>();
+
         List<String> l = new ArrayList<>();
 
         for (String s : list) {
@@ -89,27 +91,23 @@ public class Placeholder {
             s = convertPlaceholders(s, island);
 
             if (s.contains("%officers%")) {
-                if (island != null) {
-                    List<UUID> officers = island.getOfficerList();
-                    for (UUID uuid : officers) {
-                        String name = SkyBlock.getInstance().getUtils().getNameFromUUID(uuid);
-                        s = s.replace("%officers%", name);
-                        l.add(s);
-                    }
+
+                for (UUID uuid : island.getOfficerList()) {
+                    String name = SkyBlock.getInstance().getUtils().getNameFromUUID(uuid);
+                    s = s.replace("%officers%", name);
+                    l.add(s);
                 }
                 t = true;
             }
             if (s.contains("%members%")) {
-                if (island != null) {
-                    List<UUID> members = island.getMemberList();
-                    for (UUID uuid : members) {
-                        String name = SkyBlock.getInstance().getUtils().getNameFromUUID(uuid);
-                        s = s.replace("%members%", name);
-                        l.add(s);
-                    }
+                for (UUID uuid : island.getMemberList()) {
+                    String name = SkyBlock.getInstance().getUtils().getNameFromUUID(uuid);
+                    s = s.replace("%members%", name);
+                    l.add(s);
                 }
                 t = true;
             }
+
             if (!t) {
                 l.add(s);
             }

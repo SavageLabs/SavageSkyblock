@@ -2,7 +2,6 @@ package org.savage.skyblock.island;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -214,13 +213,9 @@ public class Island {
         }
     }
 
-
-    public boolean hasPlayer(UUID uuid){
-        return getOwnerUUID().equals(uuid) || getOfficerList().contains(uuid) || getCoownerList().contains(uuid) || getMemberList().contains(uuid);
-    }
-
     public List<UUID> getAllPlayers(){
-        List<UUID> l = getOfficerList();
+        List<UUID> l = new ArrayList<>();
+        l.addAll(getOfficerList());
         l.addAll(getMemberList());
         l.addAll(getCoownerList());
         l.add(getOwnerUUID());
@@ -348,7 +343,9 @@ public class Island {
             IslandJoinEvent joinEvent = new IslandJoinEvent(getIslandInstance(), joiner);
             Bukkit.getPluginManager().callEvent(joinEvent);
             if (!joinEvent.isCancelled()) {
-                memberList.add(joiner);
+                if (!getMemberList().contains(joiner)){
+                    this.memberList.add(joiner);
+                }
                 removeInvite(joiner);
                 return true;
             }
@@ -501,7 +498,9 @@ public class Island {
                     Bukkit.getPluginManager().callEvent(demoteEvent);
 
                     this.officerList.remove(target);
-                    this.memberList.add(target);
+                    if (!getMemberList().contains(target)){
+                        this.memberList.add(target);
+                    }
 
                     adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedMember").replace("%player%", targetName));
                     Player targetPlayer = Bukkit.getPlayerExact(targetName);
@@ -516,7 +515,9 @@ public class Island {
                     Bukkit.getPluginManager().callEvent(demoteEvent);
 
                     this.coownerList.remove(target);
-                    this.officerList.add(target);
+                    if (!getOfficerList().contains(target)){
+                        this.officerList.add(target);
+                    }
 
                     adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedOfficer").replace("%player%", targetName));
                     Player targetPlayer = Bukkit.getPlayerExact(targetName);
