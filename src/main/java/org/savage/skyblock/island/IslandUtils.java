@@ -65,8 +65,7 @@ public class IslandUtils {
                 if (location.distanceSquared(islandLocation) <= protectionRange) {
                     return island;
                 }
-            } catch (IllegalArgumentException e) {
-            }
+            } catch (IllegalArgumentException e) { }
         }
         return null;
     }

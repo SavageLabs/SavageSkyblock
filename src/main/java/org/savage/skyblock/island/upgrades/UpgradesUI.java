@@ -61,13 +61,13 @@ public class UpgradesUI implements Listener {
                         for (Upgrade upgrade : Upgrade.values()) {
                             String upgradeName = upgrade.getName();
                             if (f.getConfigurationSection("upgrades."+upgradeName) == null) continue;
-                            int upgradeID = upgrade.getId();
+                            //int upgradeID = upgrade.getId();
                             if (name.equalsIgnoreCase(SkyBlock.getInstance().getUtils().color(f.getString("upgrades."+upgradeName+".name")))) {
                                 int currentTier = island.getUpgradeTier(upgrade);
                                 int maxTier = Upgrade.Upgrades.getMaxTier(upgrade);
                                 int nextTier = Math.addExact(currentTier, 1);
                                 double tierCost = f.getDouble("upgrades."+upgradeName+".tiers."+nextTier+".cost");
-                                int upgradeValue = f.getInt("upgrades."+upgradeName+".tiers."+nextTier+".upgrade-value");
+                                //int upgradeValue = f.getInt("upgrades."+upgradeName+".tiers."+nextTier+".upgrade-value");
 
                                 if (currentTier >= maxTier) {
                                     p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("upgrade_max"));
@@ -79,7 +79,6 @@ public class UpgradesUI implements Listener {
                                             openUpgradesUI(p);
                                         }
                                     }.runTaskLater(SkyBlock.getInstance(), 10L);
-
                                     return;
                                 }
 
@@ -107,7 +106,6 @@ public class UpgradesUI implements Listener {
                                                 openUpgradesUI(p);
                                             }
                                         }.runTaskLater(SkyBlock.getInstance(), 10L);
-
                                         return;
                                     }
                                 }else{
@@ -120,8 +118,6 @@ public class UpgradesUI implements Listener {
                                             openUpgradesUI(p);
                                         }
                                     }.runTaskLater(SkyBlock.getInstance(), 10L);
-
-                                    return;
                                 }
                             }
                         }
