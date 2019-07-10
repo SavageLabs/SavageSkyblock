@@ -59,7 +59,7 @@ public class Island {
     private HashMap<Upgrade, Integer> upgrade_tier = new HashMap<>();
     private HashMap<FakeItem, Integer> blocks = new HashMap<>();
 
-    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> coownerList, List<UUID> memberList, List<UUID> officerList, int protectionRadius, String name, int memberLimit) {
+    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> coownerList, List<UUID> officerList, List<UUID> memberList, int protectionRadius, String name, int memberLimit) {
         this.centerX = x;
         this.centerY = y;
         this.centerZ = z;

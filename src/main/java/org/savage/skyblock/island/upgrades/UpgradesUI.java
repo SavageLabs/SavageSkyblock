@@ -93,8 +93,8 @@ public class UpgradesUI implements Listener {
                                         p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("upgrade_purchased").replace("%upgrade%", SkyBlock.getInstance().getUtils().capitalizeFirstLetter(event.getUpgrade().getName().replace("-", " "))).replace("%tier%", event.getNewTier()+""));
 
                                         for (UUID uuid : island.getAllPlayers()){
-                                            if (Bukkit.getPlayer(uuid) != null){
-                                                Bukkit.getPlayer(uuid).sendMessage(SkyBlock.getInstance().getUtils().getMessage("upgrade_purchased").replace("%player%", p.getName()).replace("%upgrade%", SkyBlock.getInstance().getUtils().capitalizeFirstLetter(event.getUpgrade().getName().replace("-", " "))).replace("%tier%", event.getNewTier()+""));
+                                            if (Bukkit.getPlayer(uuid) != null && uuid != p.getUniqueId()){
+                                                Bukkit.getPlayer(uuid).sendMessage(SkyBlock.getInstance().getUtils().getMessage("upgrade_purchased_everyone").replace("%player%", p.getName()).replace("%upgrade%", SkyBlock.getInstance().getUtils().capitalizeFirstLetter(event.getUpgrade().getName().replace("-", " "))).replace("%tier%", event.getNewTier()+""));
                                             }
                                         }
 

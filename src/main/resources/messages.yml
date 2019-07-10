@@ -134,6 +134,7 @@ messages:
   spawner-limit: '&cYou cannot place anymore spawners on this island!'
 
   upgrade_purchased: '&8&l(&c&l!&8&l) &aUpgraded &l%upgrade%&a to tier &b&l%tier%&a!'
+
   upgrade_denied: '&8&l(&c&l!&8&l) &cError, not enough money for this upgrade!'
   upgrade_max: '&8&l(&c&l!&8&l) &cThis upgrade is already &lMaxed&c!'
 

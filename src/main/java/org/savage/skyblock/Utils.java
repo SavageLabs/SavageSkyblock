@@ -138,9 +138,9 @@ public class Utils {
             }
 
 
-            String[] l2 = l[1].split(";");
-            String[] l3 = l[2].split(";");
-            String[] l4 = l[3].split(";");
+            String[] l2 = l[1].split(",");
+            String[] l3 = l[2].split(",");
+            String[] l4 = l[3].split(",");
 
             List<UUID> memberList = new ArrayList<>();
             List<UUID> officerList = new ArrayList<>();
@@ -179,12 +179,17 @@ public class Utils {
             }catch(ArrayIndexOutOfBoundsException e){}
 
 
-            Island island = new Island("", x, y, z, ownerUUID, coOwnerList, memberList, officerList, protectionRadius, name, memberLimit);
+            Island island = new Island("", x, y, z, ownerUUID, coOwnerList, officerList, memberList, protectionRadius, name, memberLimit);
 
             island.setUpgradeMap(upgradesMap);
 
             if (name.equalsIgnoreCase("")) {
-                island.setName(getNameFromUUID(ownerUUID));
+                if (!SkyBlock.getInstance().getIslandUtils().isIslandName(getNameFromUUID(ownerUUID))){
+                    island.setName(getNameFromUUID(ownerUUID));
+                }else{
+                    //taken
+                    island.setName(getNameFromUUID(ownerUUID)+"-1");
+                }
             }
 
             island.setPermissionMemberPlace(memberPlace);
