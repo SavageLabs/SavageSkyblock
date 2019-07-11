@@ -45,7 +45,7 @@ public class Placeholder {
 
         if (s.contains("%cost%")) {
             if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
-                s = s.replace("%cost%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
+                s = s.replace("%cost%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max")).replace("$", "");
             } else {
                 s = s.replace("%cost%", (Upgrade.Upgrades.getTierCost(upgrade, island.getUpgradeTier(upgrade)) + 1) + "");
             }

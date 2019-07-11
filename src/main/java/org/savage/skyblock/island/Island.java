@@ -53,12 +53,14 @@ public class Island {
     private double blockWorth = 0;
     private double spawnerWorth = 0;
 
-    private int memberLimit;
+    private int memberLimit = SkyBlock.getInstance().getUtils().getSettingInt("default-member-limit");
+    private int hopperLimit = SkyBlock.getInstance().getUtils().getSettingInt("default-hopper-limit");
+    private int spawnerLimit = SkyBlock.getInstance().getUtils().getSettingInt("default-spawner-limit");
 
     private HashMap<Upgrade, Integer> upgrade_tier = new HashMap<>();
     private HashMap<FakeItem, Integer> blocks = new HashMap<>();
 
-    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> coownerList, List<UUID> officerList, List<UUID> memberList, int protectionRadius, String name, int memberLimit) {
+    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> coownerList, List<UUID> officerList, List<UUID> memberList, int protectionRadius, String name) {
         this.centerX = x;
         this.centerY = y;
         this.centerZ = z;
@@ -69,7 +71,6 @@ public class Island {
         this.protectionRadius = protectionRadius;
         this.home = getLocation();
         this.name = name;
-        this.memberLimit = memberLimit;
 
         islandInstance = this;
 
@@ -150,8 +151,24 @@ public class Island {
         return memberLimit;
     }
 
+    public int getSpawnerLimit() {
+        return spawnerLimit;
+    }
+
+    public void setSpawnerLimit(int spawnerLimit) {
+        this.spawnerLimit = spawnerLimit;
+    }
+
     public void setMemberLimit(int memberLimit) {
         this.memberLimit = memberLimit;
+    }
+
+    public int getHopperLimit() {
+        return hopperLimit;
+    }
+
+    public void setHopperLimit(int hopperLimit) {
+        this.hopperLimit = hopperLimit;
     }
 
     public void clearBlockCount() {

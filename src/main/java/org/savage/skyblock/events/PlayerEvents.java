@@ -151,44 +151,27 @@ public class PlayerEvents implements Listener {
 
         String type = block.getType().name().toUpperCase();
 
-        int defaultHopper = SkyBlock.getInstance().getUtils().getSettingInt("default-hopper-limit");
-        int defaultSpawner = SkyBlock.getInstance().getUtils().getSettingInt("default-spawner-limit");
+        int hopperLimit = island.getHopperLimit();
+        int spawnerLimit = island.getSpawnerLimit();
 
         //check perms
         int islandHoppers = island.getHopperCount() + 1;
         int islandSpawners = island.getSpawnerCount() + 1;
 
-        if (!p.isOp()) {
+        if (!p.isOp()){
+            //player isn't op so we can restrict their placing
             if (type.equalsIgnoreCase("HOPPER")) {
-                if (islandHoppers > defaultHopper) {
-                    if (SkyBlock.getInstance().getUtils().hasPermissionAtleast(island.getOwnerUUID(), "skyblock.block.anvil")) {
-                        int val = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId()).getPermissionValue("skyblock.block.anvil");
-                        if (val < islandHoppers) {
-                            e.setCancelled(true);
-                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("hopper-limit"));
-                            return;
-                        }
-                    } else {
-                        e.setCancelled(true);
-                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("hopper-limit"));
-                        return;
-                    }
+                if (islandHoppers > hopperLimit){
+                    e.setCancelled(true);
+                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("hopper-limit"));
+                    return;
                 }
             }
             if (type.contains("SPAWNER")) {
-                if (islandSpawners > defaultSpawner) {
-                    if (SkyBlock.getInstance().getUtils().hasPermissionAtleast(island.getOwnerUUID(), "skyblock.block.spawner")) {
-                        int val = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId()).getPermissionValue("skyblock.block.spawner");
-                        if (val < islandSpawners) {
-                            e.setCancelled(true);
-                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("spawner-limit"));
-                            return;
-                        }
-                    } else {
-                        e.setCancelled(true);
-                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("spawner-limit"));
-                        return;
-                    }
+                if (islandSpawners > spawnerLimit){
+                    e.setCancelled(true);
+                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("spawner-limit"));
+                    return;
                 }
             }
         }

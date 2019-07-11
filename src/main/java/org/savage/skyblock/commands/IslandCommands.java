@@ -99,7 +99,7 @@ public class IslandCommands implements CommandExecutor {
                         }
                     }
                     if (args[0].equalsIgnoreCase("help")){
-                        for (String l : SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getConfig().getStringList("messages.is-help"))) {
+                        for (String l : SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().getMessages().getFileConfig().getStringList("messages.is-help"))) {
                             p.sendMessage(l);
                         }
                     }

@@ -10,13 +10,13 @@ placeholders:
 
 upgrades-UI:
   gui-name: '&c&lIsland Upgrades'
-  rows: 1
-  faded-slots: '2,4,6,8'
+  rows: 2
+  faded-slots: '2,4,6,8,10,12,14,16'
 
 upgrades:
   protection-radius:
     slot: 1 # position in the upgrades UI
-    item-id: 'diamond_block'
+    item-id: 'bedrock'
     item-data: 0
     item-amount: 1
     name: '&a&lProtection Radius'
@@ -39,4 +39,166 @@ upgrades:
         cost: 1000
       2:
         upgrade-value: 150
+        cost: 5000
+
+  member-limit:
+    slot: 3 # position in the upgrades UI
+    item-id: 'sign'
+    item-data: 0
+    item-amount: 1
+    name: '&b&lMember Limit'
+    lore:
+      - ''
+      - '&7How many members your Island can have!'
+      - ''
+      - '&aCurrent Tier: &l%member-limit_currentTier%'
+      - '&bNext Tier: &l%member-limit_nextTier%'
+      - ''
+      - '&aCurrent Upgrade: &l%member-limit_currentUpgrade% member cap'
+      - '&bNext Upgrade: &l%member-limit_nextUpgrade% member cap'
+      - ''
+      - '&eCost: $&l%cost%'
+      - ''
+      - '&7&oLeft click to confirm purchase'
+    tiers:
+      1:
+        upgrade-value: 10 # the new member cap for tier 1
+        cost: 1000
+      2:
+        upgrade-value: 15
+        cost: 5000
+
+  hopper-limit:
+    slot: 5 # position in the upgrades UI
+    item-id: 'hopper'
+    item-data: 0
+    item-amount: 1
+    name: '&9&lHopper Limit'
+    lore:
+      - ''
+      - '&7How many hoppers your Island can have!'
+      - ''
+      - '&aCurrent Tier: &l%hopper-limit_currentTier%'
+      - '&bNext Tier: &l%hopper-limit_nextTier%'
+      - ''
+      - '&aCurrent Upgrade: &l%hopper-limit_currentUpgrade% hoppers'
+      - '&bNext Upgrade: &l%hopper-limit_nextUpgrade% hoppers'
+      - ''
+      - '&eCost: $&l%cost%'
+      - ''
+      - '&7&oLeft click to confirm purchase'
+    tiers:
+      1:
+        upgrade-value: 10 # the new hopper limit
+        cost: 1000
+      2:
+        upgrade-value: 15
+        cost: 5000
+
+  spawner-limit:
+    slot: 7 # position in the upgrades UI
+    item-id: 'mob_spawner'
+    item-data: 0
+    item-amount: 1
+    name: '&b&lSpawner Limit'
+    lore:
+      - ''
+      - '&7How many spawners your Island can have!'
+      - ''
+      - '&aCurrent Tier: &l%spawner-limit_currentTier%'
+      - '&bNext Tier: &l%spawner-limit_nextTier%'
+      - ''
+      - '&aCurrent Upgrade: &l%spawner-limit_currentUpgrade% spawners'
+      - '&bNext Upgrade: &l%spawner-limit_nextUpgrade% spawners'
+      - ''
+      - '&eCost: $&l%cost%'
+      - ''
+      - '&7&oLeft click to confirm purchase'
+    tiers:
+      1:
+        upgrade-value: 10 # the new spawner limit
+        cost: 1000
+      2:
+        upgrade-value: 15
+        cost: 5000
+
+  generator:
+    slot: 9 # position in the upgrades UI
+    item-id: 'lava_bucket'
+    item-data: 0
+    item-amount: 1
+    name: '&a&lGenerator (todo)'
+    lore:
+      - ''
+      - '&7Chance of generator spawning ores'
+      - ''
+      - '&aCurrent Tier: &l%generator_currentTier%'
+      - '&bNext Tier: &l%generator_nextTier%'
+      - ''
+      - '&aCurrent Upgrade: &l%generator_currentUpgrade%%'
+      - '&bNext Upgrade: &l%generator_nextUpgrade%%'
+      - ''
+      - '&eCost: $&l%cost%'
+      - ''
+      - '&7&oLeft click to confirm purchase'
+    tiers:
+      1:
+        upgrade-value: 10 # the new spawner limit
+        cost: 1000
+      2:
+        upgrade-value: 15
+        cost: 5000
+
+  spawner-rate:
+    slot: 11 # position in the upgrades UI
+    item-id: 'mob_spawner'
+    item-data: 0
+    item-amount: 1
+    name: '&e&lSpawner Rate'
+    lore:
+      - ''
+      - '&7Boost your Island''s spawner rates'
+      - ''
+      - '&aCurrent Tier: &l%spawner-rate_currentTier%'
+      - '&bNext Tier: &l%spawner-rate_nextTier%'
+      - ''
+      - '&aCurrent Upgrade: &l%spawner-rate_currentUpgrade%% faster'
+      - '&bNext Upgrade: &l%spawner-rate_nextUpgrade%% faster'
+      - ''
+      - '&eCost: $&l%cost%'
+      - ''
+      - '&7&oLeft click to confirm purchase'
+    tiers:
+      1:
+        upgrade-value: 10 # spawner rates are in percents, so 10% faster than normal
+        cost: 1000
+      2:
+        upgrade-value: 15
+        cost: 5000
+
+  crop-rate:
+    slot: 13 # position in the upgrades UI
+    item-id: 'wheat'
+    item-data: 0
+    item-amount: 1
+    name: '&c&lCrop Rate'
+    lore:
+      - ''
+      - '&7Boost your Island''s crop rates'
+      - ''
+      - '&aCurrent Tier: &l%crop-rate_currentTier%'
+      - '&bNext Tier: &l%crop-rate_nextTier%'
+      - ''
+      - '&aCurrent Upgrade: &l%crop-rate_currentUpgrade%% faster'
+      - '&bNext Upgrade: &l%crop-rate_nextUpgrade%% faster'
+      - ''
+      - '&eCost: $&l%cost%'
+      - ''
+      - '&7&oLeft click to confirm purchase'
+    tiers:
+      1:
+        upgrade-value: 10 # crop rates are in percents, so 10% faster than normal
+        cost: 1000
+      2:
+        upgrade-value: 15
         cost: 5000

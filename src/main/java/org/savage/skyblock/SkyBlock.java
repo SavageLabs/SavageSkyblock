@@ -15,6 +15,7 @@ import org.savage.skyblock.commands.AdminCommands;
 import org.savage.skyblock.commands.IslandCommands;
 import org.savage.skyblock.events.IslandEvents;
 import org.savage.skyblock.events.PlayerEvents;
+import org.savage.skyblock.events.UpgradeEvents;
 import org.savage.skyblock.filemanager.FileManager;
 import org.savage.skyblock.generators.WorldGenerator;
 import org.savage.skyblock.guis.*;
@@ -79,6 +80,8 @@ public class SkyBlock extends JavaPlugin {
         islandUtils = new IslandUtils();
         reflectionManager = new ReflectionManager();
 
+        MultiMaterials.setupMultiversionMaterials();
+
         if (!setupEconomy()){
             Bukkit.getLogger().log(Level.SEVERE,  "          --- SavageSkyBlock ---");
             Bukkit.getLogger().log(Level.SEVERE, "Error: Could not find Vault...");
@@ -88,11 +91,11 @@ public class SkyBlock extends JavaPlugin {
 
         saveDefaultConfig();
 
-
         getCommand("is").setExecutor(new IslandCommands());
         getCommand("isa").setExecutor(new AdminCommands());
 
         PluginManager pm = Bukkit.getPluginManager();
+
         pm.registerEvents(new IslandEvents(), this);
         pm.registerEvents(new Panel(), this);
         pm.registerEvents(new Islands(), this);
@@ -102,6 +105,7 @@ public class SkyBlock extends JavaPlugin {
         pm.registerEvents(new ISTop(), this);
         pm.registerEvents(new PlayerEvents(), this);
         pm.registerEvents(new UpgradesUI(), this);
+        pm.registerEvents(new UpgradeEvents(), this);
 
         WorldEditPersistence.worldEditVersion = Bukkit.getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();
 
@@ -122,18 +126,6 @@ public class SkyBlock extends JavaPlugin {
         Bukkit.getScheduler().cancelTasks(this);
     }
 
-    private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        econ = rsp.getProvider();
-        return econ != null;
-    }
-
     public void startCacheTimer(){
         new BukkitRunnable(){
             @Override
@@ -151,6 +143,27 @@ public class SkyBlock extends JavaPlugin {
                             if (val > island.getProtectionRadius()){
                                 //update
                                 island.setProtectionRadius(val);
+                            }
+                        }
+                        if (upgrade.getId() == 2){
+                            //member limit
+                            if (val > island.getMemberLimit()){
+                                //update
+                                island.setMemberLimit(val);
+                            }
+                        }
+                        if (upgrade.getId() == 4){
+                            //hopper limit
+                            if (val > island.getHopperLimit()){
+                                //update
+                                island.setHopperLimit(val);
+                            }
+                        }
+                        if (upgrade.getId() == 5){
+                            //spawner limit
+                            if (val > island.getSpawnerLimit()){
+                                //update
+                                island.setSpawnerLimit(val);
                             }
                         }
                     }
@@ -211,6 +224,20 @@ public class SkyBlock extends JavaPlugin {
                                         island.setProtectionRadius(val);
                                     }
                                 }
+                                if (memoryPlayer.hasPermission("skyblock.block.hopper")) {
+                                    int val = memoryPlayer.getPermissionValue("skyblock.block.hopper");
+                                    if (val > island.getHopperLimit()) {
+                                        //update
+                                        island.setHopperLimit(val);
+                                    }
+                                }
+                                if (memoryPlayer.hasPermission("skyblock.block.spawner")) {
+                                    int val = memoryPlayer.getPermissionValue("skyblock.block.spawner");
+                                    if (val > island.getSpawnerLimit()) {
+                                        //update
+                                        island.setSpawnerLimit(val);
+                                    }
+                                }
                             }
                         }
                     }
@@ -251,5 +278,19 @@ public class SkyBlock extends JavaPlugin {
                 }
             }
         }.runTaskTimer(this, 0, getConfig().getInt("settings.island-level-calculation-time") * 20);
+    }
+
+
+
+    private boolean setupEconomy() {
+        if (getServer().getPluginManager().getPlugin("Vault") == null) {
+            return false;
+        }
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        if (rsp == null) {
+            return false;
+        }
+        econ = rsp.getProvider();
+        return econ != null;
     }
 }

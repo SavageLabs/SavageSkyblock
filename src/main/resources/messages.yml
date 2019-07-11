@@ -6,7 +6,7 @@ messages:
     - '&a  /is help &8-&7 displays this message.'
     - '&a  /is spawn &8-&7 teleports you to spawn.'
     - '&a  /is invite <player> &8-&7 invite a player to the island'
-    - '&a  /is join|accept &8&- join a island'
+    - '&a  /is join|accept &8&7- join a island'
     - '&a  /is promote <player>'
     - '&a  /is kick <player>'
     - '&a  /is demote <player>'
@@ -122,7 +122,8 @@ messages:
   ##########################################################################################
   #This is the island join message section
   joined: '&aYou have joined this island!'
-  couldNotJoin: '&aSomething happened and you could not join this island! Report to the Administrators! (ERROR CODE: 1)'
+  couldNotJoin: '&aSomething happened and you could not join this island!'
+  islandLimit: '&aThis Island''s member limit is max!'
   left: '&aYou have left this island!'
   ##########################################################################################
 

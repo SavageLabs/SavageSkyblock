@@ -18,7 +18,7 @@ settings:
 
   island-fly-permission: 'skyblock.fly' # allows flying on THEIR own Island
 
-  default-hopper-limit: 5 # override with permission: skyblock.block.anvil.NUMBER
+  default-hopper-limit: 5 # override with permission: skyblock.block.hopper.NUMBER
   default-spawner-limit: 5 # override with permission: skyblock.block.spawner.NUMBER
   default-member-limit: 5 # override with permission: skyblock.members.NUMBER, permission overrides Upgrade
   default-protection-radius: 50 # 50^4, block radius around each corner of island, override with permission: skyblock.protection.NUMBER
