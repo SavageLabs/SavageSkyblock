@@ -12,9 +12,7 @@ import java.util.List;
 
 public class Storage {
 
-
-
-    public static List<String> permissionToCache = Arrays.asList("skyblock.block.anvil", "skyblock.block.spawner", "skyblock.members", "skyblock.protection");
+    public static List<String> permissionToCache = Arrays.asList("skyblock.block.hopper", "skyblock.block.spawner", "skyblock.members", "skyblock.protection");
 
     //public static HashMap<Integer, Island> islandTopMap = new HashMap<>();
     public static int currentTop = 1;

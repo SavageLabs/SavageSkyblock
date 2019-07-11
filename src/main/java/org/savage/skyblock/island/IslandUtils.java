@@ -27,8 +27,7 @@ public class IslandUtils {
                 if (!createEvent.isCancelled()) {
                     Location location = SkyBlock.getInstance().getUtils().generateIslandLocation(Storage.minLocation(), Storage.maxLocation());
                     Island island = new Island(schematicName, location.getBlockX(), location.getBlockY(), location.getBlockZ(), p.getUniqueId(), new ArrayList<>(),
-                            new ArrayList<>(), new ArrayList<>(), SkyBlock.getInstance().getUtils().getSettingInt("default-protection-radius"), p.getName(),
-                            SkyBlock.getInstance().getUtils().getSettingInt("default-member-limit"));
+                            new ArrayList<>(), new ArrayList<>(), SkyBlock.getInstance().getUtils().getSettingInt("default-protection-radius"), p.getName());
 
                     p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("createIsland"));
 

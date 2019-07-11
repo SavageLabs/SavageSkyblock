@@ -38,7 +38,11 @@ public class Utils {
 
     public ItemStack createItem(String materialName, int data, String name, List<String> lore, int amount){
         Material material = null;
-        material = Material.valueOf(materialName.toUpperCase());
+        if (Materials.requestXMaterial(materialName, (byte)data) != null && Materials.requestXMaterial(materialName, (byte)data).parseMaterial() != null){
+            material = Materials.requestXMaterial(materialName, (byte)data).parseMaterial();
+        }else{
+            material = Material.valueOf(materialName.toUpperCase());
+        }
         ItemStack itemStack = new ItemStack(material);
         ItemMeta meta = itemStack.getItemMeta();
         meta.setDisplayName(color(name));
@@ -119,8 +123,6 @@ public class Utils {
             boolean officerInteract = Boolean.parseBoolean(l[15]);
 
             String name = l[16];
-            int memberLimit = Integer.parseInt(l[17]);
-
             HashMap<Upgrade, Integer> upgradesMap = new HashMap<>();
 
             Location homeLocation = null;
@@ -161,7 +163,7 @@ public class Utils {
             }
 
             try {
-                String upgradeString = l[18];
+                String upgradeString = l[17];
 
                 for (String upgrades : upgradeString.split(",")) {
                     int id = Integer.parseInt(upgrades.split("!")[0]);
@@ -171,7 +173,7 @@ public class Utils {
             }catch(ArrayIndexOutOfBoundsException e){}
 
 
-            Island island = new Island("", x, y, z, ownerUUID, coOwnerList, officerList, memberList, protectionRadius, name, memberLimit);
+            Island island = new Island("", x, y, z, ownerUUID, coOwnerList, officerList, memberList, protectionRadius, name);
 
             island.setUpgradeMap(upgradesMap);
 
@@ -221,7 +223,6 @@ public class Utils {
             String home = serializeLocation(island.getHome());
             String biome = island.getBiome().name();
             String name = island.getName();
-            int memberLimit = island.getMemberLimit();
             HashMap<Upgrade, Integer> upgradesMap = island.getUpgrade_tier();
 
             String upgradeString = "";
@@ -271,7 +272,7 @@ public class Utils {
             islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + coOwnerList+ ";" + x + ";" + y + ";" + z + ";" +
                     protectionRadius + ";" + home + ";" + biome + ";" +
                     island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" +
-                    island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name+";"+memberLimit+";"+upgradeString);
+                    island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name+";"+upgradeString);
         }
 
         SkyBlock.getInstance().getFileManager().getData().getFileConfig().set("data", islandData);

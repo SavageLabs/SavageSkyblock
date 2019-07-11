@@ -8,7 +8,10 @@ public enum Upgrade {
     PROTECTION_RADIUS(1, "protection-radius"),
     MEMBER_LIMIT(2, "member-limit"),
     SPAWNER_RATE(3, "spawner-rate"),
-    HOPPER_LIMIT(4, "hopper-limit");
+    HOPPER_LIMIT(4, "hopper-limit"),
+    SPAWNER_LIMIT(5, "spawner-limit"),
+    GENERATOR(6, "generator"),
+    CROP_RATE(7, "crop-rate");
 
     private int id;
     private String name;
@@ -32,12 +35,20 @@ public enum Upgrade {
             String name = upgrade.getName();
             if (island == null){
                 return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getInt("upgrades."+name+".tiers."+tier+".upgrade-value");
+            }else { // get the value straight from the island
+                if (upgrade.getId() == 1) {
+                    return island.getProtectionRadius();
+                }
+                if (upgrade.getId() == 2) {
+                    return island.getMemberLimit();
+                }
+                if (upgrade.getId() == 4) {
+                    return island.getHopperLimit();
+                }
+                //if we're not returned yet, return the config values for the tier
+                return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getInt("upgrades."+name+".tiers."+tier+".upgrade-value");
             }
-            if (upgrade.getId() == 1){
-                return island.getProtectionRadius();
-                //todo; do the rest of them, EX: member-size, anything can be overriden by a permissions
-            }
-            return 0;
+            //upgrade above can be modified via permission and override their original Is Upgrade Values...
         }
 
         public static double getTierCost(Upgrade upgrade, int tier){
