@@ -62,7 +62,9 @@ public enum Upgrade {
 
         public static HashMap<Material, Integer> getMaterialChanceMap(int tier){
             HashMap<Material, Integer> map = new HashMap<>();
-
+            if (tier > getMaxTier(Upgrade.GENERATOR)){
+                return map;
+            }
             int max = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getConfigurationSection("upgrades.generator.tiers."+tier+".blocks").getKeys(false).size();
             YamlConfiguration f = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig();
             for (int a = 1; a<= max; a++){

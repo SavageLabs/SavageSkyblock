@@ -58,12 +58,15 @@ public class Placeholder {
             }
             if (s.contains("nextUpgrade%")) {
                 if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
-                    s = s.replace(n + "nextUpgrade%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
+                    String ss = s;
+                    ss = ss.replace(n+"nextUpgrade%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
+                    newList.add(ss);
                 }else{
                     for (Material material : map2.keySet()) {
                         int chance = map2.get(material);
                         String ss = s;
-                        ss = ss.replace(n+"nextUpgrade%", currentUpgrade.replace("%material%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.materials."+material.name().toLowerCase())).replace("%chance%", chance+""));                        newList.add(ss);
+                        ss = ss.replace(n+"nextUpgrade%", nextUpgrade.replace("%material%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.materials."+material.name().toLowerCase())).replace("%chance%", chance+""));
+                        newList.add(ss);
                     }
                 }
                 t = true;
