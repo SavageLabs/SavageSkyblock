@@ -1,11 +1,15 @@
 package org.savage.skyblock.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.CropState;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockFormEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.material.Crops;
@@ -14,9 +18,34 @@ import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.upgrades.Upgrade;
 
+import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class UpgradeEvents implements Listener {
+
+    @EventHandler
+    public void generator(BlockFromToEvent e){
+        Block block = e.getToBlock();
+        Location loc = block.getLocation();
+        Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(loc);
+        if (island != null){
+            int tier = island.getUpgradeTier(Upgrade.GENERATOR);
+
+            HashMap<Material, Integer> materialChances = Upgrade.Upgrades.getMaterialChanceMap(tier);
+            //map is already sorted from lower chance to higher chance
+
+            //iterate through the chances in the map
+            for (Material material : materialChances.keySet()){
+                int chance = materialChances.get(material);
+                int randomNum = ThreadLocalRandom.current().nextInt(1, 100 + 1);
+                if (randomNum <= chance){
+                    //do this material
+                    block.setType(material);
+                    return;
+                }
+            }
+        }
+    }
 
     @EventHandler
     public void onSpawn(SpawnerSpawnEvent e) {

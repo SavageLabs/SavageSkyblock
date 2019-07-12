@@ -1,13 +1,14 @@
 package org.savage.skyblock;
 
+import net.minecraft.server.v1_14_R1.DefinedStructureProcessorBlockIgnore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.Material;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.upgrades.Upgrade;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,25 +24,87 @@ public class Placeholder {
         return 1;
     }
 
+    public static List<String> convertPlaceholders(List<String> originalList, Island island, Upgrade upgrade){
+        if (island == null) return SkyBlock.getInstance().getUtils().color(originalList);
+
+        List<String> newList = new ArrayList<>();
+
+        String currentUpgrade = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.generator-current-upgrade");
+        String nextUpgrade = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.generator-next-upgrade");
+
+        HashMap<Material, Integer> map = Upgrade.Upgrades.getMaterialChanceMap(island.getUpgradeTier(upgrade));
+        HashMap<Material, Integer> map2 = Upgrade.Upgrades.getMaterialChanceMap(island.getUpgradeTier(upgrade) + 1);
+
+        for (String s : originalList){
+            boolean t = false;
+            String n = "%" + upgrade.getName() + "_";
+            s = s.replace(n + "currentTier%", island.getUpgradeTier(upgrade) + "");
+            if (s.contains("nextTier%")) {
+                if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
+                    s = s.replace(n + "nextTier%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
+                } else {
+                    s = s.replace(n + "nextTier%", (island.getUpgradeTier(upgrade) + 1) + "");
+                }
+            }
+
+            if (s.contains("currentUpgrade%")) {
+                for (Material material: map.keySet()){
+                    int chance = map.get(material);
+                    String ss = s;
+                    ss = ss.replace(n+"currentUpgrade%", currentUpgrade.replace("%material%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.materials."+material.name().toLowerCase())).replace("%chance%", chance+""));
+                    newList.add(ss);
+                }
+                t = true;
+            }
+            if (s.contains("nextUpgrade%")) {
+                if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
+                    s = s.replace(n + "nextUpgrade%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
+                }else{
+                    for (Material material : map2.keySet()) {
+                        int chance = map2.get(material);
+                        String ss = s;
+                        ss = ss.replace(n+"nextUpgrade%", currentUpgrade.replace("%material%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.materials."+material.name().toLowerCase())).replace("%chance%", chance+""));                        newList.add(ss);
+                    }
+                }
+                t = true;
+            }
+
+            if (s.contains("%cost%")) {
+                if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
+                    s = s.replace("%cost%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max")).replace("$", "");
+                } else {
+                    s = s.replace("%cost%", (Upgrade.Upgrades.getTierCost(upgrade, island.getUpgradeTier(upgrade)) + 1) + "");
+                }
+            }
+
+            if (!t) {
+                newList.add(s);
+            }
+        }
+        return SkyBlock.getInstance().getUtils().color(newList);
+    }
+
     public static String convertPlaceholders(String s, Island island, Upgrade upgrade) {
         String n = "%" + upgrade.getName() + "_";
         s = s.replace(n + "currentTier%", island.getUpgradeTier(upgrade) + "");
         s = s.replace(n + "currentUpgrade%", Upgrade.Upgrades.getTierValue(upgrade, island.getUpgradeTier(upgrade), island) + "");
 
-        if (s.contains("nextTier%")) {
-            if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
-                s = s.replace(n + "nextTier%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
-            } else {
-                s = s.replace(n + "nextTier%", (island.getUpgradeTier(upgrade) + 1) + "");
+        //check for generator upgrade...
+
+            if (s.contains("nextTier%")) {
+                if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
+                    s = s.replace(n + "nextTier%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
+                } else {
+                    s = s.replace(n + "nextTier%", (island.getUpgradeTier(upgrade) + 1) + "");
+                }
             }
-        }
-        if (s.contains("nextUpgrade%")) {
-            if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
-                s = s.replace(n + "nextUpgrade%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max"));
-            } else {
-                s = s.replace(n + "nextUpgrade%", (Upgrade.Upgrades.getTierValue(upgrade, (island.getUpgradeTier(upgrade) + 1), null)) + "");
+            if (s.contains("nextUpgrade%")) {
+                if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
+                    s = s.replace(n + "nextUpgrade%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max").replace("%", ""));
+                } else {
+                    s = s.replace(n + "nextUpgrade%", (Upgrade.Upgrades.getTierValue(upgrade, (island.getUpgradeTier(upgrade) + 1), null)) + "");
+                }
             }
-        }
 
         if (s.contains("%cost%")) {
             if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {

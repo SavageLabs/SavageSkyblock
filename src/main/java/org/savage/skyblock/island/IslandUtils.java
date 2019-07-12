@@ -57,14 +57,9 @@ public class IslandUtils {
 
     public Island getIslandFromLocation(Location location) {
         for (Island island : Storage.islandList) {
-            Location islandLocation = island.getLocation();
-            int protectionRange = island.getProtectionRadius();
-
-            try {
-                if (location.distanceSquared(islandLocation) <= protectionRange) {
-                    return island;
-                }
-            } catch (IllegalArgumentException e) { }
+            if (island.isBlockInIsland(location.getBlockX(), location.getBlockZ())){
+                return island;
+            }
         }
         return null;
     }
