@@ -27,7 +27,7 @@ public class IslandUtils {
                 if (!createEvent.isCancelled()) {
                     Location location = SkyBlock.getInstance().getUtils().generateIslandLocation(Storage.minLocation(), Storage.maxLocation());
                     Island island = new Island(schematicName, location.getBlockX(), location.getBlockY(), location.getBlockZ(), p.getUniqueId(), new ArrayList<>(),
-                            new ArrayList<>(), new ArrayList<>(), SkyBlock.getInstance().getUtils().getSettingInt("default-protection-radius"), p.getName());
+                            new ArrayList<>(), new ArrayList<>(), SkyBlock.getInstance().getUtils().getSettingInt("default-protection-radius"), p.getName(), 0);
 
                     p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("createIsland"));
 
@@ -57,14 +57,9 @@ public class IslandUtils {
 
     public Island getIslandFromLocation(Location location) {
         for (Island island : Storage.islandList) {
-            Location islandLocation = island.getLocation();
-            int protectionRange = island.getProtectionRadius();
-
-            try {
-                if (location.distanceSquared(islandLocation) <= protectionRange) {
-                    return island;
-                }
-            } catch (IllegalArgumentException e) { }
+            if (island.isBlockInIsland(location.getBlockX(), location.getBlockZ())){
+                return island;
+            }
         }
         return null;
     }

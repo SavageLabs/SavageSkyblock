@@ -49,9 +49,6 @@ public class PlayerEvents implements Listener {
                     p.setAllowFlight(true);
                 }
             }
-
-            //send the worldBorder packet to the incoming player
-            SkyBlock.getInstance().getReflectionManager().nmsHandler.sendBorder(p, island.getCenterX(), island.getCenterZ(), island.getProtectionRadius());
         }
     }
 

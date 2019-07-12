@@ -27,9 +27,29 @@ public class IslandCommands implements CommandExecutor {
 
                     if (args[0].equalsIgnoreCase("version")) {
                         //version command is not configurable
-                        String[] list = {"&a&lSavage SkyBlock", " ", "&bVersion: " + Bukkit.getPluginManager().getPlugin("SavageSkyBlock").getDescription().getVersion(), "&bBy: Trent™"};
+                        String[] list = {"&a&lSavage SkyBlock", " ", "&bVersion: " + Bukkit.getPluginManager().getPlugin("SavageSkyBlock").getDescription().getVersion(), "&bBy: Trent™", " "};
                         for (String s : list) {
                             p.sendMessage(SkyBlock.getInstance().getUtils().color(s));
+                        }
+                    }
+
+                    if (args[0].equalsIgnoreCase("balance")){
+                        //send the island balance
+                        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                        if (island != null){
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("bank-balance").replace("%balance%", island.getBankBalance()+""));
+                        }else{
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noIsland"));
+                        }
+                    }
+
+                    if (args[0].equalsIgnoreCase("bank")){
+                        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                        if (island != null){
+                            p.openInventory(island.getBank());
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-bank-open"));
+                        }else{
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noIsland"));
                         }
                     }
 
@@ -162,6 +182,39 @@ public class IslandCommands implements CommandExecutor {
                     //is transfer <player>
                     String arg1 = args[0];
                     String arg2 = args[1];
+
+                    if (arg1.equalsIgnoreCase("deposit")){
+                        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                        if (island == null){
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
+                            return false;
+                        }
+                        double money = Double.parseDouble(arg2);
+                        if (SkyBlock.getInstance().getUtils().getBalance(p.getUniqueId()) >= money){
+                            //remove the money
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("deposit-yes").replace("%money%", SkyBlock.getInstance().getUtils().formatNumber(money+"")));
+                            SkyBlock.getInstance().getUtils().takeMoney(p.getUniqueId(), money);
+                            island.setBankBalance((island.getBankBalance() + money));
+                        }else{
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("deposit-no"));
+                        }
+                    }
+                    if (arg1.equalsIgnoreCase("withdraw")){
+                        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                        if (island == null){
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
+                            return false;
+                        }
+                        double money = Double.parseDouble(arg2);
+                        if (island.getBankBalance() >= money){
+                            //remove the money
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("withdraw-yes").replace("%money%", SkyBlock.getInstance().getUtils().formatNumber(money+"")));
+                            SkyBlock.getInstance().getUtils().addMoney(p.getUniqueId(), money);
+                            island.setBankBalance((island.getBankBalance() - money));
+                        }else{
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("withdraw-no"));
+                        }
+                    }
 
                     if (arg1.equalsIgnoreCase("transfer")){
                         //transferring ownership

@@ -151,12 +151,15 @@ public class UpgradesUI implements Listener {
                     String name = f.getString("upgrades." + upgradeName + ".name");
                     List<String> lore = f.getStringList("upgrades." + upgradeName + ".lore");
 
-                    List<String> l = new ArrayList<>();
-                    for (String s : lore){
-                        l.add(Placeholder.convertPlaceholders(s, island, upgrade));
+                    if (upgrade.equals(Upgrade.GENERATOR)){
+                        lore = Placeholder.convertPlaceholders(lore, island, upgrade);
+                    }else {
+                        List<String> l = new ArrayList<>();
+                        for (String s : lore) {
+                            l.add(Placeholder.convertPlaceholders(s, island, upgrade));
+                        }
+                        lore = l;
                     }
-
-                    lore = l;
 
                     ItemStack item = SkyBlock.getInstance().getUtils().createItem(itemID, itemData, name, lore, itemAmount);
 

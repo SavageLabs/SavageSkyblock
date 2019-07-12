@@ -148,7 +148,18 @@ messages:
 
   island-name-set: '&aYou have set your island''s name to &c%name%&a!'
   island-name-taken: '&cThis island name is already taken!'
+
   ##########################################################################################
+
+  # Island Bank Messages #
+  island-bank-open: '&aOpened Island bank!'
+  bank-balance: '&aYour Island Bank Balance is: $&l&b%balance%'
+
+  deposit-no: '&cYou don''t have enough money deposit!'
+  withdraw-no: '&cThe bank doesn''t have enough money to withdraw!'
+
+  deposit-yes: '&aYou have deposited $&l%money%&a to the Island Bank!'
+  withdraw-yes: '&aYou have withdrew $&l%money%&a from the Island Bank!'
 
   ##########################################################################################
   # IS-TOP sections

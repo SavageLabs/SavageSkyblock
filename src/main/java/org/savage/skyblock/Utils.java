@@ -2,12 +2,20 @@ package org.savage.skyblock;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
 import org.savage.skyblock.island.upgrades.Upgrade;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
 
 public class Utils {
@@ -172,8 +180,15 @@ public class Utils {
                 }
             }catch(ArrayIndexOutOfBoundsException e){}
 
+            double bankBalance = getDoublesFromString(l[18]);
 
-            Island island = new Island("", x, y, z, ownerUUID, coOwnerList, officerList, memberList, protectionRadius, name);
+            Island island = new Island("", x, y, z, ownerUUID, coOwnerList, officerList, memberList, protectionRadius, name, bankBalance);
+
+            String bankData = l[19];
+            if (!bankData.equalsIgnoreCase("")){
+                //try to convert it
+                island.createBank(bankData);
+            }
 
             island.setUpgradeMap(upgradesMap);
 
@@ -224,6 +239,8 @@ public class Utils {
             String biome = island.getBiome().name();
             String name = island.getName();
             HashMap<Upgrade, Integer> upgradesMap = island.getUpgrade_tier();
+            double bankBalance = island.getBankBalance();
+            String inventoryData = itemStackArrayToBase64(island.getBank().getContents());
 
             String upgradeString = "";
             String memberList = "";
@@ -272,7 +289,7 @@ public class Utils {
             islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + coOwnerList+ ";" + x + ";" + y + ";" + z + ";" +
                     protectionRadius + ";" + home + ";" + biome + ";" +
                     island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" +
-                    island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name+";"+upgradeString);
+                    island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name+";"+upgradeString+";"+bankBalance+";"+inventoryData);
         }
 
         SkyBlock.getInstance().getFileManager().getData().getFileConfig().set("data", islandData);
@@ -386,6 +403,9 @@ public class Utils {
     public int getIntegersFromString(String string) {
         return Integer.parseInt(string.replaceAll("[\\D]", ""));
     }
+    public double getDoublesFromString(String string) {
+        return Double.parseDouble(string.replaceAll("[\\D]", ""));
+    }
 
     public String stripIntegersFromString(String string) {
         return string.replaceAll("[0-9]", "");
@@ -430,5 +450,57 @@ public class Utils {
             return getMemoryPlayer(uuid).hasPermission(permissionBase);
         }
         return false;
+    }
+
+    public String formatNumber(final String s) {
+        double amount = Double.parseDouble(s);
+        if (amount > 0) {
+            final DecimalFormat formatter = new DecimalFormat("#,###.00");
+            final String number = formatter.format(amount);
+            return number;
+        }else{
+            return amount+"";
+        }
+    }
+
+
+
+    public String itemStackArrayToBase64(ItemStack[] items) throws IllegalStateException {
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            BukkitObjectOutputStream dataOutput = new BukkitObjectOutputStream(outputStream);
+
+            // Write the size of the inventory
+            dataOutput.writeInt(items.length);
+
+            // Save every element in the list
+            for (int i = 0; i < items.length; i++) {
+                dataOutput.writeObject(items[i]);
+            }
+
+            // Serialize that array
+            dataOutput.close();
+            return Base64Coder.encodeLines(outputStream.toByteArray());
+        } catch (Exception e) {
+            throw new IllegalStateException("Unable to save item stacks.", e);
+        }
+    }
+
+    public ItemStack[] itemStackArrayFromBase64(String data) throws IOException {
+        try {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(Base64Coder.decodeLines(data));
+            BukkitObjectInputStream dataInput = new BukkitObjectInputStream(inputStream);
+            ItemStack[] items = new ItemStack[dataInput.readInt()];
+
+            // Read the serialized inventory
+            for (int i = 0; i < items.length; i++) {
+                items[i] = (ItemStack) dataInput.readObject();
+            }
+
+            dataInput.close();
+            return items;
+        } catch (ClassNotFoundException e) {
+            throw new IOException("Unable to decode class type.", e);
+        }
     }
 }

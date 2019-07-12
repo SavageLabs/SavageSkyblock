@@ -1,7 +1,15 @@
 package org.savage.skyblock.island.upgrades;
 
+import org.bukkit.Material;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.savage.skyblock.Materials;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
+
+import java.util.*;
+
+import static java.util.Map.Entry.comparingByValue;
+import static java.util.stream.Collectors.toMap;
 
 public enum Upgrade {
 
@@ -11,7 +19,8 @@ public enum Upgrade {
     HOPPER_LIMIT(4, "hopper-limit"),
     SPAWNER_LIMIT(5, "spawner-limit"),
     GENERATOR(6, "generator"),
-    CROP_RATE(7, "crop-rate");
+    CROP_RATE(7, "crop-rate"),
+    BANK_SIZE(8, "bank-size");
 
     private int id;
     private String name;
@@ -51,6 +60,41 @@ public enum Upgrade {
             //upgrade above can be modified via permission and override their original Is Upgrade Values...
         }
 
+        public static HashMap<Material, Integer> getMaterialChanceMap(int tier){
+            HashMap<Material, Integer> map = new HashMap<>();
+
+            int max = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getConfigurationSection("upgrades.generator.tiers."+tier+".blocks").getKeys(false).size();
+            YamlConfiguration f = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig();
+            for (int a = 1; a<= max; a++){
+                //iterate through all of the block values
+                String materialName = f.getString("upgrades.generator.tiers."+tier+".blocks."+a+".material");
+                int data = f.getInt("upgrades.generator.tiers."+tier+".blocks."+a+".material-data");
+                int chance = f.getInt("upgrades.generator.tiers."+tier+".blocks."+a+".chance");
+
+                Material material;
+
+                Materials materials = Materials.requestXMaterial(materialName, (byte)data);
+                if (materials != null && materials.parseMaterial() != null){
+                    material = materials.parseMaterial();
+                }else{
+                    material = Material.getMaterial(materialName.toUpperCase());
+                }
+                if (material != null){
+                    map.put(material, chance);
+                }
+            }
+
+            HashMap<Material, Integer> sorted = map
+                    .entrySet()
+                    .stream()
+                    .sorted(comparingByValue())
+                    .collect(
+                            toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e2,
+                                    LinkedHashMap::new));
+
+            return sorted;
+        }
+
         public static double getTierCost(Upgrade upgrade, int tier){
             String name = upgrade.getName();
             return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getDouble("upgrades."+name+".tiers."+tier+".cost");
@@ -58,7 +102,11 @@ public enum Upgrade {
 
         public static int getMaxTier(Upgrade upgrade){
             String name = upgrade.getName();
-            return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getConfigurationSection("upgrades."+name+".tiers").getKeys(false).size();
+            int m = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getConfigurationSection("upgrades."+name+".tiers").getKeys(false).size();
+            if (upgrade.equals(Upgrade.GENERATOR) || upgrade.equals(Upgrade.BANK_SIZE)){
+                return m - 1;
+            }
+            return m;
         }
 
         public static Upgrade getUpgrade(int id){

@@ -20,7 +20,6 @@ public class FileManager {
     private CustomFile worth = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/worth.yml"));
     private CustomFile upgrades = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/upgrades.yml"));
     private CustomFile messages = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/messages.yml"));
-    private CustomFile config = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/config.yml"));
 
     public void setup() {
 
@@ -34,22 +33,12 @@ public class FileManager {
             new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").mkdir();
         }
 
-        SkyBlock.getInstance().saveResource("default.schematic", true);
+       // SkyBlock.getInstance().saveResource("default.schematic", true);
        // //load the schems into the plugin's directory
-
-       // File schem1 = new File(SkyBlock.getInstance().getDataFolder()+"/default-1.8_1.12.2.schematic");
-       // File schem2 = new File(SkyBlock.getInstance().getDataFolder()+"/default-1.13_1.14.schematic");
-//
-       // File schem1Out = new File(SkyBlock.getInstance().getDataFolder()+"/Schematics/"+schem1.getName());
-       // File schem2Out = new File(SkyBlock.getInstance().getDataFolder()+"/Schematics/"+schem2.getName());
-//
-       // copyFile(schem1, schem1Out);
-       // copyFile(schem2, schem2Out);
 
 
         SkyBlock.getInstance().getReflectionManager().nmsHandler.generate("skyBlock");
     }
-
 
 
     public void copyFile(File sourceFile, File destinationFile){
@@ -93,9 +82,5 @@ public class FileManager {
 
     public CustomFile getWorth() {
         return worth;
-    }
-
-    public CustomFile getConfig() {
-        return config;
     }
 }

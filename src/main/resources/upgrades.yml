@@ -7,11 +7,17 @@ faded-item:
 
 placeholders:
   max: '&c&lMAX'
+  generator-current-upgrade: '&7- &a%material% &9(&b%chance%&l%&9)'
+  generator-next-upgrade: '&8- &a%material% &9(&c&onew &b%chance%&l%&9)'
+  materials:
+    diamond_ore: '&bDiamond Ore'
+    coal_ore: '&8Coal Ore'
+    iron_ore: '&7Iron Ore'
 
 upgrades-UI:
   gui-name: '&c&lIsland Upgrades'
   rows: 2
-  faded-slots: '2,4,6,8,10,12,14,16'
+  faded-slots: '2,4,6,8,10,12,14,16,18'
 
 upgrades:
   protection-radius:
@@ -127,7 +133,7 @@ upgrades:
     item-id: 'lava_bucket'
     item-data: 0
     item-amount: 1
-    name: '&a&lGenerator (todo)'
+    name: '&a&lGenerator'
     lore:
       - ''
       - '&7Chance of generator spawning ores'
@@ -135,18 +141,45 @@ upgrades:
       - '&aCurrent Tier: &l%generator_currentTier%'
       - '&bNext Tier: &l%generator_nextTier%'
       - ''
-      - '&aCurrent Upgrade: &l%generator_currentUpgrade%%'
-      - '&bNext Upgrade: &l%generator_nextUpgrade%%'
+      - '&aCurrent Upgrade:'
+      - ''
+      - '%generator_currentUpgrade%' # can be modified via "placeholders.generator-current-upgrade"
+      - ''
+      - '&bNext Upgrade:'
+      - ''
+      - '%generator_nextUpgrade%' # can be modified via "placeholders.generator-next-upgrade"
       - ''
       - '&eCost: $&l%cost%'
       - ''
       - '&7&oLeft click to confirm purchase'
     tiers:
+      0:
+        blocks:
+          1:
+            material: 'coal_ore'
+            material-data: 0
+            chance: 50
       1:
-        upgrade-value: 10 # the new spawner limit
+        blocks:
+          1:
+            material: 'coal_ore'
+            material-data: 0
+            chance: 60
+          2:
+            material: 'diamond_ore'
+            material-data: 0
+            chance: 10
         cost: 1000
       2:
-        upgrade-value: 15
+        blocks:
+          1:
+            material: 'coal_ore'
+            material-data: 0
+            chance: 50
+          2:
+            material: 'diamond_ore'
+            material-data: 0
+            chance: 90
         cost: 5000
 
   spawner-rate:
@@ -201,4 +234,33 @@ upgrades:
         cost: 1000
       2:
         upgrade-value: 15
+        cost: 5000
+
+  bank-size:
+    slot: 15 # position in the upgrades UI
+    item-id: 'chest'
+    item-data: 0
+    item-amount: 1
+    name: '&a&lIsland Bank Size'
+    lore:
+      - ''
+      - '&7Increase your Island''s bank size!'
+      - ''
+      - '&aCurrent Tier: &l%bank-size_currentTier%'
+      - '&bNext Tier: &l%bank-size_nextTier%'
+      - ''
+      - '&aCurrent Upgrade: &l%bank-size_currentUpgrade% rows'
+      - '&bNext Upgrade: &l%bank-size_nextUpgrade% rows'
+      - ''
+      - '&eCost: $&l%cost%'
+      - ''
+      - '&7&oLeft click to confirm purchase'
+    tiers:
+      0:
+        upgrade-value: 1 # default bank rows is 1
+      1:
+        upgrade-value: 2 # 2 bank rows
+        cost: 1000
+      2:
+        upgrade-value: 3 # 3 bank rows
         cost: 5000
