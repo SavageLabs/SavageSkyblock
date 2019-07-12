@@ -240,7 +240,10 @@ public class SkyBlock extends JavaPlugin {
                                 }
                             }
                             //send the worldBorder packet to the incoming player
-                            SkyBlock.getInstance().getReflectionManager().nmsHandler.sendBorder(p, island.getCenterX(), island.getCenterZ(), island.getProtectionRadius());
+                            Island is = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation());
+                            if (is != null){
+                                SkyBlock.getInstance().getReflectionManager().nmsHandler.sendBorder(p, island.getCenterX(), island.getCenterZ(), island.getProtectionRadius());
+                            }
                         }
                     }
                 }
