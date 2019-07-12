@@ -5,6 +5,7 @@ import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,26 +26,46 @@ public class UpgradeEvents implements Listener {
 
     @EventHandler
     public void generator(BlockFromToEvent e){
-        Block block = e.getToBlock();
-        Location loc = block.getLocation();
+        Block blockTo = e.getToBlock();
+        Block blockM = e.getBlock();
+
+        Location loc = blockTo.getLocation();
         Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(loc);
         if (island != null){
-            int tier = island.getUpgradeTier(Upgrade.GENERATOR);
+            Material m = blockM.getType();
+            if (m.equals(Material.WATER) || m.equals(Material.STATIONARY_WATER) || m.equals(Material.LAVA) || m.equals(Material.STATIONARY_LAVA)) {
+                if (blockTo.getType().equals(Material.AIR) && generatesCobble(blockM.getType(), blockTo)) {
+                    int tier = island.getUpgradeTier(Upgrade.GENERATOR);
 
-            HashMap<Material, Integer> materialChances = Upgrade.Upgrades.getMaterialChanceMap(tier);
-            //map is already sorted from lower chance to higher chance
+                    HashMap<Material, Integer> materialChances = Upgrade.Upgrades.getMaterialChanceMap(tier);
+                    //map is already sorted from lower chance to higher chance
 
-            //iterate through the chances in the map
-            for (Material material : materialChances.keySet()){
-                int chance = materialChances.get(material);
-                int randomNum = ThreadLocalRandom.current().nextInt(1, 100 + 1);
-                if (randomNum <= chance){
-                    //do this material
-                    block.setType(material);
-                    return;
+                    //iterate through the chances in the map
+                    for (Material material : materialChances.keySet()) {
+                        int chance = materialChances.get(material);
+                        int randomNum = ThreadLocalRandom.current().nextInt(1, 100 + 1);
+                        if (randomNum <= chance) {
+                            //do this material
+                            blockTo.setType(material);
+                            return;
+                        }
+                    }
                 }
             }
         }
+    }
+
+    private boolean generatesCobble(final Material material, final Block block) {
+        final Material material2 = (material.equals(Material.WATER) || material.equals(Material.STATIONARY_WATER)) ? Material.LAVA : Material.WATER;
+        final Material material3 = (material.equals(Material.WATER) || material.equals(Material.STATIONARY_WATER)) ? Material.STATIONARY_LAVA : Material.STATIONARY_WATER;
+        final BlockFace[] faces = new BlockFace[] { BlockFace.SELF, BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
+        for (int length = faces.length, i = 0; i < length; ++i) {
+            final Block relative = block.getRelative(faces[i], 1);
+            if (relative.getType().equals(material2) || relative.getType().equals(material3)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @EventHandler
