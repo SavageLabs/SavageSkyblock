@@ -235,3 +235,32 @@ upgrades:
       2:
         upgrade-value: 15
         cost: 5000
+
+  bank-size:
+    slot: 15 # position in the upgrades UI
+    item-id: 'chest'
+    item-data: 0
+    item-amount: 1
+    name: '&a&lIsland Bank Size'
+    lore:
+      - ''
+      - '&7Increase your Island''s bank size!'
+      - ''
+      - '&aCurrent Tier: &l%bank-size_currentTier%'
+      - '&bNext Tier: &l%bank-size_nextTier%'
+      - ''
+      - '&aCurrent Upgrade: &l%bank-size_currentUpgrade% rows'
+      - '&bNext Upgrade: &l%bank-size_nextUpgrade% rows'
+      - ''
+      - '&eCost: $&l%cost%'
+      - ''
+      - '&7&oLeft click to confirm purchase'
+    tiers:
+      0:
+        upgrade-value: 1 # default bank rows is 1
+      1:
+        upgrade-value: 2 # 2 bank rows
+        cost: 1000
+      2:
+        upgrade-value: 3 # 3 bank rows
+        cost: 5000

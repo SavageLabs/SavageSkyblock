@@ -5,12 +5,15 @@ import org.bukkit.Location;
 import org.bukkit.block.Biome;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.savage.skyblock.API.*;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.upgrades.Upgrade;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -60,7 +63,10 @@ public class Island {
     private HashMap<Upgrade, Integer> upgrade_tier = new HashMap<>();
     private HashMap<FakeItem, Integer> blocks = new HashMap<>();
 
-    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> coownerList, List<UUID> officerList, List<UUID> memberList, int protectionRadius, String name) {
+    private Inventory bank;
+    private double bankBalance;
+
+    public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> coownerList, List<UUID> officerList, List<UUID> memberList, int protectionRadius, String name, double bankBalance) {
         this.centerX = x;
         this.centerY = y;
         this.centerZ = z;
@@ -71,6 +77,7 @@ public class Island {
         this.protectionRadius = protectionRadius;
         this.home = getLocation();
         this.name = name;
+        this.bankBalance = bankBalance;
 
         islandInstance = this;
 
@@ -97,6 +104,33 @@ public class Island {
 
         setTopPlace(Storage.currentTop);
         Storage.currentTop++;
+    }
+
+    public void createBank(String base64){
+        if (this.bank == null) {
+            this.bank = Bukkit.createInventory(null, Upgrade.Upgrades.getTierValue(Upgrade.BANK_SIZE, getUpgradeTier(Upgrade.BANK_SIZE), null)*9, SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getUtils().getSettingString("island-bank-name")));
+            //add the contents to the bank now
+            try {
+                for (ItemStack item : SkyBlock.getInstance().getUtils().itemStackArrayFromBase64(base64)){
+                    if (item == null) continue;
+                    this.bank.addItem(item);
+                }
+            }catch(IOException e){ }
+        }
+    }
+
+    public Inventory getBank(){
+        if (this.bank == null) {
+            this.bank = Bukkit.createInventory(null, Upgrade.Upgrades.getTierValue(Upgrade.BANK_SIZE, getUpgradeTier(Upgrade.BANK_SIZE), null)*9, SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getUtils().getSettingString("island-bank-name")));
+        }
+        int rows = Upgrade.Upgrades.getTierValue(Upgrade.BANK_SIZE, getUpgradeTier(Upgrade.BANK_SIZE), null);
+        if ((this.bank.getSize() / 9) != rows){
+            //re-create the bank with the rows we need
+            ItemStack[] items = this.bank.getContents();
+            this.bank = Bukkit.createInventory(null, Upgrade.Upgrades.getTierValue(Upgrade.BANK_SIZE, getUpgradeTier(Upgrade.BANK_SIZE), null)*9, SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getUtils().getSettingString("island-bank-name")));
+            this.bank.setContents(items);
+        }
+        return this.bank;
     }
 
     public int getHopperCount() {
@@ -145,6 +179,14 @@ public class Island {
 
     public HashMap<Upgrade, Integer> getUpgrade_tier() {
         return upgrade_tier;
+    }
+
+    public double getBankBalance() {
+        return bankBalance;
+    }
+
+    public void setBankBalance(double bankBalance) {
+        this.bankBalance = bankBalance;
     }
 
     public int getMemberLimit() {

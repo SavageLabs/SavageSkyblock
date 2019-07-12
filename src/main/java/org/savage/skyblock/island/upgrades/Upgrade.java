@@ -1,7 +1,6 @@
 package org.savage.skyblock.island.upgrades;
 
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.savage.skyblock.Materials;
 import org.savage.skyblock.SkyBlock;
@@ -20,7 +19,8 @@ public enum Upgrade {
     HOPPER_LIMIT(4, "hopper-limit"),
     SPAWNER_LIMIT(5, "spawner-limit"),
     GENERATOR(6, "generator"),
-    CROP_RATE(7, "crop-rate");
+    CROP_RATE(7, "crop-rate"),
+    BANK_SIZE(8, "bank-size");
 
     private int id;
     private String name;
@@ -103,7 +103,7 @@ public enum Upgrade {
         public static int getMaxTier(Upgrade upgrade){
             String name = upgrade.getName();
             int m = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getConfigurationSection("upgrades."+name+".tiers").getKeys(false).size();
-            if (upgrade.equals(Upgrade.GENERATOR)){
+            if (upgrade.equals(Upgrade.GENERATOR) || upgrade.equals(Upgrade.BANK_SIZE)){
                 return m - 1;
             }
             return m;
