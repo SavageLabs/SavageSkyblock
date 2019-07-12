@@ -20,7 +20,7 @@ public class AdminCommands implements CommandExecutor {
                 if (p.hasPermission("isa.admin")) {
 
                     if (args.length == 0 || (args.length == 1 && args[0].equalsIgnoreCase("help"))) {
-                        for (String l : SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getConfig().getStringList("messages.isa-help"))) {
+                        for (String l : SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().getMessages().getFileConfig().getStringList("messages.isa-help"))) {
                             p.sendMessage(l);
                         }
                     }

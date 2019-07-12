@@ -169,7 +169,6 @@ upgrades:
             material: 'diamond_ore'
             material-data: 0
             chance: 10
-        cost: 1000
       2:
         blocks:
           1:
