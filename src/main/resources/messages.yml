@@ -44,6 +44,7 @@ messages:
   cancelDeleting: '&aYou have canceled your deleting!'
   setPermission: '&aYou have updated &9%role%&a''s permission for &9%type%&a to &d%outcome%&a!'
   noIsland: '&aYou do not have an Island!'
+  noIslandHere: '&cThere is not an Island here!'
   ##########################################################################################
 
   ##########################################################################################
@@ -148,6 +149,23 @@ messages:
 
   island-name-set: '&aYou have set your island''s name to &c%name%&a!'
   island-name-taken: '&cThis island name is already taken!'
+
+
+  island-inspect-disabled: '&cPlugin: CoreProtect cannot be found, Island Inspect is disabled!'
+  island-inspect-mode-on: '&aTurned Inspect mode on! Click any block to show it''s history!'
+  island-inspect-mode-off: '&cTurned Inspect mode off!'
+
+  island-inspect-noResults: '&cThere are no results for Inspection here!'
+  island-inspect-results:
+    - ''
+    - '&aIsland Inspection'
+    - '&7- Time: %time%'
+    - '&7- Action: %action%'
+    - '&7- Player: %player%'
+    - '&7- Block: %block%'
+    - ''
+    - '&7Toggle off by using /is inspect again.'
+    - ''
 
   ##########################################################################################
 

@@ -144,6 +144,8 @@ public class UpgradesUI implements Listener {
             for (Upgrade upgrade : Upgrade.values()) {
                 String upgradeName = upgrade.getName();
                 if (f.getConfigurationSection("upgrades." + upgradeName) != null) {
+                    boolean enabled = f.getBoolean("upgrades."+upgradeName+".enabled");
+                    if (!enabled) continue;
                     int slot = f.getInt("upgrades." + upgradeName + ".slot");
                     String itemID = f.getString("upgrades." + upgradeName + ".item-id");
                     int itemData = f.getInt("upgrades." + upgradeName + ".item-data");

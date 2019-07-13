@@ -1,5 +1,6 @@
 package org.savage.skyblock;
 
+import com.sun.jna.Memory;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.Inventory;
@@ -105,6 +106,60 @@ public class Utils {
             }
         }
         return generateIslandLocation(min, max);
+    }
+
+    public void savePlayers(){
+        List<String> data = new ArrayList<>();
+        for (MemoryPlayer memoryPlayer : Storage.memoryPlayerList){
+            if (memoryPlayer == null) continue;
+
+            UUID uuid = memoryPlayer.getUuid();
+            String islandName = "";
+            int resets = memoryPlayer.getResets();
+
+            if (memoryPlayer.getIsland() != null){
+                islandName = memoryPlayer.getIsland().getName();
+            }
+
+            data.add(uuid.toString()+";"+islandName+";"+resets);
+        }
+        SkyBlock.getInstance().getFileManager().getPlayerData().getFileConfig().set("players", data);
+        SkyBlock.getInstance().getFileManager().getPlayerData().saveFile();
+    }
+
+    public void loadPlayer(UUID pUUID){
+        List<String> data = SkyBlock.getInstance().getFileManager().getPlayerData().getFileConfig().getStringList("players");
+        if (!hasMemoryPlayer(pUUID)) {
+            for (String playerData : data) {
+                String[] l = playerData.split(";");
+                //layout: uuid;islandName;islandResets
+                UUID uuid = UUID.fromString(l[0]);
+                if (pUUID.equals(uuid)) {
+                    String islandName = l[1];
+                    int islandResets = 0;
+
+                    if (!l[2].equalsIgnoreCase("")) {
+                        //has something
+                        try {
+                            islandResets = Integer.parseInt(l[2]);
+                        } catch (NumberFormatException e) {
+                        }
+                    }
+                    //create memory player
+                    MemoryPlayer memoryPlayer = new MemoryPlayer(uuid);
+                    memoryPlayer.setResets(islandResets);
+                    if (!islandName.equalsIgnoreCase("")){
+                        Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromName(islandName);
+                        if (island != null){
+                            memoryPlayer.setIsland(island);
+                        }
+                    }
+                    if (Bukkit.getPlayer(pUUID) != null){
+                        memoryPlayer.setPlayer(Bukkit.getPlayer(pUUID));
+                    }
+                }
+            }
+        }
     }
 
     public void loadIslands(){
@@ -450,6 +505,11 @@ public class Utils {
             return getMemoryPlayer(uuid).hasPermission(permissionBase);
         }
         return false;
+    }
+
+    public String convertTime(int time) {
+        String result = String.valueOf(Math.round((System.currentTimeMillis() / 1000L - time) / 36.0D) / 100.0D);
+        return (result.length() == 3 ? result + "0" : result) + "/hrs ago";
     }
 
     public String formatNumber(final String s) {

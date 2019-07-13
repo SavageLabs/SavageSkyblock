@@ -8,7 +8,10 @@ import org.bukkit.Location;
 public class PluginHook {
 
     public static boolean isEnabled(String pluginName){
-        return Bukkit.getPluginManager().getPlugin(pluginName).isEnabled();
+        if (Bukkit.getPluginManager().getPlugin(pluginName) != null){
+            return Bukkit.getPluginManager().getPlugin(pluginName).isEnabled();
+        }
+        return false;
     }
 
     private static WildStacker getWildStacker(){

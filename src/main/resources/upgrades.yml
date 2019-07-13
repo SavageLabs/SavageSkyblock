@@ -21,6 +21,7 @@ upgrades-UI:
 
 upgrades:
   protection-radius:
+    enabled: true # set to false to disable
     slot: 1 # position in the upgrades UI
     item-id: 'bedrock'
     item-data: 0
@@ -48,6 +49,7 @@ upgrades:
         cost: 5000
 
   member-limit:
+    enabled: true
     slot: 3 # position in the upgrades UI
     item-id: 'sign'
     item-data: 0
@@ -75,6 +77,7 @@ upgrades:
         cost: 5000
 
   hopper-limit:
+    enabled: true
     slot: 5 # position in the upgrades UI
     item-id: 'hopper'
     item-data: 0
@@ -102,6 +105,7 @@ upgrades:
         cost: 5000
 
   spawner-limit:
+    enabled: true
     slot: 7 # position in the upgrades UI
     item-id: 'mob_spawner'
     item-data: 0
@@ -129,6 +133,7 @@ upgrades:
         cost: 5000
 
   generator:
+    enabled: true
     slot: 9 # position in the upgrades UI
     item-id: 'lava_bucket'
     item-data: 0
@@ -182,6 +187,7 @@ upgrades:
         cost: 5000
 
   spawner-rate:
+    enabled: true
     slot: 11 # position in the upgrades UI
     item-id: 'mob_spawner'
     item-data: 0
@@ -209,6 +215,7 @@ upgrades:
         cost: 5000
 
   crop-rate:
+    enabled: true
     slot: 13 # position in the upgrades UI
     item-id: 'wheat'
     item-data: 0
@@ -236,6 +243,7 @@ upgrades:
         cost: 5000
 
   bank-size:
+    enabled: true
     slot: 15 # position in the upgrades UI
     item-id: 'chest'
     item-data: 0

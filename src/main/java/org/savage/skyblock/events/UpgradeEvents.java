@@ -55,10 +55,12 @@ public class UpgradeEvents implements Listener {
         }
     }
 
+    private BlockFace[] faces = new BlockFace[] { BlockFace.SELF, BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
+
     private boolean generatesCobble(final Material material, final Block block) {
         final Material material2 = (material.equals(Material.WATER) || material.equals(Material.STATIONARY_WATER)) ? Material.LAVA : Material.WATER;
         final Material material3 = (material.equals(Material.WATER) || material.equals(Material.STATIONARY_WATER)) ? Material.STATIONARY_LAVA : Material.STATIONARY_WATER;
-        final BlockFace[] faces = new BlockFace[] { BlockFace.SELF, BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.EAST, BlockFace.SOUTH, BlockFace.WEST };
+        final BlockFace[] faces = this.faces;
         for (int length = faces.length, i = 0; i < length; ++i) {
             final Block relative = block.getRelative(faces[i], 1);
             if (relative.getType().equals(material2) || relative.getType().equals(material3)) {
