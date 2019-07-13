@@ -1,5 +1,7 @@
 package org.savage.skyblock.events;
 
+import net.coreprotect.CoreProtect;
+import net.coreprotect.CoreProtectAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -12,6 +14,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.savage.skyblock.API.IslandEnterEvent;
@@ -21,6 +24,8 @@ import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
+
+import java.util.List;
 
 public class PlayerEvents implements Listener {
 
@@ -32,6 +37,36 @@ public class PlayerEvents implements Listener {
             //good we can now call our own event from this one
             Bukkit.getPluginManager().callEvent(new IslandTeleportEvent(island, e.getPlayer().getUniqueId(), e.getFrom(), e.getTo()));
         }
+    }
+
+    @EventHandler
+    public void inspect(PlayerInteractEvent e){
+        Player p = e.getPlayer();
+        MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId());
+        if (memoryPlayer == null) return;
+
+        if (memoryPlayer.isInspectMode()){
+            e.setCancelled(true);
+            //send the data
+            List<String[]> info = CoreProtect.getInstance().getAPI().blockLookup(e.getClickedBlock(), 0);
+            if (info.size() == 0) {
+                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-inspect-noResults"));
+                return;
+            }
+            CoreProtectAPI coAPI = CoreProtect.getInstance().getAPI();
+            List<String> msg = SkyBlock.getInstance().getUtils().getMessageList("island-inspect-results");
+            for (int i = 0; i < info.size(); i++) {
+                CoreProtectAPI.ParseResult row = coAPI.parseResult(info.get(i));
+                for (String s : msg){
+                    p.sendMessage(s
+                            .replace("%time%", SkyBlock.getInstance().getUtils().convertTime(row.getTime()))
+                            .replace("%action%", row.getActionString())
+                            .replace("%player%", row.getPlayer())
+                            .replace("%block%", row.getType().toString().toLowerCase()));
+                }
+            }
+        }
+
     }
 
     @EventHandler
@@ -104,9 +139,7 @@ public class PlayerEvents implements Listener {
     public void joinEvent(PlayerJoinEvent e){
         Player p = e.getPlayer();
 
-        if (!SkyBlock.getInstance().getUtils().hasMemoryPlayer(p.getUniqueId())){
-            new MemoryPlayer(p.getUniqueId());
-        }
+       SkyBlock.getInstance().getUtils().loadPlayer(p.getUniqueId()); // load the memory player from file
 
         Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
         Island island1 = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation());
@@ -114,6 +147,7 @@ public class PlayerEvents implements Listener {
             //logged into their island
             Bukkit.getPluginManager().callEvent(new IslandEnterEvent(p, island));
         }
+
     }
 
     @EventHandler

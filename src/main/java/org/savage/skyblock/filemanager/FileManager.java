@@ -1,17 +1,8 @@
 package org.savage.skyblock.filemanager;
 
-import org.apache.commons.io.FileUtils;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.savage.skyblock.SkyBlock;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Scanner;
 
 public class FileManager {
 
@@ -20,6 +11,7 @@ public class FileManager {
     private CustomFile worth = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/worth.yml"));
     private CustomFile upgrades = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/upgrades.yml"));
     private CustomFile messages = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/messages.yml"));
+    private CustomFile playerData = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/playerData.yml"));
 
     public void setup() {
 
@@ -28,6 +20,7 @@ public class FileManager {
         guis.setup(true);
         upgrades.setup(true);
         messages.setup(true);
+        playerData.setup(true);
 
         if (!new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").exists()) {
             new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").mkdir();
@@ -82,5 +75,9 @@ public class FileManager {
 
     public CustomFile getWorth() {
         return worth;
+    }
+
+    public CustomFile getPlayerData() {
+        return playerData;
     }
 }

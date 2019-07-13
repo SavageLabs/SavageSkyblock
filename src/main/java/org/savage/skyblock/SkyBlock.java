@@ -122,6 +122,7 @@ public class SkyBlock extends JavaPlugin {
 
     public void onDisable(){
         getUtils().saveIslands();
+        getUtils().savePlayers();
 
         Bukkit.getScheduler().cancelTasks(this);
     }

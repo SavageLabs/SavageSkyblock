@@ -55,9 +55,22 @@ public class IslandUtils {
         return isOwner(p.getUniqueId(), island) || isCoOwner(p.getUniqueId(), island);
     }
 
+    public boolean hasModPermissions(Player p, Island island){
+        return hasAdminPermissions(p, island) || isOfficer(p.getUniqueId(), island);
+    }
+
     public Island getIslandFromLocation(Location location) {
         for (Island island : Storage.islandList) {
             if (island.isBlockInIsland(location.getBlockX(), location.getBlockZ())){
+                return island;
+            }
+        }
+        return null;
+    }
+
+    public Island getIslandFromName(String name){
+        for (Island island : Storage.islandList){
+            if (island.getName().equalsIgnoreCase(name)){
                 return island;
             }
         }
