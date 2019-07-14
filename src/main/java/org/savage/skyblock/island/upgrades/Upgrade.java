@@ -20,7 +20,8 @@ public enum Upgrade {
     SPAWNER_LIMIT(5, "spawner-limit"),
     GENERATOR(6, "generator"),
     CROP_RATE(7, "crop-rate"),
-    BANK_SIZE(8, "bank-size");
+    BANK_SIZE(8, "bank-size"),
+    WARP_AMOUNT(9, "warp-amount");
 
     private int id;
     private String name;
@@ -60,6 +61,38 @@ public enum Upgrade {
             //upgrade above can be modified via permission and override their original Is Upgrade Values...
         }
 
+        public static double getTierCost(Upgrade upgrade, int tier){
+            String name = upgrade.getName();
+            return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getDouble("upgrades."+name+".tiers."+tier+".cost");
+        }
+
+        public static int getMaxTier(Upgrade upgrade){
+            String name = upgrade.getName();
+            int m = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getConfigurationSection("upgrades."+name+".tiers").getKeys(false).size();
+            if (upgrade.equals(Upgrade.GENERATOR) || upgrade.equals(Upgrade.BANK_SIZE)){
+                return m - 1;
+            }
+            return m;
+        }
+
+        public static Upgrade getUpgrade(int id){
+            for (Upgrade upgrade : Upgrade.values()){
+                if (upgrade.getId() == id){
+                    return upgrade;
+                }
+            }
+            return null;
+        }
+
+        public static Upgrade getUpgrade(String name){
+            for (Upgrade upgrade : Upgrade.values()){
+                if (upgrade.getName().equalsIgnoreCase(name)){
+                    return upgrade;
+                }
+            }
+            return null;
+        }
+
         public static HashMap<Material, Integer> getMaterialChanceMap(int tier){
             HashMap<Material, Integer> map = new HashMap<>();
             if (tier > getMaxTier(Upgrade.GENERATOR)){
@@ -95,38 +128,6 @@ public enum Upgrade {
                                     LinkedHashMap::new));
 
             return sorted;
-        }
-
-        public static double getTierCost(Upgrade upgrade, int tier){
-            String name = upgrade.getName();
-            return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getDouble("upgrades."+name+".tiers."+tier+".cost");
-        }
-
-        public static int getMaxTier(Upgrade upgrade){
-            String name = upgrade.getName();
-            int m = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getConfigurationSection("upgrades."+name+".tiers").getKeys(false).size();
-            if (upgrade.equals(Upgrade.GENERATOR) || upgrade.equals(Upgrade.BANK_SIZE)){
-                return m - 1;
-            }
-            return m;
-        }
-
-        public static Upgrade getUpgrade(int id){
-            for (Upgrade upgrade : Upgrade.values()){
-                if (upgrade.getId() == id){
-                    return upgrade;
-                }
-            }
-            return null;
-        }
-
-        public static Upgrade getUpgrade(String name){
-            for (Upgrade upgrade : Upgrade.values()){
-                if (upgrade.getName().equalsIgnoreCase(name)){
-                    return upgrade;
-                }
-            }
-            return null;
         }
     }
 

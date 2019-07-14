@@ -9,7 +9,7 @@ placeholders:
   max: '&c&lMAX'
   generator-current-upgrade: '&7- &a%material% &9(&b%chance%&l%&9)'
   generator-next-upgrade: '&8- &a%material% &9(&c&onew &b%chance%&l%&9)'
-  materials:
+  materials: # makes the ore's name in the Upgrade GUI look sexy :D
     diamond_ore: '&bDiamond Ore'
     coal_ore: '&8Coal Ore'
     iron_ore: '&7Iron Ore'
@@ -270,4 +270,35 @@ upgrades:
         cost: 1000
       2:
         upgrade-value: 3 # 3 bank rows
+        cost: 5000
+
+  warp-amount:
+    enabled: true
+    slot: 17 # position in the upgrades UI
+    item-id: 'sign'
+    item-data: 0
+    item-amount: 1
+    name: '&b&lWarp Amount'
+    lore:
+      - ''
+      - '&7Increase your Island''s warp amount!'
+      - ''
+      - '&aCurrent Tier: &l%warp-amount_currentTier%'
+      - '&bNext Tier: &l%warp-amount_nextTier%'
+      - ''
+      - '&aCurrent Upgrade: &l%warp-amount_currentUpgrade% warps'
+      - '&bNext Upgrade: &l%warp-amount_nextUpgrade% warps'
+      - ''
+      - '&eCost: $&l%cost%'
+      - ''
+      - '&7&oLeft click to confirm purchase'
+    tiers:
+      1:
+        upgrade-value: 2
+        cost: 1000
+      2:
+        upgrade-value: 3
+        cost: 5000
+      3:
+        upgrade-value: 4
         cost: 5000

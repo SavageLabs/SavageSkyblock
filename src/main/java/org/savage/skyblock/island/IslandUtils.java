@@ -7,6 +7,7 @@ import org.savage.skyblock.API.IslandCreateEvent;
 import org.savage.skyblock.API.IslandCreatedEvent;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
+import org.savage.skyblock.island.warps.IslandWarp;
 
 import java.util.*;
 
@@ -142,6 +143,21 @@ public class IslandUtils {
         }
         return null;
     }
+
+    public List<IslandWarp> getIslandWarps(Island island){
+        return island.getIslandWarps();
+    }
+
+    public IslandWarp getIslandWarp(Island island, String name){
+        for (IslandWarp islandWarp : island.getIslandWarps()){
+            if (islandWarp.getName().equalsIgnoreCase(name)){
+                return islandWarp;
+            }
+        }
+        return null;
+    }
+
+
 
     public void calculateIslandTop() {
 

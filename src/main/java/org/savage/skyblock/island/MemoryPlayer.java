@@ -2,8 +2,10 @@ package org.savage.skyblock.island;
 
 import org.bukkit.entity.Player;
 import org.savage.skyblock.Storage;
+import org.savage.skyblock.island.challenges.Challenge;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class MemoryPlayer {
@@ -15,6 +17,11 @@ public class MemoryPlayer {
     private boolean inspectMode = false;
     private HashMap<String, Integer> permissionMap = new HashMap<>();
 
+    private List<Integer> completedChallenges;
+    private List<Integer> startedChallenges;
+
+    //TODO; make a map of blocks they have broken, and make that load/save from file
+
     private int resets;
 
     public MemoryPlayer(UUID uuid){
@@ -24,6 +31,14 @@ public class MemoryPlayer {
 
     public boolean hasPermission(String permissionBase){
         return getPermissionMap().get(permissionBase) != null;
+    }
+
+    public List<Integer> getCompletedChallenges() {
+        return completedChallenges;
+    }
+
+    public List<Integer> getStartedChallenges() {
+        return startedChallenges;
     }
 
     public void setIsland(Island island) {

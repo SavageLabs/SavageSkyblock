@@ -12,8 +12,11 @@ import org.savage.skyblock.PluginHook;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.warps.IslandWarp;
 import org.savage.skyblock.island.MemoryPlayer;
+import org.savage.skyblock.island.upgrades.Upgrade;
 import org.savage.skyblock.island.upgrades.UpgradesUI;
+import org.savage.skyblock.island.warps.WarpUI;
 
 public class IslandCommands implements CommandExecutor {
 
@@ -29,12 +32,21 @@ public class IslandCommands implements CommandExecutor {
 
                     String arg1 = args[0];
 
-
                     if (arg1.equalsIgnoreCase("version")) {
                         //version command is not configurable
                         String[] list = {"&a&lSavage SkyBlock", " ", "&bVersion: " + Bukkit.getPluginManager().getPlugin("SavageSkyBlock").getDescription().getVersion(), "&bBy: Trent™", " "};
                         for (String s : list) {
                             p.sendMessage(SkyBlock.getInstance().getUtils().color(s));
+                        }
+                    }
+
+                    if (arg1.equalsIgnoreCase("warps")){
+                        //open GUI of the island warps
+                        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                        if (island != null){
+                            WarpUI.openWarpUI(p);
+                        }else{
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noIsland"));
                         }
                     }
 
@@ -214,8 +226,88 @@ public class IslandCommands implements CommandExecutor {
                     //is kick <player>
                     //is setname <name>
                     //is transfer <player>
+                    //is warp <name>
+                    //is createWarp|setWarp <name>
                     String arg1 = args[0];
                     String arg2 = args[1];
+
+                    if (arg1.equalsIgnoreCase("removeWarp") || arg1.equalsIgnoreCase("deleteWarp") || arg1.equalsIgnoreCase("delWarp")){
+                        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                        if (island == null){
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
+                            return false;
+                        }
+                        if (SkyBlock.getInstance().getIslandUtils().hasAdminPermissions(p, island)) {
+                            if (SkyBlock.getInstance().getIslandUtils().getIslandWarp(island, arg2) != null) {
+                                //has a warp named this name
+                                //remove it now
+                                IslandWarp islandWarp = SkyBlock.getInstance().getIslandUtils().getIslandWarp(island, arg2);
+                                if (islandWarp != null){
+                                    island.removeIslandWarp(islandWarp);
+                                    islandWarp.remove();
+
+                                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-warp-removed").replace("%name%", arg2));
+                                }else{
+                                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-warp-none"));
+                                }
+                            }else{
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-warp-none"));
+                            }
+                        }else{
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+                        }
+                    }
+
+                    if (arg1.equalsIgnoreCase("createWarp") || arg1.equalsIgnoreCase("setWarp")) {
+                        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                        if (island == null){
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
+                            return false;
+                        }
+
+                        if (SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation()).equals(island)){
+                            //check the permission for the player
+                            if (SkyBlock.getInstance().getIslandUtils().hasAdminPermissions(p, island)){
+                                if (SkyBlock.getInstance().getIslandUtils().getIslandWarp(island, arg2) == null){
+                                    //there isn't a warp with this name... allow
+                                    //check their upgrade value for island warps before allowing them to create a new one
+                                    int currentWarps = island.getIslandWarps().size() + 1;
+                                    if (Upgrade.Upgrades.getTierValue(Upgrade.WARP_AMOUNT, island.getUpgradeTier(Upgrade.WARP_AMOUNT), null) >= currentWarps){
+                                        //allow them to create it
+                                        IslandWarp islandWarp = new IslandWarp(island, arg2, p.getLocation());
+                                        island.addIslandWarp(islandWarp);
+                                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-warp-created").replace("%name%", arg2));
+                                    }else{
+                                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-warp-max"));
+                                    }
+                                }else{
+                                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-warp-exists"));
+                                }
+                            }else{
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+                            }
+                        }else{
+                            //noPermissionIsland
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+                        }
+                    }
+
+                    if (arg1.equalsIgnoreCase("warp")){
+                        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                        if (island == null){
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
+                            return false;
+                        }
+
+                        IslandWarp islandWarp = SkyBlock.getInstance().getIslandUtils().getIslandWarp(island, arg2);
+                        if (islandWarp != null){
+                            //teleport
+                            p.teleport(islandWarp.getLocation());
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-warp-teleported").replace("%name%", arg2));
+                        }else{
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-warp-none"));
+                        }
+                    }
 
                     if (arg1.equalsIgnoreCase("deposit")){
                         Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());

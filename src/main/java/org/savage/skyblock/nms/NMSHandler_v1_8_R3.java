@@ -4,9 +4,7 @@ import net.minecraft.server.v1_8_R3.*;
 import net.minecraft.server.v1_8_R3.WorldBorder;
 import org.bukkit.*;
 import org.bukkit.Chunk;
-import org.bukkit.block.Block;
 import org.bukkit.craftbukkit.v1_8_R3.CraftChunk;
-import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -111,4 +109,5 @@ public class NMSHandler_v1_8_R3 extends NMSHandler {
                 IChatBaseComponent.ChatSerializer.a(ChatColor.translateAlternateColorCodes('&', "{\"text\":\"" + text + " \"}")), in, stay, out);
         ((CraftPlayer) p).getHandle().playerConnection.sendPacket(title);
     }
+
 }

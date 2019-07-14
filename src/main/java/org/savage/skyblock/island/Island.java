@@ -12,6 +12,7 @@ import org.savage.skyblock.API.*;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.upgrades.Upgrade;
+import org.savage.skyblock.island.warps.IslandWarp;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -65,6 +66,8 @@ public class Island {
 
     private Inventory bank;
     private double bankBalance;
+
+    private List<IslandWarp> islandWarps = new ArrayList<>();
 
     public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> coownerList, List<UUID> officerList, List<UUID> memberList, int protectionRadius, String name, double bankBalance) {
         this.centerX = x;
@@ -131,6 +134,17 @@ public class Island {
             this.bank.setContents(items);
         }
         return this.bank;
+    }
+
+    public List<IslandWarp> getIslandWarps() {
+        return islandWarps;
+    }
+
+    public void addIslandWarp(IslandWarp islandWarp){
+        this.islandWarps.add(islandWarp);
+    }
+    public void removeIslandWarp(IslandWarp islandWarp){
+        this.islandWarps.remove(islandWarp);
     }
 
     public int getHopperCount() {

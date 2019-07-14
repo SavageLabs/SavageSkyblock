@@ -22,8 +22,10 @@ import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.IslandUtils;
 import org.savage.skyblock.island.MemoryPlayer;
+import org.savage.skyblock.island.challenges.Challenges;
 import org.savage.skyblock.island.upgrades.Upgrade;
 import org.savage.skyblock.island.upgrades.UpgradesUI;
+import org.savage.skyblock.island.warps.WarpUI;
 import org.savage.skyblock.nms.ReflectionManager;
 import org.savage.skyblock.worldedit.WorldEditPersistence;
 
@@ -39,6 +41,7 @@ public class SkyBlock extends JavaPlugin {
     private FileManager fileManager;
     private IslandUtils islandUtils;
     private ReflectionManager reflectionManager;
+    private Challenges challenges;
 
     public List<Player> safePlayers = new ArrayList<>();
 
@@ -68,6 +71,10 @@ public class SkyBlock extends JavaPlugin {
         return utils;
     }
 
+    public Challenges getChallenges() {
+        return challenges;
+    }
+
     public ReflectionManager getReflectionManager() {
         return reflectionManager;
     }
@@ -79,6 +86,7 @@ public class SkyBlock extends JavaPlugin {
         fileManager = new FileManager();
         islandUtils = new IslandUtils();
         reflectionManager = new ReflectionManager();
+        challenges = new Challenges();
 
         MultiMaterials.setupMultiversionMaterials();
 
@@ -106,6 +114,7 @@ public class SkyBlock extends JavaPlugin {
         pm.registerEvents(new PlayerEvents(), this);
         pm.registerEvents(new UpgradesUI(), this);
         pm.registerEvents(new UpgradeEvents(), this);
+        pm.registerEvents(new WarpUI(), this);
 
         WorldEditPersistence.worldEditVersion = Bukkit.getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();
 
