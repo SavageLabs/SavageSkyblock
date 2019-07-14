@@ -1,5 +1,6 @@
 package org.savage.skyblock;
 
+import com.sun.jna.Memory;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
@@ -17,6 +18,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Utils {
 
@@ -128,6 +131,7 @@ public class Utils {
 
     public void loadPlayer(UUID pUUID){
         List<String> data = SkyBlock.getInstance().getFileManager().getPlayerData().getFileConfig().getStringList("players");
+        MemoryPlayer memoryPlayer = null;
         if (!hasMemoryPlayer(pUUID)) {
             for (String playerData : data) {
                 String[] l = playerData.split(";");
@@ -145,7 +149,7 @@ public class Utils {
                         }
                     }
                     //create memory player
-                    MemoryPlayer memoryPlayer = new MemoryPlayer(uuid);
+                    memoryPlayer = new MemoryPlayer(uuid);
                     memoryPlayer.setResets(islandResets);
                     if (!islandName.equalsIgnoreCase("")){
                         Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromName(islandName);
@@ -157,6 +161,15 @@ public class Utils {
                         memoryPlayer.setPlayer(Bukkit.getPlayer(pUUID));
                     }
                 }
+            }
+            if (memoryPlayer == null){
+                //couldn't find any data to load. we make new
+                memoryPlayer = new MemoryPlayer(pUUID);
+                Island island = SkyBlock.getInstance().getIslandUtils().getIsland(pUUID);
+                if (island != null){
+                    memoryPlayer.setIsland(island);
+                }
+                memoryPlayer.setResets(0);
             }
         }
     }
@@ -552,4 +565,15 @@ public class Utils {
             throw new IOException("Unable to decode class type.", e);
         }
     }
+
+    public String createBar(int barNum, int progress){
+        String yesBar = SkyBlock.getInstance().getFileManager().getQuestFile().getFileConfig().getString("placeholder.progressBar-Yes");
+        String noBar = SkyBlock.getInstance().getFileManager().getQuestFile().getFileConfig().getString("placeholder.progressBar-No");
+
+        String progressBar = IntStream.range(0, progress).mapToObj(i -> yesBar).collect(Collectors.joining("")); // adds goodBars that many times...
+        progressBar = progressBar + IntStream.range(0, Math.subtractExact(barNum, progress)).mapToObj(i -> noBar).collect(Collectors.joining("")); // adds badBars that many times...
+        return progressBar;
+    }
+
+
 }

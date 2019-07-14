@@ -2,10 +2,7 @@ package org.savage.skyblock;
 
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -22,7 +19,7 @@ import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.IslandUtils;
 import org.savage.skyblock.island.MemoryPlayer;
-import org.savage.skyblock.island.challenges.Challenges;
+import org.savage.skyblock.island.quests.Quests;
 import org.savage.skyblock.island.upgrades.Upgrade;
 import org.savage.skyblock.island.upgrades.UpgradesUI;
 import org.savage.skyblock.island.warps.WarpUI;
@@ -41,7 +38,7 @@ public class SkyBlock extends JavaPlugin {
     private FileManager fileManager;
     private IslandUtils islandUtils;
     private ReflectionManager reflectionManager;
-    private Challenges challenges;
+    private Quests quests;
 
     public List<Player> safePlayers = new ArrayList<>();
 
@@ -71,8 +68,8 @@ public class SkyBlock extends JavaPlugin {
         return utils;
     }
 
-    public Challenges getChallenges() {
-        return challenges;
+    public Quests getQuests() {
+        return quests;
     }
 
     public ReflectionManager getReflectionManager() {
@@ -86,7 +83,7 @@ public class SkyBlock extends JavaPlugin {
         fileManager = new FileManager();
         islandUtils = new IslandUtils();
         reflectionManager = new ReflectionManager();
-        challenges = new Challenges();
+        quests = new Quests();
 
         MultiMaterials.setupMultiversionMaterials();
 
@@ -121,6 +118,8 @@ public class SkyBlock extends JavaPlugin {
         getReflectionManager().setup(); // load NMS
         getFileManager().setup(); // load flat files
         getUtils().loadIslands(); // load Islands
+
+        getQuests().loadQuests(); // load Quests
 
         startTopTimer();
         startCalculationTimer();

@@ -16,11 +16,11 @@ public class CustomFile {
         this.fileConfig = YamlConfiguration.loadConfiguration(file);
     }
 
-    public void setup(boolean loadFromProject){
+    public void setup(boolean loadFromProject, String inFolder){
         if (!getFile().exists()){
             //create
             if (loadFromProject){
-                SkyBlock.getInstance().saveResource(file.getName(), false);
+                SkyBlock.getInstance().saveResource(inFolder+"/"+file.getName(), false);
             }else{
                 try{
                     getFile().createNewFile();

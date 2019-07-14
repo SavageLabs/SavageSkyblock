@@ -12,6 +12,7 @@ import org.savage.skyblock.PluginHook;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.quests.QuestUI;
 import org.savage.skyblock.island.warps.IslandWarp;
 import org.savage.skyblock.island.MemoryPlayer;
 import org.savage.skyblock.island.upgrades.Upgrade;
@@ -38,6 +39,10 @@ public class IslandCommands implements CommandExecutor {
                         for (String s : list) {
                             p.sendMessage(SkyBlock.getInstance().getUtils().color(s));
                         }
+                    }
+
+                    if (arg1.equalsIgnoreCase("quests") || arg1.equalsIgnoreCase("quest")){
+                        QuestUI.openQuestMenuUI(p);
                     }
 
                     if (arg1.equalsIgnoreCase("warps")){
