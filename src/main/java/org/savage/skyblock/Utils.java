@@ -1,14 +1,13 @@
 package org.savage.skyblock;
 
-import com.sun.jna.Memory;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.warps.IslandWarp;
 import org.savage.skyblock.island.MemoryPlayer;
 import org.savage.skyblock.island.upgrades.Upgrade;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
@@ -227,11 +226,12 @@ public class Utils {
 
             try {
                 String upgradeString = l[17];
-
-                for (String upgrades : upgradeString.split(",")) {
-                    int id = Integer.parseInt(upgrades.split("!")[0]);
-                    int tier = Integer.parseInt(upgrades.split("!")[1]);
-                    upgradesMap.put(Upgrade.Upgrades.getUpgrade(id), tier);
+                if (!upgradeString.equalsIgnoreCase("")) {
+                    for (String upgrades : upgradeString.split(",")) {
+                        int id = Integer.parseInt(upgrades.split("!")[0]);
+                        int tier = Integer.parseInt(upgrades.split("!")[1]);
+                        upgradesMap.put(Upgrade.Upgrades.getUpgrade(id), tier);
+                    }
                 }
             }catch(ArrayIndexOutOfBoundsException e){}
 
@@ -244,6 +244,30 @@ public class Utils {
                 //try to convert it
                 island.createBank(bankData);
             }
+
+            try {
+                String islandWarpString = l[20];
+                if (!islandWarpString.equalsIgnoreCase("")) {
+
+                    if (islandWarpString.contains(":")) {
+                        //has multiple island warps
+                        String[] warpList = islandWarpString.split(":");
+                        for (String warp : warpList) {
+                            String warpName = warp.split("!")[0];
+                            String warpLocation = warp.split("!")[1];
+
+                            IslandWarp islandWarp = new IslandWarp(island, warpName, deserializeLocation(warpLocation));
+                            island.addIslandWarp(islandWarp);
+                        }
+                    } else {
+                        //only has 1 island warp
+                        String warpName = islandWarpString.split("!")[0];
+                        String warpLocation = islandWarpString.split("!")[1];
+                        IslandWarp islandWarp = new IslandWarp(island, warpName, deserializeLocation(warpLocation));
+                        island.addIslandWarp(islandWarp);
+                    }
+                }
+            }catch(ArrayIndexOutOfBoundsException e){ }
 
             island.setUpgradeMap(upgradesMap);
 
@@ -302,6 +326,23 @@ public class Utils {
             String officerList = "";
             String coOwnerList = "";
 
+            String islandWarpsString = "";
+
+            if (!island.getIslandWarps().isEmpty()){
+                //not empty
+                for (IslandWarp islandWarp : island.getIslandWarps()){
+                    String warpName = islandWarp.getName();
+                    String warpLocation = serializeLocation(islandWarp.getLocation());
+                    if (islandWarpsString.equalsIgnoreCase("")){
+                        //empty
+                        islandWarpsString = warpName+"!"+warpLocation;
+                    }else{
+                        //is not empty
+                        islandWarpsString = islandWarpsString + ":"+warpName+"!"+warpLocation;
+                    }
+                }
+            }
+
             if (!members.isEmpty()){
                 for (UUID uuid : members){
                     if (memberList.equalsIgnoreCase("")){
@@ -344,7 +385,7 @@ public class Utils {
             islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + coOwnerList+ ";" + x + ";" + y + ";" + z + ";" +
                     protectionRadius + ";" + home + ";" + biome + ";" +
                     island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" +
-                    island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name+";"+upgradeString+";"+bankBalance+";"+inventoryData);
+                    island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name+";"+upgradeString+";"+bankBalance+";"+inventoryData+";"+islandWarpsString);
         }
 
         SkyBlock.getInstance().getFileManager().getData().getFileConfig().set("data", islandData);
@@ -393,58 +434,6 @@ public class Utils {
             }
         }
         return blocks;
-    }
-
-    public List<Block> getNearbyBlocks(Location location, int radius, List<Material> blocksToFind) {
-        List<Block> blocks = new ArrayList<Block>();
-        for(int x = location.getBlockX() - radius; x <= location.getBlockX() + radius; x++) {
-            for(int y = location.getBlockY() - radius; y <= location.getBlockY() + radius; y++) {
-                for(int z = location.getBlockZ() - radius; z <= location.getBlockZ() + radius; z++) {
-                    Block block = location.getWorld().getBlockAt(x, y, z);
-                    for (Material b: blocksToFind){
-                        if (b.equals(block.getType())){
-                            blocks.add(block);
-                        }
-                    }
-                }
-            }
-        }
-        return blocks;
-    }
-
-    public List<Block> getBlocksInChunk(Island island, Chunk chunk){
-        List<Block> list = new ArrayList<>();
-        for(int xx = chunk.getX(); xx < chunk.getX()+16; xx++) {
-            for(int zz = chunk.getZ(); zz < chunk.getZ()+16; zz++) {
-                for(int yy = 0; yy < 128; yy++) {
-                    Block block = chunk.getBlock(xx, yy, zz);
-                    if (block != null && !block.getType().equals(Material.AIR)){
-                        if (block.getLocation() != null && SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(block.getLocation()) != null) {
-                            if (SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(block.getLocation()).equals(island)) {
-                                list.add(block);
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return list;
-    }
-
-    public List<Chunk> getChunks(Location location, int radius){
-        List<Chunk> chunks = new ArrayList<>();
-        Chunk centerChunk = location.getChunk();
-        for (int x = centerChunk.getX()-radius; x < centerChunk.getX() + radius; x++) {
-            for (int z = centerChunk.getZ()-radius; z < centerChunk.getZ() + radius; z++) {
-                if (centerChunk.getWorld().getChunkAt(x, z) != null && centerChunk.getWorld().getChunkAt(x, z).isLoaded()) {
-                    Chunk chunk = centerChunk.getWorld().getChunkAt(x, z);
-                    if (!chunks.contains(chunk) && chunk.getWorld().equals(location.getWorld())){
-                        chunks.add(chunk);
-                    }
-                }
-            }
-        }
-        return chunks;
     }
 
     public String getNameFromUUID(UUID uuid) {

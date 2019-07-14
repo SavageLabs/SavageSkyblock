@@ -1,10 +1,25 @@
 # Saber SkyBlock GUI.yml #
 # this file contains all the configuration for the in-game GUI's #
 
+island-warps:
+  name: '&b&lIsland Warps &7(%warps% warps)'
+  rows: 3
+  faded-slots: '1,2,3,4,5,6,7,8,9,19,20,21,22,23,24,25,26,27' # faded slots are the top and bottom of the UI
+
+  warp-item:
+    item-id: 'sign'
+    item-data: 0
+    name: '&bWarp: &l%name%'
+    lore:
+      - ''
+      - '&7&oClick to teleport to this warp!'
+      - ''
+      - '&9Location: &a%x%&7, &a%y%&7, &a%z%'
 
 protection:
   name: '&bIsland Protection'
   rows: 1
+
   break:
     slot: 1
     item-id: 'barrier'

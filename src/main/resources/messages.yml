@@ -167,6 +167,13 @@ messages:
     - '&7Toggle off by using /is inspect again.'
     - ''
 
+  island-warp-teleported: '&aTeleported to Island Warp: %name%'
+  island-warp-none: '&cThis island warp doesn''t exist!'
+  island-warp-created: '&aCreated island warp: %name% to this location!'
+  island-warp-removed: '&aYou have removed this warp, %name%!'
+  island-warp-exists: '&aThis island warp name already exists!'
+  island-warp-max: '&aYour island is at MAX Island Warps!'
+
   ##########################################################################################
 
   # Island Bank Messages #
