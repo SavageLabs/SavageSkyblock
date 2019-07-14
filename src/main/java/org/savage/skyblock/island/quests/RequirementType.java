@@ -1,4 +1,4 @@
-package org.savage.skyblock.island.challenges;
+package org.savage.skyblock.island.quests;
 
 public enum RequirementType {
 
@@ -6,7 +6,11 @@ public enum RequirementType {
     HAVE_CURRENCY(2, "have_currency"),
 
     BREAK_BLOCK(3, "break_block"),
-    PLACE_BLOCK(4, "place_block");
+    PLACE_BLOCK(4, "place_block"),
+
+    HAVE_QUEST(5, "have_quest"),
+
+    PLAY_TIME(6, "play_time");
 
     private int id;
     private String name;

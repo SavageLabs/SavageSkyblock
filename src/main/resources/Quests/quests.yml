@@ -1,0 +1,28 @@
+# Quests File #
+
+placeholder:
+  progressBar-Yes: '&a|'
+  progressBar-No: '&8|'
+
+  requirement-types:
+    spend_currency: '&aSpend Currency'
+    have_currency: '&cHave Currency'
+    break_block: '&bBreak Blocks'
+    place_block: '&bPlace Blocks'
+    have_quest: '&9Have Quest'
+    play_time: '&bPlay Time'
+
+
+questMenuUI:
+  name: '&b&lQuests Menu'
+  rows: 3
+
+  daily:
+    slot: 1
+    item-id: 'diamond_block'
+    item-data: 0
+    item-name: '&c&lDaily Quests'
+    item-lore:
+      - ''
+      - '&7&oClick to view your Daily Quests!'
+      - ''
