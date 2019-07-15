@@ -168,6 +168,7 @@
             <groupId>net.coreprotect</groupId>
             <artifactId>coreprotect</artifactId>
             <version>2.14.2</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
