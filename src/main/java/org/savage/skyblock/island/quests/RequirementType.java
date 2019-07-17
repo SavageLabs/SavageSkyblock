@@ -2,26 +2,32 @@ package org.savage.skyblock.island.quests;
 
 public enum RequirementType {
 
-    SPEND_CURRENCY(1, "spend_currency"),
-    HAVE_CURRENCY(2, "have_currency"),
+    SPEND_CURRENCY("spend_currency"),
+    HAVE_CURRENCY("have_currency"),
 
-    BREAK_BLOCK(3, "break_block"),
-    PLACE_BLOCK(4, "place_block"),
+    BREAK_BLOCK("break_block"),
+    PLACE_BLOCK("place_block"),
 
-    HAVE_QUEST(5, "have_quest"),
+    HAVE_QUEST("have_quest"),
 
-    PLAY_TIME(6, "play_time");
+    PLAY_TIME("play_time"),
 
-    private int id;
+    VOTE_AMOUNT("vote_amount"),
+
+    KILL_MOB("kill_mob"),
+    KILL_PLAYER("kill_player"),
+
+    DIE("die"),
+
+    IS_TOP("is_top"),
+
+    IS_UPGRADE_TIER("is_upgrade_tier");
+
+
     private String name;
 
-    RequirementType(int id, String name){
-        this.id = id;
+    RequirementType(String name){
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public String getName() {

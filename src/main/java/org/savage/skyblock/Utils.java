@@ -1,6 +1,7 @@
 package org.savage.skyblock;
 
 import com.sun.jna.Memory;
+import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
@@ -8,16 +9,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.quests.Quest;
 import org.savage.skyblock.island.warps.IslandWarp;
 import org.savage.skyblock.island.MemoryPlayer;
 import org.savage.skyblock.island.upgrades.Upgrade;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -123,7 +124,34 @@ public class Utils {
                 islandName = memoryPlayer.getIsland().getName();
             }
 
-            data.add(uuid.toString()+";"+islandName+";"+resets);
+            int playTime = memoryPlayer.getPlayTime();
+            int playerKills = memoryPlayer.getPlayerKills();
+            int mobKills = memoryPlayer.getMobKills();
+            int deaths = memoryPlayer.getDeaths();
+
+            String blocksPlacedString = "";
+            String blocksBrokenString = "";
+            String completedQuests = "";
+            double moneySpent = memoryPlayer.getMoneySpent();
+
+            try{
+                blocksPlacedString = serializeObject(memoryPlayer.getBlocksPlaced());
+                blocksBrokenString = serializeObject(memoryPlayer.getBlocksBroke());
+            }catch(IOException e){
+                e.printStackTrace();
+            }
+
+            for (Quest quest : memoryPlayer.getCompletedQuests()){
+                String type = quest.getQuestType().name().toUpperCase();
+                int id = quest.getId();
+                if (completedQuests.equalsIgnoreCase("")){
+                    completedQuests = type+","+id;
+                }else{
+                    completedQuests = completedQuests+"-"+type+","+id;
+                }
+            }
+
+            data.add(uuid.toString()+";"+islandName+";"+resets+";"+playTime+";"+blocksPlacedString+";"+blocksBrokenString+";"+completedQuests+";"+moneySpent+";"+playerKills+";"+mobKills+";"+deaths);
         }
         SkyBlock.getInstance().getFileManager().getPlayerData().getFileConfig().set("players", data);
         SkyBlock.getInstance().getFileManager().getPlayerData().saveFile();
@@ -135,22 +163,97 @@ public class Utils {
         if (!hasMemoryPlayer(pUUID)) {
             for (String playerData : data) {
                 String[] l = playerData.split(";");
-                //layout: uuid;islandName;islandResets
+                //data.add(uuid.toString()+";"+islandName+";"+resets+";"+playTime+";"+blocksPlacedString+";"+blocksBrokenString);
                 UUID uuid = UUID.fromString(l[0]);
                 if (pUUID.equals(uuid)) {
+
                     String islandName = l[1];
                     int islandResets = 0;
+                    int playTime = 0;
 
                     if (!l[2].equalsIgnoreCase("")) {
-                        //has something
                         try {
                             islandResets = Integer.parseInt(l[2]);
                         } catch (NumberFormatException e) {
                         }
                     }
+                    if (!l[3].equalsIgnoreCase("")) {
+                        try {
+                            playTime = Integer.parseInt(l[3]);
+                        } catch (NumberFormatException e) {
+                        }
+                    }
+
+                    HashMap<String, Integer> blocksPlacedMap = new HashMap<>();
+                    HashMap<String, Integer> blockBrokenMap = new HashMap<>();
+
+                    List<Quest> completedQuests = new ArrayList<>();
+
+                    double moneySpent = 0;
+                    int mobKills = 0;
+                    int playerKills = 0;
+                    int deaths = 0;
+
+                    if (!l[4].equalsIgnoreCase("")){
+                        try{
+                            blocksPlacedMap = (HashMap<String, Integer>) deserializeObject(l[4]);
+                        }catch(ClassNotFoundException | IOException e){ }
+                    }
+                    if (!l[5].equalsIgnoreCase("")){
+                        try{
+                            blockBrokenMap = (HashMap<String, Integer>) deserializeObject(l[5]);
+                        }catch(ClassNotFoundException | IOException e){ }
+                    }
+
+                    try {
+                        if (!l[6].equalsIgnoreCase("")) {
+                            //completedQuests = completedQuests+"-"+type+","+id;
+                            if (l[6].contains("-")) {
+                                //multiple
+                                String[] list = l[6].split("-");
+                                for (String s : list) {
+                                    String type = s.split(",")[0];
+                                    int id = Integer.parseInt(s.split(",")[1]);
+                                    //fetch the quest
+                                    Quest quest = SkyBlock.getInstance().getQuests().getQuest(id, Quest.QuestType.valueOf(type));
+                                    completedQuests.add(quest);
+                                }
+                            } else {
+                                //single
+                                String type = l[6].split(",")[0];
+                                int id = Integer.parseInt(l[6].split(",")[1]);
+                                Quest quest = SkyBlock.getInstance().getQuests().getQuest(id, Quest.QuestType.valueOf(type));
+                                completedQuests.add(quest);
+                            }
+                        }
+
+                        try {
+                            moneySpent = Double.parseDouble(l[7]);
+
+                            playerKills = Integer.parseInt(l[8]);
+                            mobKills = Integer.parseInt(l[9]);
+                            deaths = Integer.parseInt(l[10]);
+                        }catch(NumberFormatException e){ }
+
+                    }catch(ArrayIndexOutOfBoundsException e){ }
+
                     //create memory player
                     memoryPlayer = new MemoryPlayer(uuid);
+
+                    memoryPlayer.setPlayerKills(playerKills);
+                    memoryPlayer.setMobKills(mobKills);
+                    memoryPlayer.setDeaths(deaths);
+
                     memoryPlayer.setResets(islandResets);
+                    memoryPlayer.setPlayTime(playTime);
+
+                    memoryPlayer.setBlocksBroke(blockBrokenMap);
+                    memoryPlayer.setBlocksPlaced(blocksPlacedMap);
+
+                    memoryPlayer.setCompletedQuests(completedQuests);
+
+                    memoryPlayer.setMoneySpent(moneySpent);
+
                     if (!islandName.equalsIgnoreCase("")){
                         Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromName(islandName);
                         if (island != null){
@@ -514,6 +617,23 @@ public class Utils {
         return (result.length() == 3 ? result + "0" : result) + "/hrs ago";
     }
 
+    public enum time{
+        DAYS, HOURS, MINUTES
+    }
+
+    public double convertSeconds(int seconds, Enum typeTime){
+        if (typeTime.equals(time.DAYS)){
+            return TimeUnit.SECONDS.toDays(seconds);
+        }
+        if (typeTime.equals(time.HOURS)){
+            return TimeUnit.SECONDS.toHours(seconds);
+        }
+        if (typeTime.equals(time.MINUTES)){
+            return TimeUnit.SECONDS.toMinutes(seconds);
+        }
+        return 0;
+    }
+
     public String formatNumber(final String s) {
         double amount = Double.parseDouble(s);
         if (amount > 0) {
@@ -566,13 +686,53 @@ public class Utils {
         }
     }
 
-    public String createBar(int barNum, int progress){
+    public String createBar(int barNum, int progress, int totalProgress){
         String yesBar = SkyBlock.getInstance().getFileManager().getQuestFile().getFileConfig().getString("placeholder.progressBar-Yes");
         String noBar = SkyBlock.getInstance().getFileManager().getQuestFile().getFileConfig().getString("placeholder.progressBar-No");
+
+        if (progress > barNum){
+            progress = barNum;
+        }
+        if (progress > totalProgress){
+            progress = barNum;
+        }
 
         String progressBar = IntStream.range(0, progress).mapToObj(i -> yesBar).collect(Collectors.joining("")); // adds goodBars that many times...
         progressBar = progressBar + IntStream.range(0, Math.subtractExact(barNum, progress)).mapToObj(i -> noBar).collect(Collectors.joining("")); // adds badBars that many times...
         return progressBar;
+    }
+
+    private void collectDigits(int num, List<Integer> digits) {
+        if(num / 10 > 0) {
+            collectDigits(num / 10, digits);
+        }
+        digits.add(num % 10);
+    }
+
+    public Integer[] getDigits(int num) {
+        if (num < 0) { return new Integer[0]; }
+        List<Integer> digits = new ArrayList<Integer>();
+        collectDigits(num, digits);
+        Collections.reverse(digits);
+        return digits.toArray(new Integer[]{});
+    }
+
+    public String serializeObject(Serializable o) throws IOException {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream oos = new ObjectOutputStream(baos);
+        oos.writeObject(o);
+        oos.close();
+        return Base64.getEncoder().encodeToString(baos.toByteArray());
+    }
+
+    public Object deserializeObject(String s) throws IOException,
+            ClassNotFoundException {
+        byte[] data = Base64.getDecoder().decode(s);
+        ObjectInputStream ois = new ObjectInputStream(
+                new ByteArrayInputStream(data));
+        Object o = ois.readObject();
+        ois.close();
+        return o;
     }
 
 

@@ -5,14 +5,15 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
+import org.savage.skyblock.island.quests.Quest;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Storage {
 
     public static List<String> permissionToCache = Arrays.asList("skyblock.block.hopper", "skyblock.block.spawner", "skyblock.members", "skyblock.protection");
+
+    public static HashMap<UUID, List<Quest>> completedQuestMessageQueue = new HashMap<>();
 
     //public static HashMap<Integer, Island> islandTopMap = new HashMap<>();
     public static int currentTop = 1;

@@ -9,6 +9,12 @@ settings:
 
   config-version: 1.3 # DO NOT CHANGE THIS!!!
 
+  debug: true # if you want debug messages in console enable this, if not set to "false"
+
+  data-save-interval: 5 # in minutes
+
+  quest-requirements-completed-messageInterval: 30 # every 30 seconds we want to notify the player that they have completed this quest's requirements and to complete the quest
+
   island-bank-name: '&aIsland Bank'
 
   fast-break-permission: 'skyblock.fastbreak' # allows players to break blocks fast, similar to Creative Mode

@@ -2,10 +2,13 @@ package org.savage.skyblock.events;
 
 import net.coreprotect.CoreProtect;
 import net.coreprotect.CoreProtectAPI;
+import net.ess3.api.events.UserBalanceUpdateEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -13,6 +16,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -20,11 +25,13 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import org.savage.skyblock.API.IslandEnterEvent;
 import org.savage.skyblock.API.IslandLeaveEvent;
 import org.savage.skyblock.API.IslandTeleportEvent;
+import org.savage.skyblock.Materials;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 public class PlayerEvents implements Listener {
@@ -166,6 +173,7 @@ public class PlayerEvents implements Listener {
         Player p = e.getPlayer();
         Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
         if (island == null) return;
+        MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId());
 
 
         Block block = e.getBlockPlaced();
@@ -238,6 +246,11 @@ public class PlayerEvents implements Listener {
         } else if (block.getType().equals(Material.HOPPER) || block.getType().equals(Material.MOB_SPAWNER)) {
             island.addBlockCount(type, spawner, 1);
         }
+
+        //log the material's main name for now...
+        //todo; allow for data type values... for 1.8 - 1.12
+
+        memoryPlayer.addBlocksPlaced(block.getType(), 0, spawner);
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -291,6 +304,46 @@ public class PlayerEvents implements Listener {
             } else if (block.getType().equals(Material.HOPPER) || block.getType().equals(Material.MOB_SPAWNER)) {
                 island.removeBlockCount(type, spawner, 1);
             }
+            MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId());
+            memoryPlayer.addBlocksBroken(block.getType(), 0, spawner);
+        }
+    }
+
+    @EventHandler
+    public void balanceChangeEvent(UserBalanceUpdateEvent e){
+        Player p = e.getPlayer();
+        double oldBalance = e.getOldBalance().doubleValue();
+        double newBalance = e.getNewBalance().doubleValue();
+
+        if (oldBalance > newBalance){
+            //means they lost money, so they're spending the money...
+            MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId());
+            double difference = oldBalance - newBalance;
+            memoryPlayer.setMoneySpent(memoryPlayer.getMoneySpent() + difference);
+        }
+    }
+
+    @EventHandler
+    public void killPlayer(PlayerDeathEvent e){
+        Player killer = e.getEntity().getKiller();
+        if (killer == null) return;
+        MemoryPlayer player = SkyBlock.getInstance().getUtils().getMemoryPlayer(killer.getUniqueId());
+        MemoryPlayer victim = SkyBlock.getInstance().getUtils().getMemoryPlayer(killer.getUniqueId());
+        player.setPlayerKills(player.getPlayerKills() + 1);
+        victim.setDeaths(victim.getDeaths() + 1);
+    }
+
+    @EventHandler
+    public void killMonster(EntityDeathEvent e){
+        LivingEntity livingEntity = e.getEntity();
+        if (livingEntity == null) return;
+        if (livingEntity instanceof ArmorStand) return;
+
+        if (livingEntity.getKiller() == null) return;
+        if (livingEntity.getKiller() instanceof Player){
+            Player p = livingEntity.getKiller();
+            MemoryPlayer player = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId());
+            player.setMobKills(player.getMobKills() + 1);
         }
     }
 }

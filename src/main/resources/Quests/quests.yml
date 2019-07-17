@@ -1,6 +1,7 @@
 # Quests File #
 
 placeholder:
+  progressBar-count: 10 # this means there will be 10 characters in the progress bar
   progressBar-Yes: '&a|'
   progressBar-No: '&8|'
 
@@ -26,3 +27,9 @@ questMenuUI:
       - ''
       - '&7&oClick to view your Daily Quests!'
       - ''
+
+questUI:
+  daily:
+    name: '&c&lDaily Quests'
+    rows: 3
+    faded-slots: '1,3'

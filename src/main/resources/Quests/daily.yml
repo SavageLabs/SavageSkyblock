@@ -1,7 +1,8 @@
 # Daily Quests File #
 
-quests-reset-time: 24 # in hours...
-current-reset-time: 24 # DO NOT MODIFY THIS UNLESS THE SERVER IS OFFLINE, this controls what the countdown is currently at...
+#quests-reset-time: 24 # in hours...
+#current-reset-time: 24 # DO NOT MODIFY THIS UNLESS THE SERVER IS OFFLINE, this controls what the countdown is currently at...
+
 
 quests:
   1:
@@ -11,25 +12,60 @@ quests:
     item-name: '&c&lTest Quest'
     item-lore:
       - ''
-      - '&7&oQuest Test'
+      - '&7&oTest Quest...'
       - ''
       - '&cRequirements:'
       - ''
       - '&bPlace Block: ( Diamond Block )'
-      - '&7- &c&l%1_progress%'
+      - '&7- &c&l%1_progressBar%'
+      - '&7- &a&l%1_progressNumFirst% &7/ &c&l%1_progressNumLast%'
+      - '&7- &c&l%1_progressPercent%%'
       - ''
-      - '&cPlay Time: ( 5 minutes )'
-      - '&7- &c&l%2_progress'
-
+      - '&bPlay Time: ( 5 minutes )'
+      - '&7- &c&l%2_progressBar%'
+      - '&7- &a&l%2_progressNumFirst% &7/ &c&l%2_progressNumLast%'
+      - '&7- &c&l%2_progressPercent%%'
     requirements:
       1:
         type: 'place_block'
         target-amount: 10
         block-type: 'diamond_block' # since we're using place_block, we need a block-type for this requirement, they need to place 10 diamond blocks.
-        block-data: 0
+        isSpawner: false
+        block-data: 0 # block-data can only be used when on Server Versions 1.8-1.12, for 1.13+ please use the material's full name for block-type and leave block-data 0.
       2:
         type: 'play_time'
-        target-amount: 5 # since we're using play_time, we need to specify how long, so play_time is measured in minutes.
-
+        target-amount: 5 # 5 minutes
+        time-type: 'MINUTES' # all time Types are: DAYS, HOURS, MINUTES
     reward-commands: # once the player completed this quest, they will receive these rewards...
       - 'msg %player% &cYou have completed QUEST 1!!!!!!'
+
+  2:
+    questName: '&b&lQuest 2'
+    item-id: 'diamond_sword'
+    item-data: 0
+    item-name: '&c&lTest Quest'
+    item-lore:
+      - ''
+      - '&7&oTest Quest...'
+      - ''
+      - '&cRequirements:'
+      - ''
+      - '&bVote once'
+      - '&7- &c&l%1_progressBar%'
+      - '&7- &a&l%1_progressNumFirst% &7/ &c&l%1_progressNumLast%'
+      - '&7- &c&l%1_progressPercent%%'
+      - ''
+      - '&bKill 5 monsters'
+      - '&7- &c&l%2_progressBar%'
+      - '&7- &a&l%2_progressNumFirst% &7/ &c&l%2_progressNumLast%'
+      - '&7- &c&l%2_progressPercent%%'
+    requirements:
+      1:
+        type: 'VOTE_AMOUNT'
+        target-amount: 1
+      2:
+        type: 'KILL_MOB'
+        target-amount: 5
+    reward-commands: # once the player completed this quest, they will receive these rewards...
+      - 'msg %player% &cYou have completed QUEST 2!'
+      - 'broadcast %player% &chas completed Quest 2!'
