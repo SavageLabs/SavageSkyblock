@@ -18,14 +18,12 @@ public class CustomFile {
 
     public void setup(boolean loadFromProject, String inFolder){
         if (!getFile().exists()){
-            //create
             if (loadFromProject){
                 if (!inFolder.equalsIgnoreCase("")){
                     SkyBlock.getInstance().saveResource(inFolder+"/"+file.getName(), false);
                 }else{
                     SkyBlock.getInstance().saveResource(file.getName(), false);
                 }
-
             }else{
                 try{
                     getFile().createNewFile();

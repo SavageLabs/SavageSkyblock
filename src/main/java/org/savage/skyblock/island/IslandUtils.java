@@ -169,13 +169,16 @@ public class IslandUtils {
             island.setBlockWorth(0);
             island.setSpawnerWorth(0);
 
-            for (Map.Entry<FakeItem, Integer> entry : island.getBlocks().entrySet()) {
-                FakeItem fakeItem = entry.getKey();
-                int amount = entry.getValue();
+            Iterator it = island.getBlocks().entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry pair = (Map.Entry)it.next();
+
+                FakeItem fakeItem = (FakeItem)pair.getKey();
+                int amount = (int)pair.getValue();
                 if (amount == 0) continue;
                 double val;
 
-               // System.out.print("\n "+fakeItem.getType()+","+amount+"\n");
+                // System.out.print("\n "+fakeItem.getType()+","+amount+"\n");
 
                 if (fakeItem.isSpawner()) {
                     val = getMoneyWorth(fakeItem.getType(), true) * amount;
@@ -188,6 +191,7 @@ public class IslandUtils {
                     val = getLevelWorth(fakeItem.getType(), false) * amount;
                     island.addLevel(val);
                 }
+                it.remove(); // avoids a ConcurrentModificationException
             }
 
             double level = island.getLevel();

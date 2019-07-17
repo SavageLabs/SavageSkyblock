@@ -8,9 +8,11 @@ main: org.savage.skyblock.SkyBlock
 depend:
   - WorldEdit
   - Vault
+  - Essentials
 
 softdepend:
   - WildStacker
+  - Votifier
 
 load: POSTWORLD
 

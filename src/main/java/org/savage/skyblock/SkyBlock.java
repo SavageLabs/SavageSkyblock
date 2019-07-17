@@ -1,5 +1,6 @@
 package org.savage.skyblock;
 
+import com.sun.jna.Memory;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -19,7 +20,10 @@ import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.IslandUtils;
 import org.savage.skyblock.island.MemoryPlayer;
+import org.savage.skyblock.island.quests.Quest;
+import org.savage.skyblock.island.quests.QuestUI;
 import org.savage.skyblock.island.quests.Quests;
+import org.savage.skyblock.island.quests.Requirement;
 import org.savage.skyblock.island.upgrades.Upgrade;
 import org.savage.skyblock.island.upgrades.UpgradesUI;
 import org.savage.skyblock.island.warps.WarpUI;
@@ -28,6 +32,7 @@ import org.savage.skyblock.worldedit.WorldEditPersistence;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 public class SkyBlock extends JavaPlugin {
@@ -112,6 +117,7 @@ public class SkyBlock extends JavaPlugin {
         pm.registerEvents(new UpgradesUI(), this);
         pm.registerEvents(new UpgradeEvents(), this);
         pm.registerEvents(new WarpUI(), this);
+        pm.registerEvents(new QuestUI(), this);
 
         WorldEditPersistence.worldEditVersion = Bukkit.getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();
 
@@ -125,6 +131,30 @@ public class SkyBlock extends JavaPlugin {
         startCalculationTimer();
 
         startCacheTimer();
+
+        for (Player p : Bukkit.getOnlinePlayers()){
+            if (!SkyBlock.getInstance().getUtils().hasMemoryPlayer(p.getUniqueId())){
+                SkyBlock.getInstance().getUtils().loadPlayer(p.getUniqueId());
+            }
+        }
+
+        int saveInterval = getConfig().getInt("settings.data-save-interval") * 20 * 60;
+
+        new BukkitRunnable(){
+            boolean debug = getConfig().getBoolean("settings.debug");
+            @Override
+            public void run() {
+                CompletableFuture.runAsync(() ->{
+                    //do saving
+                    getUtils().saveIslands();
+                    getUtils().savePlayers();
+                    if (debug){
+                        System.out.print("\n\n SavageSkyBlock: Saved all Data Async. \n\n");
+                    }
+
+                });
+            }
+        }.runTaskTimer(this, 0, saveInterval);
 
     }
 
@@ -183,6 +213,53 @@ public class SkyBlock extends JavaPlugin {
                 for (Player p : Bukkit.getOnlinePlayers()){
                     if (getUtils().hasMemoryPlayer(p.getUniqueId())) {
                         MemoryPlayer memoryPlayer = getUtils().getMemoryPlayer(p.getUniqueId());
+
+                        memoryPlayer.setPlayTime(Math.addExact(memoryPlayer.getPlayTime(), 1));
+
+
+                        //check for requirements here...
+
+                        List<Quest> quests = getQuests().questList;
+                        quests.removeAll(memoryPlayer.getCompletedQuests());
+
+                        for (Quest quest : quests){
+                            boolean has = true;
+                            for (Requirement requirement : quest.getRequirements()){
+                                if (!getQuests().hasRequirement(p.getUniqueId(), requirement)){
+                                    has = false;
+                                }
+                            }
+                            if (has){
+                                //they have completed them all for this quest... send them the message...
+                                //check if that specific quest is not in the map cached
+                                if (Storage.completedQuestMessageQueue.get(p.getUniqueId()) == null || !Storage.completedQuestMessageQueue.get(p.getUniqueId()).contains(quest)){
+                                    List<Quest> q = new ArrayList<>();
+                                    if (Storage.completedQuestMessageQueue.get(p.getUniqueId()) != null){
+                                        q = Storage.completedQuestMessageQueue.get(p.getUniqueId());
+                                    }
+                                    q.add(quest);
+                                    Storage.completedQuestMessageQueue.remove(p.getUniqueId());
+                                    Storage.completedQuestMessageQueue.put(p.getUniqueId(), q);
+                                    //send the message
+
+                                    p.sendMessage(getUtils().getMessage("island-quest-requirements-completed").replace("%quest%", getUtils().color(quest.getName())));
+
+                                    new BukkitRunnable(){
+                                        @Override
+                                        public void run() {
+                                            // remove the quest from the cached message list, because we want to re-send the message the next interval...
+                                            List<Quest> q = Storage.completedQuestMessageQueue.get(p.getUniqueId());
+                                            q.remove(quest);
+                                            Storage.completedQuestMessageQueue.remove(p.getUniqueId());
+                                            Storage.completedQuestMessageQueue.put(p.getUniqueId(), q);
+                                            //removed from the cache, so now the next interval we will send the message
+                                        }
+                                    }.runTaskLater(SkyBlock.getInstance(), getConfig().getInt("settings.quest-requirements-completed-messageInterval")* 20);
+                                }
+                            }
+                        }
+
+
                         for (PermissionAttachmentInfo pInfo : p.getEffectivePermissions()) {
                             String perm = pInfo.getPermission();
                             for (String permBase : Storage.permissionToCache){

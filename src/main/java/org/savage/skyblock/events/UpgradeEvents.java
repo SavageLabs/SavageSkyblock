@@ -1,6 +1,4 @@
 package org.savage.skyblock.events;
-
-import org.bukkit.Bukkit;
 import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,7 +7,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockFormEvent;
 import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockGrowEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
@@ -23,6 +20,11 @@ import java.util.HashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class UpgradeEvents implements Listener {
+
+    //@EventHandler
+    //public void voteHandler(VotifierEvent e){
+//
+    //}
 
     @EventHandler
     public void generator(BlockFromToEvent e){

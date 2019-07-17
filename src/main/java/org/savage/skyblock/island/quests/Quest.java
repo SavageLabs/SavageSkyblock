@@ -58,25 +58,25 @@ public class Quest {
             itemID = f.getString("quests."+getId()+".item-id");
             itemData = f.getInt("quests."+getId()+".item-data");
             itemName = f.getString("quests."+getId()+".item-name");
-            itemLore = f.getStringList("quests."+getId()+".item-lore");
+            itemLore = SkyBlock.getInstance().getQuests().convertQuestPlaceholders(f.getStringList("quests."+getId()+".item-lore"), p, QuestType.DAILY, getId());
         }
         if (getQuestType().equals(QuestType.FOREVER)){
             itemID = f.getString("quests."+getId()+".item-id");
             itemData = f.getInt("quests."+getId()+".item-data");
             itemName = f.getString("quests."+getId()+".item-name");
-            itemLore = f.getStringList("quests."+getId()+".item-lore");
+            itemLore = SkyBlock.getInstance().getQuests().convertQuestPlaceholders(f.getStringList("quests."+getId()+".item-lore"), p, QuestType.FOREVER, getId());
         }
         if (getQuestType().equals(QuestType.WEEKLY)){
             itemID = f.getString("quests."+getId()+".item-id");
             itemData = f.getInt("quests."+getId()+".item-data");
             itemName = f.getString("quests."+getId()+".item-name");
-            itemLore = f.getStringList("quests."+getId()+".item-lore");
+            itemLore = SkyBlock.getInstance().getQuests().convertQuestPlaceholders(f.getStringList("quests."+getId()+".item-lore"), p, QuestType.WEEKLY, getId());
         }
         if (getQuestType().equals(QuestType.MONTHLY)){
             itemID = f.getString("quests."+getId()+".item-id");
             itemData = f.getInt("quests."+getId()+".item-data");
             itemName = f.getString("quests."+getId()+".item-name");
-            itemLore = f.getStringList("quests."+getId()+".item-lore");
+            itemLore = SkyBlock.getInstance().getQuests().convertQuestPlaceholders(f.getStringList("quests."+getId()+".item-lore"), p, QuestType.MONTHLY, getId());
         }
 
         item = SkyBlock.getInstance().getUtils().createItem(itemID, itemData, itemName, itemLore, 1);
