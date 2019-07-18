@@ -128,6 +128,7 @@ public class Utils {
             int playerKills = memoryPlayer.getPlayerKills();
             int mobKills = memoryPlayer.getMobKills();
             int deaths = memoryPlayer.getDeaths();
+            int votes = memoryPlayer.getVotes();
 
             String blocksPlacedString = "";
             String blocksBrokenString = "";
@@ -151,7 +152,7 @@ public class Utils {
                 }
             }
 
-            data.add(uuid.toString()+";"+islandName+";"+resets+";"+playTime+";"+blocksPlacedString+";"+blocksBrokenString+";"+completedQuests+";"+moneySpent+";"+playerKills+";"+mobKills+";"+deaths);
+            data.add(uuid.toString()+";"+islandName+";"+resets+";"+playTime+";"+blocksPlacedString+";"+blocksBrokenString+";"+completedQuests+";"+moneySpent+";"+playerKills+";"+mobKills+";"+deaths+";"+votes);
         }
         SkyBlock.getInstance().getFileManager().getPlayerData().getFileConfig().set("players", data);
         SkyBlock.getInstance().getFileManager().getPlayerData().saveFile();
@@ -193,6 +194,7 @@ public class Utils {
                     int mobKills = 0;
                     int playerKills = 0;
                     int deaths = 0;
+                    int votes = 0;
 
                     if (!l[4].equalsIgnoreCase("")){
                         try{
@@ -233,6 +235,7 @@ public class Utils {
                             playerKills = Integer.parseInt(l[8]);
                             mobKills = Integer.parseInt(l[9]);
                             deaths = Integer.parseInt(l[10]);
+                            votes = Integer.parseInt(l[11]);
                         }catch(NumberFormatException e){ }
 
                     }catch(ArrayIndexOutOfBoundsException e){ }
@@ -243,6 +246,7 @@ public class Utils {
                     memoryPlayer.setPlayerKills(playerKills);
                     memoryPlayer.setMobKills(mobKills);
                     memoryPlayer.setDeaths(deaths);
+                    memoryPlayer.setVotes(votes);
 
                     memoryPlayer.setResets(islandResets);
                     memoryPlayer.setPlayTime(playTime);
@@ -693,7 +697,7 @@ public class Utils {
         if (progress > barNum){
             progress = barNum;
         }
-        if (progress > totalProgress){
+        if (progress >= totalProgress){
             progress = barNum;
         }
 

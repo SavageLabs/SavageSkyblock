@@ -1,25 +1,30 @@
 # Quests File #
 
+enable-quests: true # set to false to disable ALL quest features...
+
 placeholder:
   progressBar-count: 10 # this means there will be 10 characters in the progress bar
   progressBar-Yes: '&a|'
   progressBar-No: '&8|'
 
-  requirement-types:
-    spend_currency: '&aSpend Currency'
-    have_currency: '&cHave Currency'
-    break_block: '&bBreak Blocks'
-    place_block: '&bPlace Blocks'
-    have_quest: '&9Have Quest'
-    play_time: '&bPlay Time'
-
-
 questMenuUI:
   name: '&b&lQuests Menu'
   rows: 3
+  faded-slots: '1,2,3,4,5,6,7,8,9,10,12,14,16,18,19,20,21,22,23,24,25,26,27'
 
+  forever:
+    enabled: true
+    slot: 11
+    item-id: 'diamond_block'
+    item-data: 0
+    item-name: '&9&lForever Quests'
+    item-lore:
+      - ''
+      - '&7&oClick to view your Forever Quests!'
+      - ''
   daily:
-    slot: 1
+    enabled: true
+    slot: 13
     item-id: 'diamond_block'
     item-data: 0
     item-name: '&c&lDaily Quests'
@@ -27,9 +32,41 @@ questMenuUI:
       - ''
       - '&7&oClick to view your Daily Quests!'
       - ''
+  weekly:
+    enabled: true
+    slot: 15
+    item-id: 'diamond_block'
+    item-data: 0
+    item-name: '&b&lWeekly Quests'
+    item-lore:
+      - ''
+      - '&7&oClick to view your Weekly Quests!'
+      - ''
+  monthly:
+    enabled: true
+    slot: 17
+    item-id: 'diamond_block'
+    item-data: 0
+    item-name: '&a&lMonthly Quests'
+    item-lore:
+      - ''
+      - '&7&oClick to view your Monthly Quests!'
+      - ''
 
 questUI:
+  forever:
+    name: '&9&lForever Quests'
+    rows: 3
+    faded-slots: '1,2,3,4,5,6,7,8,9,10,12,14,16,18,19,20,21,22,23,24,25,26,27'
   daily:
     name: '&c&lDaily Quests'
     rows: 3
-    faded-slots: '1,3'
+    faded-slots: '1,2,3,4,5,6,7,8,9,10,12,14,16,18,19,20,21,22,23,24,25,26,27'
+  weekly:
+    name: '&b&lWeekly Quests'
+    rows: 3
+    faded-slots: '1,2,3,4,5,6,7,8,9,10,12,14,16,18,19,20,21,22,23,24,25,26,27'
+  monthly:
+    name: '&a&lMonthly Quests'
+    rows: 3
+    faded-slots: '1,2,3,4,5,6,7,8,9,10,12,14,16,18,19,20,21,22,23,24,25,26,27'

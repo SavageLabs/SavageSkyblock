@@ -30,6 +30,7 @@ public class MemoryPlayer {
     private int playerKills = 0;
     private int mobKills = 0;
     private int deaths = 0;
+    private int votes = 0;
 
     private int resets;
 
@@ -40,6 +41,15 @@ public class MemoryPlayer {
 
     public List<Quest> getCompletedQuests() {
         return completedQuests;
+    }
+
+
+    public int getVotes() {
+        return votes;
+    }
+
+    public void setVotes(int votes) {
+        this.votes = votes;
     }
 
     public int getDeaths() {

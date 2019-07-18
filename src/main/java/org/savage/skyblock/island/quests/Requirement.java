@@ -27,6 +27,10 @@ public class Requirement {
         this.targetAmount = targetAmount;
     }
 
+    public void setUpgradeType(Upgrade upgradeType) {
+        this.upgradeType = upgradeType;
+    }
+
     public Upgrade getUpgradeType() {
         return upgradeType;
     }

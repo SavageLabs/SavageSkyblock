@@ -1,11 +1,8 @@
 # Daily Quests File #
 
-#quests-reset-time: 24 # in hours...
-#current-reset-time: 24 # DO NOT MODIFY THIS UNLESS THE SERVER IS OFFLINE, this controls what the countdown is currently at...
-
-
 quests:
   1:
+    enabled: true
     questName: '&c&lTest Quest'
     item-id: 'diamond_block'
     item-data: 0
@@ -40,6 +37,7 @@ quests:
       - 'msg %player% &cYou have completed QUEST 1!!!!!!'
 
   2:
+    enabled: true
     questName: '&b&lQuest 2'
     item-id: 'diamond_sword'
     item-data: 0
@@ -59,13 +57,23 @@ quests:
       - '&7- &c&l%2_progressBar%'
       - '&7- &a&l%2_progressNumFirst% &7/ &c&l%2_progressNumLast%'
       - '&7- &c&l%2_progressPercent%%'
+      - ''
+      - '&bUpgrade Island-Bank (tier 2)'
+      - '&7- &c&l%3_progressBar%'
+      - '&7- &a&l%3_progressNumFirst% &7/ &c&l%3_progressNumLast%'
+      - '&7- &c&l%3_progressPercent%%'
     requirements:
       1:
-        type: 'VOTE_AMOUNT'
+        type: 'vote_amount'
         target-amount: 1
       2:
-        type: 'KILL_MOB'
+        type: 'kill_mob'
         target-amount: 5
+      3:
+        type: 'is_upgrade_tier'
+        upgrade: 'bank-size'
+        target-amount: 2 # in this case, target-amount represents the tier of the upgrade
+
     reward-commands: # once the player completed this quest, they will receive these rewards...
       - 'msg %player% &cYou have completed QUEST 2!'
       - 'broadcast %player% &chas completed Quest 2!'
