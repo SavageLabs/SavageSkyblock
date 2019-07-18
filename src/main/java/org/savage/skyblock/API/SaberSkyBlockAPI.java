@@ -1,5 +1,7 @@
-package org.savage.skyblock;
+package org.savage.skyblock.API;
 
+import org.savage.skyblock.SkyBlock;
+import org.savage.skyblock.Utils;
 import org.savage.skyblock.filemanager.FileManager;
 import org.savage.skyblock.generators.WorldGenerator;
 import org.savage.skyblock.island.IslandUtils;

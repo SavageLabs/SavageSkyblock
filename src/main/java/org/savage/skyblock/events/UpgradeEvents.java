@@ -1,10 +1,13 @@
 package org.savage.skyblock.events;
+import com.vexsoftware.votifier.model.VotifierEvent;
+import org.bukkit.Bukkit;
 import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -14,6 +17,7 @@ import org.bukkit.material.Crops;
 import org.savage.skyblock.MultiMaterials;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.MemoryPlayer;
 import org.savage.skyblock.island.upgrades.Upgrade;
 
 import java.util.HashMap;
@@ -21,10 +25,15 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class UpgradeEvents implements Listener {
 
-    //@EventHandler
-    //public void voteHandler(VotifierEvent e){
-//
-    //}
+   @EventHandler
+   public void voteHandler(VotifierEvent e){
+       String username = e.getVote().getUsername();
+       Player p = Bukkit.getPlayerExact(username);
+       if (p != null && p.isOnline()){
+           MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId());
+           memoryPlayer.setVotes(memoryPlayer.getVotes() + 1);
+       }
+   }
 
     @EventHandler
     public void generator(BlockFromToEvent e){

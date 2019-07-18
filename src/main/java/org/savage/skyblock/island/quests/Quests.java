@@ -262,68 +262,71 @@ public class Quests {
 
     public void loadQuests(){
         //load all of the quests into memory
-
-        //load from each file...
-
+        boolean debug = SkyBlock.getInstance().getUtils().getSettingBool("debug");
         for (Enum type : Quest.QuestType.values()){
             FileConfiguration f = getConfig(type);
             if (f == null) continue;
 
-            if (!type.equals(Quest.QuestType.DAILY)){
-                continue;
-            }
-
             int max = f.getConfigurationSection("quests").getKeys(false).size();
 
-            for (int a = 1; a<= max; a++){
+            for (int a = 1; a<= max; a++) {
                 int questID = a;
-                String questName = f.getString("quests."+a+".questName");
 
-                //build the requirements now...
+                if (f.getBoolean("quests." + a + ".enabled")) {
+                    String questName = f.getString("quests." + a + ".questName");
 
-                Quest quest = new Quest(type, questID, questName); // created the quest instance
+                    //build the requirements now...
 
-                int requirementMax = f.getConfigurationSection("quests."+a+".requirements").getKeys(false).size();
+                    Quest quest = new Quest(type, questID, questName); // created the quest instance
 
-                for (int b = 1; b<= requirementMax; b++){
-                    //we're in the requirement list now...
-                    Enum requirementType = RequirementType.valueOf(f.getString("quests."+a+".requirements."+b+".type").toUpperCase());
+                    int requirementMax = f.getConfigurationSection("quests." + a + ".requirements").getKeys(false).size();
 
-                    if (requirementType == null) continue;
+                    for (int b = 1; b <= requirementMax; b++) {
+                        //we're in the requirement list now...
+                        Enum requirementType = RequirementType.valueOf(f.getString("quests." + a + ".requirements." + b + ".type").toUpperCase());
 
-                    int targetAmount = f.getInt("quests."+a+".requirements."+b+".target-amount");
+                        if (requirementType == null) continue;
 
-                    Requirement requirement = new Requirement(quest, requirementType, targetAmount);
+                        int targetAmount = f.getInt("quests." + a + ".requirements." + b + ".target-amount");
 
-                    //now we check for block type, or any other arguments we need
+                        Requirement requirement = new Requirement(quest, requirementType, targetAmount);
 
-                    if (requirementType.equals(RequirementType.BREAK_BLOCK) || requirementType.equals(RequirementType.PLACE_BLOCK)){
-                        //either break, or place block, check for block-type data
-                        String materialName = f.getString("quests."+a+".requirements."+b+".block-type");
-                        boolean isSpawner = f.getBoolean("quests."+a+".requirements."+b+".isSpawner");
-                        int blockData = f.getInt("quests."+a+".requirements."+b+".block-data");
-                        Material material;
-                        if (Material.getMaterial(materialName) != null){
-                            //got a valid material id
-                            material = Material.getMaterial(materialName);
-                        }else{
-                            material = Materials.requestXMaterial(materialName, (byte)blockData).parseMaterial();
+                        //now we check for block type, or any other arguments we need
+
+                        if (requirementType.equals(RequirementType.BREAK_BLOCK) || requirementType.equals(RequirementType.PLACE_BLOCK)) {
+                            //either break, or place block, check for block-type data
+                            String materialName = f.getString("quests." + a + ".requirements." + b + ".block-type");
+                            boolean isSpawner = f.getBoolean("quests." + a + ".requirements." + b + ".isSpawner");
+                            int blockData = f.getInt("quests." + a + ".requirements." + b + ".block-data");
+                            Material material;
+                            if (Material.getMaterial(materialName) != null) {
+                                //got a valid material id
+                                material = Material.getMaterial(materialName);
+                            } else {
+                                material = Materials.requestXMaterial(materialName, (byte) blockData).parseMaterial();
+                            }
+                            requirement.setRequirementMaterial(material);
+                            requirement.setRequirementMaterialSpawner(isSpawner);
                         }
-                        requirement.setRequirementMaterial(material);
-                        requirement.setRequirementMaterialSpawner(isSpawner);
+
+                        if (requirementType.equals(RequirementType.PLAY_TIME)) {
+                            //get the time-type
+                            Enum timeType = Utils.time.valueOf(f.getString("quests." + a + ".requirements." + b + ".time-type"));
+                            requirement.setTimeType(timeType);
+                        }
+
+                        if (requirementType.equals(RequirementType.IS_UPGRADE_TIER)) {
+                            //get the upgrade type we want to it
+                            Upgrade upgradeType = Upgrade.Upgrades.getUpgrade(f.getString("quests." + a + ".requirements." + b + ".upgrade"));
+                            requirement.setUpgradeType(upgradeType);
+                        }
+                        //add requirement to the quest now...
+                        quest.addRequirement(requirement);
                     }
-
-                    if (requirementType.equals(RequirementType.PLAY_TIME)){
-                        //get the time-type
-                        Enum timeType = Utils.time.valueOf(f.getString("quests."+a+".requirements."+b+".time-type"));
-                        requirement.setTimeType(timeType);
+                    if (debug){
+                        SkyBlock.getInstance().getUtils().log("Loaded Quest: " + questName + ", " + questID + " : Requirements = " + quest.getRequirements().toString());
                     }
-
-                    //add requirement to the quest now...
-                    quest.addRequirement(requirement);
-
                 }
-                SkyBlock.getInstance().getUtils().log("Loaded Quest: "+questName+", "+questID+" : Requirements = "+quest.getRequirements().toString());
             }
         }
     }
