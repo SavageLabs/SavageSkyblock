@@ -137,6 +137,9 @@
             <scope>provided</scope>
         </dependency>
 
+
+
+
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
@@ -148,6 +151,7 @@
             <groupId>be.maximvdw</groupId>
             <artifactId>MVdWPlaceholderAPI</artifactId>
             <version>2.2.3-SNAPSHOT</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
