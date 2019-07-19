@@ -1,6 +1,6 @@
 # SavageSkyblock #
 
-Information Doc: https://docs.google.com/document/d/12fwGgU35YeNu8Iu8LPHXqZyNfrpGX0htTdaK3vRWhAg/edit
+WIKI: https://wiki.prosavage.net/display/savageskyblock/Getting+Started
 
 The Complete SkyBlock Plugin With Enhanced Features
 
@@ -18,8 +18,12 @@ while boasting a massive selection of features!
 - IS-TOP ( add block and spawner value )
 - Completely customizable GUI's
 - Island Schematic permissions ( set permissions for certain island schematics )
+- IS Quests
+- IS Banks
 
 
 # Dependencies #
 
 - WorldEdit (6 for 1.8 -> 1.12, 7 for 1.13 -> 1.14)
+- Vault
+- Essentials
