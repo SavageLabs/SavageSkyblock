@@ -1,42 +1,51 @@
 package org.savage.skyblock.API;
 
-import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.savage.skyblock.island.Island;
 
-/**
- * @author Trent @ Aysteria Development
- * <p>
- * Event when a player leaves an Island's zone
- */
+import java.util.UUID;
 
-public class IslandLeaveEvent extends Event {
+public class IslandLeaveEvent extends Event implements Cancellable {
+
+    @Override
+    public boolean isCancelled() {
+        return this.isCancelled;
+    }
+
+    @Override
+    public void setCancelled(boolean arg0) {
+        this.isCancelled = arg0;
+    }
 
     private static final HandlerList handlers = new HandlerList();
-
-    private Island island;
-    private Player player;
-
-    public IslandLeaveEvent(Player player, Island island) {
-        this.player = player;
-        this.island = island;
-    }
-
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
 
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
 
-    public Player getPlayer() {
-        return player;
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
+
+    private UUID target;
+    private Island island;
+    private boolean isCancelled;
+
+    public IslandLeaveEvent(Island island, UUID target) {
+        this.island = island;
+        this.target = target;
+        this.isCancelled = false;
     }
 
     public Island getIsland() {
         return island;
     }
+
+    public UUID getTarget() {
+        return target;
+    }
+
 }

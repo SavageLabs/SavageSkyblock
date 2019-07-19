@@ -1,7 +1,5 @@
 package org.savage.skyblock;
 
-import net.minecraft.server.v1_14_R1.DefinedStructureProcessorBlockIgnore;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.savage.skyblock.island.Island;

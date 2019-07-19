@@ -265,20 +265,27 @@ public class Utils {
                             memoryPlayer.setIsland(island);
                         }
                     }
+                    Island island = SkyBlock.getInstance().getIslandUtils().getIsland(pUUID);
+                    if (island != null){
+                        memoryPlayer.setIsland(island);
+                    }
                     if (Bukkit.getPlayer(pUUID) != null){
                         memoryPlayer.setPlayer(Bukkit.getPlayer(pUUID));
                     }
                 }
             }
-            if (memoryPlayer == null){
-                //couldn't find any data to load. we make new
-                memoryPlayer = new MemoryPlayer(pUUID);
-                Island island = SkyBlock.getInstance().getIslandUtils().getIsland(pUUID);
-                if (island != null){
-                    memoryPlayer.setIsland(island);
-                }
-                memoryPlayer.setResets(0);
+        }
+        if (memoryPlayer == null){
+            //couldn't find any data to load. we make new
+            memoryPlayer = new MemoryPlayer(pUUID);
+            Island island = SkyBlock.getInstance().getIslandUtils().getIsland(pUUID);
+            if (island != null){
+                memoryPlayer.setIsland(island);
             }
+            if (Bukkit.getPlayer(pUUID) != null){
+                memoryPlayer.setPlayer(Bukkit.getPlayer(pUUID));
+            }
+            memoryPlayer.setResets(0);
         }
     }
 

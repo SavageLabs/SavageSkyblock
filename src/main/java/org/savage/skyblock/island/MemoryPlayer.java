@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.quests.Quest;
+import org.savage.skyblock.island.scoreboards.CScoreboard;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class MemoryPlayer {
 
     //we cache our player shit here
+    private CScoreboard scoreboard;
     private UUID uuid;
     private Player player;
     private Island island;
@@ -43,6 +45,13 @@ public class MemoryPlayer {
         return completedQuests;
     }
 
+    public void setScoreboard(CScoreboard scoreboard) {
+        this.scoreboard = scoreboard;
+    }
+
+    public CScoreboard getScoreboard() {
+        return scoreboard;
+    }
 
     public int getVotes() {
         return votes;

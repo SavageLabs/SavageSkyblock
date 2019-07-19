@@ -1,0 +1,19 @@
+# Scoreboard.yml #
+
+scoreboard-title: '&c&lSavageSkyBlock'
+scoreboard-update-time: 5 # in ticks, 20 ticks = 1 second, 5 ticks = 0.25 seconds
+scoreboard-enabled: true # set to false to disable scoreboard for everyone
+
+placeholders:
+  none: '&c&lN/A'
+
+scoreboard-rows:
+  - ' '
+  - '&7Island: &c%island%'
+  - '&7Player: &c%player%'
+  - '&7Money: &a$&c%money%'
+  - ' '
+  - '&7IS-Bank: &a$&l%is-bank%'
+  - '&7IS-TOP:&a #&l%is-top%'
+  - '&7IS-Worth: &a$&l%is-worth%'
+  - ' '

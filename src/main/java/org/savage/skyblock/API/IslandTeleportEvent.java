@@ -54,10 +54,10 @@ public class IslandTeleportEvent extends Event implements Cancellable {
             if (islandFrom != islandTo){
                 Player p = Bukkit.getPlayer(getTarget());
                 if (islandFrom != null){
-                    Bukkit.getPluginManager().callEvent(new IslandLeaveEvent(p, islandFrom));
+                    Bukkit.getPluginManager().callEvent(new IslandLeaveTerritoryEvent(p, islandFrom));
                 }
                 if (islandTo != null){
-                    Bukkit.getPluginManager().callEvent(new IslandEnterEvent(p, islandTo));
+                    Bukkit.getPluginManager().callEvent(new IslandEnterTerritoryEvent(p, islandTo));
                 }
             }
         }

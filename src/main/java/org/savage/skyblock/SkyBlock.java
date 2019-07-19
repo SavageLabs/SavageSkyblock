@@ -5,6 +5,7 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +26,7 @@ import org.savage.skyblock.island.quests.Quest;
 import org.savage.skyblock.island.quests.QuestUI;
 import org.savage.skyblock.island.quests.Quests;
 import org.savage.skyblock.island.quests.Requirement;
+import org.savage.skyblock.island.scoreboards.IslandBoard;
 import org.savage.skyblock.island.upgrades.Upgrade;
 import org.savage.skyblock.island.upgrades.UpgradesUI;
 import org.savage.skyblock.island.warps.WarpUI;
@@ -45,6 +47,7 @@ public class SkyBlock extends JavaPlugin {
     private IslandUtils islandUtils;
     private ReflectionManager reflectionManager;
     private Quests quests;
+    private IslandBoard islandBoard;
 
     public List<Player> safePlayers = new ArrayList<>();
 
@@ -82,6 +85,10 @@ public class SkyBlock extends JavaPlugin {
         return reflectionManager;
     }
 
+    public IslandBoard getIslandBoard() {
+        return islandBoard;
+    }
+
     public void onEnable(){
         instance = this;
         worldGenerator = new WorldGenerator();
@@ -90,6 +97,7 @@ public class SkyBlock extends JavaPlugin {
         islandUtils = new IslandUtils();
         reflectionManager = new ReflectionManager();
         quests = new Quests();
+        islandBoard = new IslandBoard();
 
         MultiMaterials.setupMultiversionMaterials();
 
@@ -131,6 +139,14 @@ public class SkyBlock extends JavaPlugin {
         getUtils().loadIslands(); // load Islands
 
         getQuests().loadQuests(); // load Quests
+
+        islandBoard.updateBoard();
+
+        PluginHook.registerMVdPlaceholders();
+
+        if (PluginHook.isEnabled("PlaceholderAPI")){
+            new PAPIExpansion(this).register();
+        }
 
         startTopTimer();
         startCalculationTimer();

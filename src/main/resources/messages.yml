@@ -45,6 +45,9 @@ messages:
   setPermission: '&aYou have updated &9%role%&a''s permission for &9%type%&a to &d%outcome%&a!'
   noIsland: '&aYou do not have an Island!'
   noIslandHere: '&cThere is not an Island here!'
+  isOwner: '&cYou are the owner of the Island! Gift the ownership to someone else before doing this.'
+  leftIsland: '&c%player% has left the island!'
+  leftIslandSelf: '&aYou have left the Island...'
   ##########################################################################################
 
   ##########################################################################################
