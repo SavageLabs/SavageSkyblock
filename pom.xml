@@ -223,11 +223,6 @@
 
     <repositories>
         <repository>
-            <id>jitpack.io</id>
-            <url>https://jitpack.io</url>
-        </repository>
-
-        <repository>
             <id>enginehub-maven</id>
             <url>http://maven.enginehub.org/repo/</url>
         </repository>
@@ -265,6 +260,11 @@
             <id>mvdw-software</id>
             <name>MVdW Public Repositories</name>
             <url>http://repo.mvdw-software.be/content/groups/public/</url>
+        </repository>
+
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
