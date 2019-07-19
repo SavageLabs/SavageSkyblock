@@ -11,11 +11,10 @@ import java.util.*;
 
 public class Storage {
 
-    public static List<String> permissionToCache = Arrays.asList("skyblock.block.hopper", "skyblock.block.spawner", "skyblock.members", "skyblock.protection");
+    public static List<String> permissionToCache = Arrays.asList("skyblock.block.hopper", "skyblock.block.spawner", "skyblock.members", "skyblock.protection", "skyblock.resets");
 
     public static HashMap<UUID, List<Quest>> completedQuestMessageQueue = new HashMap<>();
 
-    //public static HashMap<Integer, Island> islandTopMap = new HashMap<>();
     public static int currentTop = 1;
 
     public static List<Island> islandList = new ArrayList<>();

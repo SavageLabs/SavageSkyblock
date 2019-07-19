@@ -55,6 +55,9 @@ public enum Upgrade {
                 if (upgrade.getId() == 4) {
                     return island.getHopperLimit();
                 }
+                if (upgrade.getId() == 5) {
+                    return island.getSpawnerLimit();
+                }
                 //if we're not returned yet, return the config values for the tier
                 return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getInt("upgrades."+name+".tiers."+tier+".upgrade-value");
             }
@@ -69,7 +72,7 @@ public enum Upgrade {
         public static int getMaxTier(Upgrade upgrade){
             String name = upgrade.getName();
             int m = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getConfigurationSection("upgrades."+name+".tiers").getKeys(false).size();
-            if (upgrade.equals(Upgrade.GENERATOR) || upgrade.equals(Upgrade.BANK_SIZE)){
+            if (upgrade.equals(Upgrade.GENERATOR) || upgrade.equals(Upgrade.BANK_SIZE) || upgrade.equals(Upgrade.WARP_AMOUNT)){
                 return m - 1;
             }
             return m;

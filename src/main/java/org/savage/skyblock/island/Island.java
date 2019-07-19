@@ -1,5 +1,6 @@
 package org.savage.skyblock.island;
 
+import com.sun.jna.Memory;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Biome;
@@ -509,6 +510,11 @@ public class Island {
             Bukkit.getPluginManager().callEvent(deleteEvent);
 
             if (!deleteEvent.isCancelled()) {
+
+                MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(getOwnerUUID());
+                if (memoryPlayer != null){
+                    memoryPlayer.setResets(memoryPlayer.getResets() + 1);
+                }
 
                 int radius = getProtectionRadius();
 

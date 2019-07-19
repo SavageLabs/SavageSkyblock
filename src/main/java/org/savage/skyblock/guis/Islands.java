@@ -10,6 +10,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.savage.skyblock.SkyBlock;
+import org.savage.skyblock.island.MemoryPlayer;
 
 import java.util.List;
 
@@ -54,6 +55,19 @@ public class Islands implements Listener {
 
                             if (name.equalsIgnoreCase(name2)) {
                                 //create island
+                                //check their current resets
+                                MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId());
+                                if (memoryPlayer != null){
+                                    int resetMax = SkyBlock.getInstance().getUtils().getSettingInt("default-reset-limit");
+                                    if (memoryPlayer.getResets() >= resetMax){
+                                        if (memoryPlayer.getPermissionValue("skyblock.resets") <= memoryPlayer.getResets()){
+                                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-reset-max"));
+                                            return;
+                                        }
+                                        p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("island-reset-max"));
+                                        return;
+                                    }
+                                }
                                 SkyBlock.getInstance().getIslandUtils().createIsland(p, perm, schematic);
                             }
                         }

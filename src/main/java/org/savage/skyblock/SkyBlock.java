@@ -145,13 +145,11 @@ public class SkyBlock extends JavaPlugin {
             @Override
             public void run() {
                 CompletableFuture.runAsync(() ->{
-                    //do saving
                     getUtils().saveIslands();
                     getUtils().savePlayers();
                     if (debug){
                         System.out.print("\n\n SavageSkyBlock: Saved all Data Async. \n\n");
                     }
-
                 });
             }
         }.runTaskTimer(this, 0, saveInterval);
@@ -215,8 +213,6 @@ public class SkyBlock extends JavaPlugin {
                         MemoryPlayer memoryPlayer = getUtils().getMemoryPlayer(p.getUniqueId());
 
                         memoryPlayer.setPlayTime(Math.addExact(memoryPlayer.getPlayTime(), 1));
-
-
                         //check for requirements here...
 
                         List<Quest> quests = getQuests().questList;

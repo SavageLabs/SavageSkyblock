@@ -1,9 +1,5 @@
-# Saber SkyBlock by: Trent #
-
-#        Saber SkyBlock Commands & Permissions List          #
-#       https://docs.google.com/document/d/12fwGgU35YeNu8Iu8LPHXqZyNfrpGX0htTdaK3vRWhAg/edit      #
-#   /is - Main Island Command  #
-#   /isa - Admin Island Commands ( permission: isa.admin ) #
+#      SavageSkyBlock      #
+# Information: https://wiki.prosavage.net/display/savageskyblock/SavageSkyblock #
 
 settings:
 
@@ -30,6 +26,7 @@ settings:
   default-spawner-limit: 5 # override with permission: skyblock.block.spawner.NUMBER
   default-member-limit: 5 # override with permission: skyblock.members.NUMBER, permission overrides Upgrade
   default-protection-radius: 50 # 50^4, block radius around each corner of island, override with permission: skyblock.protection.NUMBER
+  default-reset-limit: 3 # override with permission: skyblock.resets.NUMBER
 
   island-level-calculation-time: 60 # in seconds
   island-level-placeholder: '%is-level%' # can use this in chat formatting
@@ -41,6 +38,7 @@ settings:
   use-chat-format: true
   chat-format: '&a{is-level} &7[&9{is-top}&7] &r{old-format}'
 
+  island-distance: 100 # 100 blocks away from the nearest island....
   min-x: 0 # the starting point on the x axis to start plotting islands
   min-z: 0 # the starting point on the z axis to start plotting islands
   max-x: 1000 # the ending point on the x axis to stop plotting islands
