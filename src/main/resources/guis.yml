@@ -180,7 +180,7 @@ panel:
         - 'is perms'
     7:
       slot: 5
-      item-id: 'sign'
+      item-id: 'diamond_sword'
       item-name: '&9Island Quests'
       amount: 1
       item-lore:
@@ -189,6 +189,28 @@ panel:
         - ''
       commands:
         - 'is quests'
+    8:
+      slot: 4
+      item-id: 'diamond_block'
+      item-name: '&c&lIsland Top'
+      amount: 1
+      item-lore:
+        - '&7Check the Island Top!'
+        - ''
+        - ''
+      commands:
+        - 'is top'
+    9:
+      slot: 3
+      item-id: 'sign'
+      item-name: '&aIsland Warps'
+      amount: 1
+      item-lore:
+        - '&7View your Island''s warps!'
+        - ''
+        - ''
+      commands:
+        - 'is warps'
 
 
 biomes: # this is a list of all possible biomes: https://minecraft.gamepedia.com/Biome/ID
