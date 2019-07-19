@@ -14,6 +14,7 @@ import org.savage.skyblock.commands.IslandCommands;
 import org.savage.skyblock.events.IslandEvents;
 import org.savage.skyblock.events.PlayerEvents;
 import org.savage.skyblock.events.UpgradeEvents;
+import org.savage.skyblock.events.VoteEvents;
 import org.savage.skyblock.filemanager.FileManager;
 import org.savage.skyblock.generators.WorldGenerator;
 import org.savage.skyblock.guis.*;
@@ -118,6 +119,10 @@ public class SkyBlock extends JavaPlugin {
         pm.registerEvents(new UpgradeEvents(), this);
         pm.registerEvents(new WarpUI(), this);
         pm.registerEvents(new QuestUI(), this);
+
+        if (PluginHook.isEnabled("Votifier")){
+            pm.registerEvents(new VoteEvents(), this);
+        }
 
         WorldEditPersistence.worldEditVersion = Bukkit.getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();
 
