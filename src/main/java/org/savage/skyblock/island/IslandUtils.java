@@ -34,6 +34,8 @@ public class IslandUtils {
 
                     Bukkit.getPluginManager().callEvent(new IslandCreatedEvent(p.getUniqueId(), island));
 
+                    SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId()).setIsland(island);
+
                 }
             } else {
                 p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noIslandPermissionCreate"));
@@ -191,7 +193,7 @@ public class IslandUtils {
                     val = getLevelWorth(fakeItem.getType(), false) * amount;
                     island.addLevel(val);
                 }
-                it.remove(); // avoids a ConcurrentModificationException
+               // it.remove(); // avoids a ConcurrentModificationException
             }
 
             double level = island.getLevel();

@@ -22,16 +22,14 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
-import org.savage.skyblock.API.IslandEnterEvent;
-import org.savage.skyblock.API.IslandLeaveEvent;
+import org.savage.skyblock.API.IslandEnterTerritoryEvent;
+import org.savage.skyblock.API.IslandLeaveTerritoryEvent;
 import org.savage.skyblock.API.IslandTeleportEvent;
-import org.savage.skyblock.Materials;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 public class PlayerEvents implements Listener {
@@ -77,7 +75,7 @@ public class PlayerEvents implements Listener {
     }
 
     @EventHandler
-    public void enterIsland(IslandEnterEvent e){
+    public void enterIsland(IslandEnterTerritoryEvent e){
         Player p = e.getPlayer();
         Island island = e.getIsland();
         if (p != null && island != null){
@@ -95,7 +93,7 @@ public class PlayerEvents implements Listener {
     }
 
     @EventHandler
-    public void leaveIsland(IslandLeaveEvent e){
+    public void leaveIsland(IslandLeaveTerritoryEvent e){
         Player p = e.getPlayer();
         Island island = e.getIsland();
         if (p != null && island != null){
@@ -152,7 +150,7 @@ public class PlayerEvents implements Listener {
         Island island1 = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation());
         if (island != null && island1 != null){
             //logged into their island
-            Bukkit.getPluginManager().callEvent(new IslandEnterEvent(p, island));
+            Bukkit.getPluginManager().callEvent(new IslandEnterTerritoryEvent(p, island));
         }
 
     }

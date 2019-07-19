@@ -13,6 +13,8 @@ depend:
 softdepend:
   - WildStacker
   - Votifier
+  - PlaceholderAPI
+  - MVdWPlaceholderAPI
 
 load: POSTWORLD
 

@@ -138,6 +138,19 @@
         </dependency>
 
         <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.10.3</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>be.maximvdw</groupId>
+            <artifactId>MVdWPlaceholderAPI</artifactId>
+            <version>2.2.3-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
             <groupId>com.vexsoftware</groupId>
             <artifactId>nuvotifier-universal</artifactId>
             <version>2.5.3</version>
@@ -241,6 +254,17 @@
             <id>ibj-public</id>
             <name>Ichbinjoe Public Repository</name>
             <url>https://repo.glaremasters.me/repository/public/</url>
+        </repository>
+
+        <repository>
+            <id>placeholderapi</id>
+            <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+
+        <repository>
+            <id>mvdw-software</id>
+            <name>MVdW Public Repositories</name>
+            <url>http://repo.mvdw-software.be/content/groups/public/</url>
         </repository>
     </repositories>
 

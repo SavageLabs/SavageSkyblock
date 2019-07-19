@@ -13,14 +13,14 @@ import java.util.UUID;
  * Event when a player enters an Island's zone
  */
 
-public class IslandEnterEvent extends Event {
+public class IslandEnterTerritoryEvent extends Event {
 
     private static final HandlerList handlers = new HandlerList();
 
     private Island island;
     private Player player;
 
-    public IslandEnterEvent(Player player, Island island) {
+    public IslandEnterTerritoryEvent(Player player, Island island) {
         this.player = player;
         this.island = island;
     }

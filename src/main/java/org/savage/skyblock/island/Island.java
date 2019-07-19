@@ -419,6 +419,7 @@ public class Island {
             if (!joinEvent.isCancelled()) {
                 if (!getMemberList().contains(joiner)){
                     this.memberList.add(joiner);
+                    SkyBlock.getInstance().getUtils().getMemoryPlayer(joiner).setIsland(islandInstance);
                 }
                 removeInvite(joiner);
                 return true;
@@ -485,6 +486,7 @@ public class Island {
                                 Bukkit.getPlayer(target).sendMessage(SkyBlock.getInstance().getUtils().getMessage("kickedMe"));
                             }
                             officerList.remove(target);
+                            SkyBlock.getInstance().getUtils().getMemoryPlayer(target).setIsland(null);
                         }
                     }else{
                         //let officer kick them
@@ -493,6 +495,7 @@ public class Island {
                             Bukkit.getPlayer(target).sendMessage(SkyBlock.getInstance().getUtils().getMessage("kickedMe"));
                         }
                         memberList.remove(target);
+                        SkyBlock.getInstance().getUtils().getMemoryPlayer(target).setIsland(null);
                     }
                 }else{
                     Bukkit.getPlayer(kicker).sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionKick"));
@@ -514,6 +517,7 @@ public class Island {
                 MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(getOwnerUUID());
                 if (memoryPlayer != null){
                     memoryPlayer.setResets(memoryPlayer.getResets() + 1);
+                    memoryPlayer.setIsland(null);
                 }
 
                 int radius = getProtectionRadius();
@@ -526,6 +530,10 @@ public class Island {
                 uuids.addAll(getCoownerList());
 
                 for (UUID uuid : uuids) {
+                    MemoryPlayer m = SkyBlock.getInstance().getUtils().getMemoryPlayer(uuid);
+                    if (m != null){
+                        m.setIsland(null);
+                    }
                     if (Bukkit.getPlayer(uuid) != null && Bukkit.getPlayer(uuid).isOnline()) {
                         Player p = Bukkit.getPlayer(uuid);
                         p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("deletedIsland"));
@@ -610,6 +618,34 @@ public class Island {
 
         }else{
             adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+        }
+    }
+
+    public void leave(UUID leaver) {
+        //the command already made the checks that they're not the owner, etc.
+
+        IslandLeaveEvent islandLeaveEvent = new IslandLeaveEvent(this, leaver);
+        Bukkit.getPluginManager().callEvent(islandLeaveEvent);
+
+        if (!islandLeaveEvent.isCancelled()) {
+            this.memberList.remove(leaver);
+            this.officerList.remove(leaver);
+            this.coownerList.remove(leaver);
+            //send message to everyone
+            SkyBlock.getInstance().getUtils().getMemoryPlayer(leaver).setIsland(null);
+
+            List<UUID> uuids = new ArrayList<>();
+            uuids.addAll(getMemberList());
+            uuids.addAll(getOfficerList());
+            uuids.addAll(getCoownerList());
+
+            for (UUID uuid : uuids) {
+                if (Bukkit.getPlayer(uuid) != null && Bukkit.getPlayer(uuid).isOnline()) {
+                    Player p = Bukkit.getPlayer(uuid);
+                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("leftIsland").replace("%player%", Bukkit.getPlayer(leaver).getName()));
+                }
+            }
+            Bukkit.getPlayer(leaver).sendMessage(SkyBlock.getInstance().getUtils().getMessage("leftIslandSelf"));
         }
     }
 
