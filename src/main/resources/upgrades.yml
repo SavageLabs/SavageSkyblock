@@ -293,6 +293,8 @@ upgrades:
       - ''
       - '&7&oLeft click to confirm purchase'
     tiers:
+      0:
+        upgrade-value: 1
       1:
         upgrade-value: 2
         cost: 1000

@@ -146,7 +146,7 @@ panel:
       commands:
         - 'is delete'
     4:
-      slot: 8
+      slot: 6
       item-id: 'ender_pearl'
       item-name: '&eIsland Home'
       amount: 1
@@ -178,6 +178,18 @@ panel:
         - ''
       commands:
         - 'is perms'
+    7:
+      slot: 5
+      item-id: 'sign'
+      item-name: '&9Island Quests'
+      amount: 1
+      item-lore:
+        - '&7Check your quests!'
+        - ''
+        - ''
+      commands:
+        - 'is quests'
+
 
 biomes: # this is a list of all possible biomes: https://minecraft.gamepedia.com/Biome/ID
   name: '&cPick a Biome!'

@@ -25,16 +25,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class UpgradeEvents implements Listener {
 
-   @EventHandler
-   public void voteHandler(VotifierEvent e){
-       String username = e.getVote().getUsername();
-       Player p = Bukkit.getPlayerExact(username);
-       if (p != null && p.isOnline()){
-           MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(p.getUniqueId());
-           memoryPlayer.setVotes(memoryPlayer.getVotes() + 1);
-       }
-   }
-
     @EventHandler
     public void generator(BlockFromToEvent e){
         Block blockTo = e.getToBlock();

@@ -178,6 +178,8 @@ messages:
   island-quest-complete: '&c(!) &aYou have completed &c&l%quest%&a!'
   island-quest-requirements-completed: '&c(!) &7You have completed all requirements for Quest: &b%quest%&7! Use /is quests to complete it!'
 
+  island-reset-max: '&cYou cannot create another island, your resets are max!'
+
   ##########################################################################################
 
   # Island Bank Messages #

@@ -6,7 +6,7 @@ import org.savage.skyblock.filemanager.FileManager;
 import org.savage.skyblock.generators.WorldGenerator;
 import org.savage.skyblock.island.IslandUtils;
 
-public class SaberSkyBlockAPI {
+public class SavageSkyBlockAPI {
 
     private SkyBlock getSkyBlockPlusInstance() {
         return SkyBlock.getInstance();

@@ -92,6 +92,7 @@ public class Utils {
     }
 
     public Location generateIslandLocation(Location min, Location max){
+        int distanceAway = SkyBlock.getInstance().getUtils().getSettingInt("island-distance");
         Location randomLocation = randomLocation(min, max);
         if (randomLocation != null){
             //check this location's distance from all preexisting islands's locations
@@ -100,7 +101,7 @@ public class Utils {
                     Location location = island.getLocation();
 
                     double distance = randomLocation.distanceSquared(location);
-                    if (distance >= 100) {
+                    if (distance >= distanceAway) {
                         return randomLocation;
                     }
                 }
