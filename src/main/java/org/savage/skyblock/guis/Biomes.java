@@ -13,10 +13,17 @@ import org.savage.skyblock.SkyBlock;
 
 import java.util.List;
 
+import static org.savage.skyblock.island.upgrades.UpgradesUI.createFadedItem;
+
 public class Biomes implements Listener {
 
     public static void openBiome(Player p) {
         Inventory i = Bukkit.createInventory(null, SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("biomes.rows") * 9, SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("biomes.name")));
+
+        for (String s : SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("biomes.faded-slots").split(",")){
+            int slot = Integer.parseInt(s);
+            i.setItem(slot -1, createFadedItem());
+        }
 
         int m = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getConfigurationSection("biomes.items").getKeys(false).size();
         for (int a = 1; a <= m; a++) {

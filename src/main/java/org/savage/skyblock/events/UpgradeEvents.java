@@ -1,13 +1,10 @@
 package org.savage.skyblock.events;
-import com.vexsoftware.votifier.model.VotifierEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockFromToEvent;
@@ -17,7 +14,6 @@ import org.bukkit.material.Crops;
 import org.savage.skyblock.MultiMaterials;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
-import org.savage.skyblock.island.MemoryPlayer;
 import org.savage.skyblock.island.upgrades.Upgrade;
 
 import java.util.HashMap;

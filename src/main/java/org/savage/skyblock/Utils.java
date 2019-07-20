@@ -1,26 +1,36 @@
 package org.savage.skyblock;
 
-import com.sun.jna.Memory;
-import jdk.nashorn.internal.runtime.arrays.ArrayIndex;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.permissions.Perm;
+import org.savage.skyblock.island.permissions.Perms;
 import org.savage.skyblock.island.quests.Quest;
+import org.savage.skyblock.island.permissions.Role;
+import org.savage.skyblock.island.rules.Rule;
+import org.savage.skyblock.island.rules.Rules;
 import org.savage.skyblock.island.warps.IslandWarp;
 import org.savage.skyblock.island.MemoryPlayer;
 import org.savage.skyblock.island.upgrades.Upgrade;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
+import javax.swing.plaf.multi.MultiViewportUI;
 import java.io.*;
 import java.text.DecimalFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static java.lang.Double.parseDouble;
+import static java.util.regex.Pattern.compile;
 
 public class Utils {
 
@@ -46,6 +56,38 @@ public class Utils {
             color.add(color(s));
         }
         return color;
+    }
+
+    public ItemStack getMultiVersionItem(String materialName, int data){
+        Materials materials = null;
+        if (Materials.requestXMaterial(materialName.toUpperCase(), (byte)data) != null){
+            materials = Materials.requestXMaterial(materialName, (byte)data);
+        }
+        if (materials != null && materials.parseItem() != null){
+            return materials.parseItem();
+        }else{
+            return new ItemStack(Material.getMaterial(materialName.toUpperCase()));
+        }
+    }
+
+    public ItemStack createHead(String owner, String materialName, int data, String name, List<String> lore, int amount){
+        Material material = null;
+        if (Materials.requestXMaterial(materialName, (byte)data) != null && Materials.requestXMaterial(materialName, (byte)data).parseMaterial() != null){
+            material = Materials.requestXMaterial(materialName, (byte)data).parseMaterial();
+        }else{
+            material = Material.valueOf(materialName.toUpperCase());
+        }
+        ItemStack itemStack = new ItemStack(material, amount, (short) data);
+        if (MultiMaterials.mc18){
+            itemStack.setType(Material.SKULL_ITEM);
+        }
+        SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
+        meta.setOwner(owner);
+        meta.setDisplayName(color(name));
+        meta.setLore(color(lore));
+        itemStack.setAmount(amount);
+        itemStack.setItemMeta(meta);
+        return itemStack;
     }
 
     public ItemStack createItem(String materialName, int data, String name, List<String> lore, int amount){
@@ -231,7 +273,7 @@ public class Utils {
                         }
 
                         try {
-                            moneySpent = Double.parseDouble(l[7]);
+                            moneySpent = parseDouble(l[7]);
 
                             playerKills = Integer.parseInt(l[8]);
                             mobKills = Integer.parseInt(l[9]);
@@ -289,6 +331,12 @@ public class Utils {
         }
     }
 
+
+
+
+
+
+
     public void loadIslands(){
         //onEnable
         //layout: ownerUUID;member1,member2;x;y;z;protectionRadius
@@ -297,23 +345,21 @@ public class Utils {
         for (String islandData : data){
             String[] l = islandData.split(";");
             UUID ownerUUID = UUID.fromString(l[0]);
-            double x = Double.parseDouble(l[4]);
-            double y = Double.parseDouble(l[5]);
-            double z = Double.parseDouble(l[6]);
+            double x = parseDouble(l[4]);
+            double y = parseDouble(l[5]);
+            double z = parseDouble(l[6]);
             int protectionRadius = Integer.parseInt(l[7]);
             String home = l[8];
             String biome = l[9];
 
-            boolean memberPlace = Boolean.parseBoolean(l[10]);
-            boolean memberBreak = Boolean.parseBoolean(l[11]);
-            boolean memberInteract = Boolean.parseBoolean(l[12]);
-
-            boolean officerPlace = Boolean.parseBoolean(l[13]);
-            boolean officerBreak = Boolean.parseBoolean(l[14]);
-            boolean officerInteract = Boolean.parseBoolean(l[15]);
-
-            String name = l[16];
+            String name = l[10];
             HashMap<Upgrade, Integer> upgradesMap = new HashMap<>();
+
+            ArrayList<Perms> visitorPerms = new ArrayList<>();
+            ArrayList<Perms> memberPerms =  new ArrayList<>();
+            ArrayList<Perms> officerPerms = new ArrayList<>();
+            ArrayList<Perms> coOwnerPerms = new ArrayList<>();
+            ArrayList<Rules> rulesList = new ArrayList<>();
 
             Location homeLocation = null;
 
@@ -353,7 +399,7 @@ public class Utils {
             }
 
             try {
-                String upgradeString = l[17];
+                String upgradeString = l[11];
                 if (!upgradeString.equalsIgnoreCase("")) {
                     for (String upgrades : upgradeString.split(",")) {
                         int id = Integer.parseInt(upgrades.split("!")[0]);
@@ -363,18 +409,43 @@ public class Utils {
                 }
             }catch(ArrayIndexOutOfBoundsException e){}
 
-            double bankBalance = getDoublesFromString(l[18]);
+            double bankBalance = parseDouble(l[12]);
 
             Island island = new Island("", x, y, z, ownerUUID, coOwnerList, officerList, memberList, protectionRadius, name, bankBalance);
 
-            String bankData = l[19];
+            String bankData = l[13];
             if (!bankData.equalsIgnoreCase("")){
                 //try to convert it
                 island.createBank(bankData);
             }
 
             try {
-                String islandWarpString = l[20];
+                String islandWarpString = l[14];
+
+                String visitorPermsString = l[15];
+                String memberPermsString = l[16];
+                String officerPermsString = l[17];
+                String coownerPermsString = l[18];
+
+                String ruleString = l[19];
+
+                if (!ruleString.equalsIgnoreCase("")){
+                    rulesList = deserializeRuleList(ruleString);
+                }
+
+                if (!visitorPermsString.equalsIgnoreCase("")){
+                    visitorPerms = deserializePermList(visitorPermsString);
+                }
+                if (!memberPermsString.equalsIgnoreCase("")){
+                    memberPerms = deserializePermList(memberPermsString);
+                }
+                if (!officerPermsString.equalsIgnoreCase("")){
+                    officerPerms = deserializePermList(officerPermsString);
+                }
+                if (!coownerPermsString.equalsIgnoreCase("")){
+                    coOwnerPerms = deserializePermList(coownerPermsString);
+                }
+
                 if (!islandWarpString.equalsIgnoreCase("")) {
 
                     if (islandWarpString.contains(":")) {
@@ -395,7 +466,17 @@ public class Utils {
                         island.addIslandWarp(islandWarp);
                     }
                 }
-            }catch(ArrayIndexOutOfBoundsException e){ }
+            }catch(ArrayIndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
+
+
+            island.setVisitorPerms(visitorPerms);
+            island.setMemberPerms(memberPerms);
+            island.setOfficerPerms(officerPerms);
+            island.setCoOwnerPerms(coOwnerPerms);
+
+            island.setIslandRules(rulesList);
 
             island.setUpgradeMap(upgradesMap);
 
@@ -407,14 +488,6 @@ public class Utils {
                     island.setName(getNameFromUUID(ownerUUID)+"-1");
                 }
             }
-
-            island.setPermissionMemberPlace(memberPlace);
-            island.setPermissionMemberBreak(memberBreak);
-            island.setPermissionMemberInteract(memberInteract);
-
-            island.setPermissionOfficerPlace(officerPlace);
-            island.setPermissionOfficerBreak(officerBreak);
-            island.setPermissionOfficerInteract(officerInteract);
 
             if (homeLocation != null){
                 island.setHome(homeLocation);
@@ -510,10 +583,22 @@ public class Utils {
                 }
             }
 
+            String visitorPerms = "";
+            String memberPerms = "";
+            String officerPerms = "";
+            String coownerPerms = "";
+            String rules = "";
+
+            visitorPerms = serializePermList(island.getVisitorPerms());
+            memberPerms = serializePermList(island.getMemberPerms());
+            officerPerms = serializePermList(island.getOfficerPerms());
+            coownerPerms = serializePermList(island.getCoOwnerPerms());
+            rules = serializeRuleList(island.getIslandRules());
+
+
             islandData.add(owner.toString() + ";" + memberList + ";" + officerList + ";" + coOwnerList+ ";" + x + ";" + y + ";" + z + ";" +
-                    protectionRadius + ";" + home + ";" + biome + ";" +
-                    island.canMemberPlace() + ";" + island.canMemberBreak() + ";" + island.canMemberInteract() + ";" +
-                    island.canOfficerPlace() + ";" + island.canOfficerBreak() + ";" + island.canOfficerInteract() + ";" + name+";"+upgradeString+";"+bankBalance+";"+inventoryData+";"+islandWarpsString);
+                    protectionRadius + ";" + home + ";" + biome + ";" + name+";"+upgradeString+";"+bankBalance+";"+inventoryData+";"+islandWarpsString
+                    +";"+visitorPerms+";"+memberPerms+";"+officerPerms+";"+coownerPerms+";"+rules);
         }
 
         SkyBlock.getInstance().getFileManager().getData().getFileConfig().set("data", islandData);
@@ -575,8 +660,9 @@ public class Utils {
     public int getIntegersFromString(String string) {
         return Integer.parseInt(string.replaceAll("[\\D]", ""));
     }
+
     public double getDoublesFromString(String string) {
-        return Double.parseDouble(string.replaceAll("[\\D]", ""));
+        return parseDouble(string.replaceAll("[\\D]", ""));
     }
 
     public String stripIntegersFromString(String string) {
@@ -586,7 +672,7 @@ public class Utils {
     public Location deserializeLocation(String locationString){
         try {
             String[] l = locationString.split(",");
-            return new Location(Bukkit.getWorld(l[0]), Double.parseDouble(l[1]), Double.parseDouble(l[2]), Double.parseDouble(l[3]));
+            return new Location(Bukkit.getWorld(l[0]), parseDouble(l[1]), parseDouble(l[2]), parseDouble(l[3]));
         }catch(ArrayIndexOutOfBoundsException e){
             return null;
         }
@@ -647,7 +733,7 @@ public class Utils {
     }
 
     public String formatNumber(final String s) {
-        double amount = Double.parseDouble(s);
+        double amount = parseDouble(s);
         if (amount > 0) {
             final DecimalFormat formatter = new DecimalFormat("#,###.00");
             final String number = formatter.format(amount);
@@ -746,6 +832,101 @@ public class Utils {
         ois.close();
         return o;
     }
+
+    public String serializePermList(ArrayList<Perms> list){
+        String string = "";
+        for (Perms perms : list){
+            if (string.equalsIgnoreCase("")){
+                //empty
+                String permName = perms.getPerm().name().toUpperCase();
+                boolean allow = perms.isAllow();
+                string = permName+"!"+allow;
+            }else{
+                //not
+                String permName = perms.getPerm().name().toUpperCase();
+                boolean allow = perms.isAllow();
+                string = string +","+permName+"!"+allow;
+            }
+        }
+        return string;
+    }
+
+    public ArrayList<Perms> deserializePermList(String string){
+        String[] l = string.split(",");
+        ArrayList<Perms> perms = new ArrayList<>();
+        for (String s : l){
+            //perm format: PERM!true
+            String permName = s.split("!")[0];
+            boolean allow = Boolean.parseBoolean(s.split("!")[1]);
+            Perm perm = Perm.getPerm(permName);
+            perms.add(new Perms(perm, allow));
+            System.out.print("\n loaded perm: "+perm.name()+", "+allow+"\n");
+        }
+        return perms;
+    }
+
+    public String serializeRuleList(ArrayList<Rules> list){
+        String string = "";
+        for (Rules perms : list){
+            if (string.equalsIgnoreCase("")){
+                //empty
+                String permName = perms.getRule().name().toUpperCase();
+                boolean allow = perms.isAllow();
+                string = permName+"!"+allow;
+            }else{
+                //not
+                String permName = perms.getRule().name().toUpperCase();
+                boolean allow = perms.isAllow();
+                string = string +","+permName+"!"+allow;
+            }
+        }
+        return string;
+    }
+
+    public ArrayList<Rules> deserializeRuleList(String string){
+        String[] l = string.split(",");
+        ArrayList<Rules> perms = new ArrayList<>();
+        for (String s : l){
+            //perm format: PERM!true
+            String permName = s.split("!")[0];
+            boolean allow = Boolean.parseBoolean(s.split("!")[1]);
+            Rule perm = Rule.getRule(permName);
+            perms.add(new Rules(perm, allow));
+        }
+        return perms;
+    }
+
+    public static class numberFormat{
+
+        private static final Pattern REGEX = compile("(\\d+(?:\\.\\d+)?)([KMG]?)");
+        private static final String[] KMG = new String[] {"", "K", "M", "G"};
+
+        public static String formatDbl(double d) {
+            int i = 0;
+            while (d >= 1000) { i++; d /= 1000; }
+            return round(d, 2) + KMG[i];
+        }
+
+        public static double parseDbl(String s) {
+            final Matcher m = REGEX.matcher(s);
+            if (!m.matches()) throw new RuntimeException("Invalid number format " + s);
+            int i = 0;
+            long scale = 1;
+            while (!m.group(2).equals(KMG[i])) { i++; scale *= 1000; }
+            return parseDouble(m.group(1)) * scale;
+        }
+
+        public static double round(double value, int places) {
+            if (places < 0) throw new IllegalArgumentException();
+
+            long factor = (long) Math.pow(10, places);
+            value = value * factor;
+            long tmp = Math.round(value);
+            return (double) tmp / factor;
+        }
+
+    }
+
 
 
 }

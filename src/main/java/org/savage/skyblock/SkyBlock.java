@@ -12,20 +12,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.savage.skyblock.commands.AdminCommands;
 import org.savage.skyblock.commands.IslandCommands;
-import org.savage.skyblock.events.IslandEvents;
-import org.savage.skyblock.events.PlayerEvents;
-import org.savage.skyblock.events.UpgradeEvents;
-import org.savage.skyblock.events.VoteEvents;
+import org.savage.skyblock.events.*;
 import org.savage.skyblock.filemanager.FileManager;
 import org.savage.skyblock.generators.WorldGenerator;
 import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.IslandUtils;
 import org.savage.skyblock.island.MemoryPlayer;
+import org.savage.skyblock.island.permissions.PermissionUI;
 import org.savage.skyblock.island.quests.Quest;
 import org.savage.skyblock.island.quests.QuestUI;
 import org.savage.skyblock.island.quests.Quests;
 import org.savage.skyblock.island.quests.Requirement;
+import org.savage.skyblock.island.rules.RuleUI;
 import org.savage.skyblock.island.scoreboards.IslandBoard;
 import org.savage.skyblock.island.upgrades.Upgrade;
 import org.savage.skyblock.island.upgrades.UpgradesUI;
@@ -115,12 +114,14 @@ public class SkyBlock extends JavaPlugin {
 
         PluginManager pm = Bukkit.getPluginManager();
 
+        pm.registerEvents(new ProtectionEvents(), this);
         pm.registerEvents(new IslandEvents(), this);
         pm.registerEvents(new Panel(), this);
         pm.registerEvents(new Islands(), this);
         pm.registerEvents(new DeleteIsland(), this);
         pm.registerEvents(new Biomes(), this);
-        pm.registerEvents(new Protection(), this);
+        pm.registerEvents(new PermissionUI(), this);
+        pm.registerEvents(new RuleUI(), this);
         pm.registerEvents(new ISTop(), this);
         pm.registerEvents(new PlayerEvents(), this);
         pm.registerEvents(new UpgradesUI(), this);
@@ -130,6 +131,9 @@ public class SkyBlock extends JavaPlugin {
 
         if (PluginHook.isEnabled("Votifier")){
             pm.registerEvents(new VoteEvents(), this);
+        }
+        if (PluginHook.isEnabled("WildStacker")){
+            pm.registerEvents(new WildStackerEvents(), this);
         }
 
         WorldEditPersistence.worldEditVersion = Bukkit.getPluginManager().getPlugin("WorldEdit").getDescription().getVersion();

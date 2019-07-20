@@ -13,6 +13,8 @@ public class FileManager {
     private CustomFile messages = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/messages.yml"));
     private CustomFile playerData = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/playerData.yml"));
     private CustomFile scoreboard = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/scoreboard.yml"));
+    private CustomFile permissions = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/permissions.yml"));
+    private CustomFile rules = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/rules.yml"));
 
     private CustomFile questFile = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/Quests/quests.yml"));
     private CustomFile foreverQuestFile = new CustomFile(new File(SkyBlock.getInstance().getDataFolder() + "/Quests/forever.yml"));
@@ -29,6 +31,8 @@ public class FileManager {
         messages.setup(true, "");
         playerData.setup(true, "");
         scoreboard.setup(true, "");
+        permissions.setup(true, "");
+        rules.setup(true, "");
 
         if (!new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").exists()) {
             new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").mkdir();
@@ -71,8 +75,16 @@ public class FileManager {
         }
     }
 
+    public CustomFile getRules() {
+        return rules;
+    }
+
     public CustomFile getScoreboard() {
         return scoreboard;
+    }
+
+    public CustomFile getPermissions() {
+        return permissions;
     }
 
     public CustomFile getData() {

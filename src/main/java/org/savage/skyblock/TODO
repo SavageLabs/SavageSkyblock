@@ -1,0 +1,27 @@
+1. If player does not have an Island, when using /is make it pop up the island creation GUI
+2. Add player heads for ISTOP
+3. Add Island rules (PVP, mob spawning, etc)
+4. Island group permissions re-haul (make it a lot better and implement clicking for toggle on/off)
+Permissions: Build, Destroy, Access containers, Interact, Mob Interact, Mob Attack, Vehicle Use, Item Pickup, Item Drop, Manage Permissions, Invite members, Promote: member -> officer, Demote: officer -> member
+5. PAPI placeholder for IS-Level
+6. Reset Is upgrades when the Island is Deleted ( TRUE OR FALSE )
+
+inplment some of pvpwars, vanity /is top and skyblock stuff you could be selling that plugin for good money or people would be downloading it off the wall
+
+
+REHAUL THE PROMOTE/DEMOTE/TRANSFER METHODS!!!
+ADD IN THE REST OF THE PERMS, BANK_VIEW, WITHDRAW, ETC
+
+
+
+ADDONS:
+
+FREE:
+- NPC island top names/skins, also create holograms for any additional stats - DEPEND Citizens
+
+
+PAID:
+- IslandDuels
+- IslandPets
+- IslandCoins
+- IslandBoosters

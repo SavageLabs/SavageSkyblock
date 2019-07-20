@@ -35,14 +35,13 @@ messages:
   #This is the island message section
   createIsland: '&aYou have created an island!'
   alreadyIsland: '&aYou are already in an island!'
-  notYours: '&aCannot break/place in this island!'
+  notYours: '&cInvalid permission on this Island for this Action!'
   notYourIsland: '&cThis is not your island!'
   deleteIsland: '&cYou have deleted your island!'
   deletedIsland: '&aThe island you were on has been deleted!'
   notInIsland: '&cYou are not a member of an island!'
   notOwner: '&cYou are not the owner of the island!'
   cancelDeleting: '&aYou have canceled your deleting!'
-  setPermission: '&aYou have updated &9%role%&a''s permission for &9%type%&a to &d%outcome%&a!'
   noIsland: '&aYou do not have an Island!'
   noIslandHere: '&cThere is not an Island here!'
   isOwner: '&cYou are the owner of the Island! Gift the ownership to someone else before doing this.'
@@ -182,6 +181,11 @@ messages:
   island-quest-requirements-completed: '&c(!) &7You have completed all requirements for Quest: &b%quest%&7! Use /is quests to complete it!'
 
   island-reset-max: '&cYou cannot create another island, your resets are max!'
+
+  island-not-exist: '&cThis island name, or player name does not exist!'
+  island-locked: '&cThis island is currently locked! You cannot teleport to it.'
+  island-teleport: '&aYou have teleported to Island: %island%!'
+
 
   ##########################################################################################
 

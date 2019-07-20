@@ -8,6 +8,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.savage.skyblock.PluginHook;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
+import org.savage.skyblock.Utils;
 import org.savage.skyblock.island.MemoryPlayer;
 
 public class IslandBoard {
@@ -63,19 +64,28 @@ public class IslandBoard {
                         }
 
                         oldMessage = oldMessage.replace("%player%", p.getName());
-                        oldMessage = oldMessage.replace("%money%", SkyBlock.getInstance().getUtils().getBalance(p.getUniqueId())+"");
+                        double bal = SkyBlock.getInstance().getUtils().getBalance(p.getUniqueId());
+
+                        oldMessage = oldMessage.replace("%money%", Utils.numberFormat.formatDbl(bal));
                         if (memoryPlayer.getIsland() != null){
                             oldMessage = oldMessage.replace("%island%", memoryPlayer.getIsland().getName());
                             oldMessage = oldMessage.replace("%is-top%", memoryPlayer.getIsland().getTopPlace()+"");
-                            oldMessage = oldMessage.replace("%is-worth%", memoryPlayer.getIsland().getWorth()+"");
-                            oldMessage = oldMessage.replace("%is-bank%", memoryPlayer.getIsland().getBankBalance()+"");
+                            oldMessage = oldMessage.replace("%is-worth%", Utils.numberFormat.formatDbl(memoryPlayer.getIsland().getWorth()));
+                            oldMessage = oldMessage.replace("%is-bank%", Utils.numberFormat.formatDbl(memoryPlayer.getIsland().getBankBalance()));
                         }else{
                             oldMessage = oldMessage.replace("%island%", none);
                             oldMessage = oldMessage.replace("%is-top%", none);
                             oldMessage = oldMessage.replace("%is-worth%", none);
                             oldMessage = oldMessage.replace("%is-bank%", none);
                         }
-                        row.setMessage(SkyBlock.getInstance().getUtils().color(oldMessage));
+
+                        oldMessage = SkyBlock.getInstance().getUtils().color(oldMessage);
+
+                        if (oldMessage.length() > 25){
+                            oldMessage = oldMessage.substring(0, Math.min(oldMessage.length(), 25));
+                        }
+
+                        row.setMessage(oldMessage);
                     }
                 }
             }
