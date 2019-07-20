@@ -1,0 +1,280 @@
+# Island Permissions.yml #
+
+placeholders:
+  allowed: '&a&lALLOWED'
+  denied: '&c&lDENIED'
+
+allowed-glow: true # when a permission is allowed, should the item glow?
+
+permission-items:
+  BUILD:
+    item-id: 'grass'
+    item-data: 0
+    name: '&b&lBuild'
+    lore:
+      - '&7Allow this role to Build...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  DESTROY:
+    item-id: 'diamond_pickaxe'
+    item-data: 0
+    name: '&c&lDestroy'
+    lore:
+      - '&7Allow this role to Break Blocks...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  ACCESS_CONTAINERS:
+    item-id: 'chest'
+    item-data: 0
+    name: '&a&lAccess Containers'
+    lore:
+      - '&7Allow this role to open containers...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  INTERACT:
+    item-id: 'stone_button'
+    item-data: 0
+    name: '&9&lInteract'
+    lore:
+      - '&7Allow this role to Interact...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  MOB_INTERACT:
+    item-id: 'skull'
+    item-data: 2
+    name: '&b&lMob Interact'
+    lore:
+      - '&7Allow this role to interact with Mobs...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  MOB_ATTACK:
+    item-id: 'diamond_sword'
+    item-data: 0
+    name: '&b&lMob Attack'
+    lore:
+      - '&7Allow this role to attack monsters...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  VEHICLE_USE:
+    item-id: 'boat'
+    item-data: 0
+    name: '&c&lVehicle Use'
+    lore:
+      - '&7Allow this role to use vehicles...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  ITEM_PICKUP:
+    item-id: 'hopper'
+    item-data: 0
+    name: '&e&lItem Pickup'
+    lore:
+      - '&7Allow this role to pickup items...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  ITEM_DROP:
+    item-id: 'egg'
+    item-data: 0
+    name: '&c&lItem Drop'
+    lore:
+      - '&7Allow this role to drop items...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  MANAGE_PERMISSIONS:
+    item-id: 'diode'
+    item-data: 0
+    name: '&c&lManage Permissions'
+    lore:
+      - '&7Allow this role to manage permissions...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  PROMOTE_MEMBER:
+    item-id: 'banner'
+    item-data: 1
+    name: '&b&lPromote Member -> Officer'
+    lore:
+      - '&7Allow this role to promote a member to officer...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  PROMOTE_OFFICER:
+    item-id: 'banner'
+    item-data: 4
+    name: '&b&lPromote Officer -> Co-Owner'
+    lore:
+      - '&7Allow this role to promote officer to co-owner...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  DEMOTE_OFFICER:
+    item-id: 'banner'
+    item-data: 12
+    name: '&c&lDemote Officer -> Member'
+    lore:
+      - '&7Allow this role to demote officer to member...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  DEMOTE_COOWNER:
+    item-id: 'banner'
+    item-data: 1
+    name: '&c&lDemote Co-Owner -> Officer'
+    lore:
+      - '&7Allow this role to demote co-owner to officer...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  KICK:
+    item-id: 'barrier'
+    item-data: 0
+    name: '&9&lKick Player'
+    lore:
+      - '&7Allow this role to kick a member...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  INVITE:
+    item-id: 'beacon'
+    item-data: 0
+    name: '&b&lInvite Player'
+    lore:
+      - '&7Allow this role to invite players...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  SET_WARP:
+    item-id: 'sign'
+    item-data: 0
+    name: '&c&lSet Warp'
+    lore:
+      - '&7Allow this role to set warps...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  DELETE_WARP:
+    item-id: 'barrier'
+    item-data: 0
+    name: '&c&lDelete Warp'
+    lore:
+      - '&7Allow this role to delete warps...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  BANK_WITHDRAW:
+    item-id: 'emerald_block'
+    item-data: 0
+    name: '&b&lBank Withdraw'
+    lore:
+      - '&7Allow this role to withdraw from the island bank...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  BANK_VIEW:
+    item-id: 'chest'
+    item-data: 0
+    name: '&b&lBank View'
+    lore:
+      - '&7Allow this role to open the island bank...'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+
+
+default-permissions:
+
+  VISITOR:
+    BUILD: false
+    DESTROY: false
+    ACCESS_CONTAINERS: false
+    INTERACT: false
+    MOB_INTERACT: false
+    MOB_ATTACK: false
+    VEHICLE_USE: false
+    ITEM_PICKUP: false
+    ITEM_DROP: false
+    MANAGE_PERMISSIONS: false #( co owner, owner )
+    PROMOTE_MEMBER: false  # member -> officer
+    PROMOTE_OFFICER: false # officer -> coOwner
+    DEMOTE_COOWNER: false  # officer -> member
+    DEMOTE_OFFICER: false  # coowner -> officer
+    KICK: false
+    INVITE: false
+    SET_WARP: false
+    DELETE_WARP: false
+    BANK_WITHDRAW: false
+    BANK_VIEW: false
+
+  MEMBER:
+    BUILD: true
+    DESTROY: true
+    ACCESS_CONTAINERS: true
+    INTERACT: true
+    MOB_INTERACT: true
+    MOB_ATTACK: true
+    VEHICLE_USE: true
+    ITEM_PICKUP: true
+    ITEM_DROP: true
+    MANAGE_PERMISSIONS: false #( co owner, owner )
+    PROMOTE_MEMBER: false  # member -> officer
+    PROMOTE_OFFICER: false # officer -> coOwner
+    DEMOTE_COOWNER: false  # officer -> member
+    DEMOTE_OFFICER: false  # coowner -> officer
+    KICK: false
+    INVITE: false
+    SET_WARP: false
+    DELETE_WARP: false
+    BANK_WITHDRAW: false
+    BANK_VIEW: false
+
+  OFFICER:
+    BUILD: true
+    DESTROY: true
+    ACCESS_CONTAINERS: true
+    INTERACT: true
+    MOB_INTERACT: true
+    MOB_ATTACK: true
+    VEHICLE_USE: true
+    ITEM_PICKUP: true
+    ITEM_DROP: true
+    MANAGE_PERMISSIONS: false #( co owner, owner )
+    PROMOTE_MEMBER: false  # member -> officer
+    PROMOTE_OFFICER: false # officer -> coOwner
+    DEMOTE_COOWNER: false  # officer -> member
+    DEMOTE_OFFICER: false  # coowner -> officer
+    KICK: true
+    INVITE: true
+    SET_WARP: false
+    DELETE_WARP: false
+    BANK_WITHDRAW: true
+    BANK_VIEW: true
+
+  COOWNER:
+    BUILD: true
+    DESTROY: true
+    ACCESS_CONTAINERS: true
+    INTERACT: true
+    MOB_INTERACT: true
+    MOB_ATTACK: true
+    VEHICLE_USE: true
+    ITEM_PICKUP: true
+    ITEM_DROP: true
+    MANAGE_PERMISSIONS: true #( co owner, owner )
+    PROMOTE_MEMBER: true  # member -> officer
+    PROMOTE_OFFICER: false # officer -> coOwner
+    DEMOTE_COOWNER: false  # officer -> member
+    DEMOTE_OFFICER: true  # coowner -> officer
+    KICK: true
+    INVITE: true
+    SET_WARP: true
+    DELETE_WARP: true
+    BANK_WITHDRAW: true
+    BANK_VIEW: true

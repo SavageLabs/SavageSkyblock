@@ -1,6 +1,5 @@
 package org.savage.skyblock.island;
 
-import com.sun.jna.Memory;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Biome;
@@ -12,6 +11,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.savage.skyblock.API.*;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
+import org.savage.skyblock.island.permissions.Perm;
+import org.savage.skyblock.island.permissions.Perms;
+import org.savage.skyblock.island.permissions.Role;
+import org.savage.skyblock.island.rules.Rule;
+import org.savage.skyblock.island.rules.Rules;
 import org.savage.skyblock.island.upgrades.Upgrade;
 import org.savage.skyblock.island.warps.IslandWarp;
 
@@ -44,14 +48,6 @@ public class Island {
 
     private List<UUID> invites = new ArrayList<>();
 
-    private boolean permissionMemberPlace = true;
-    private boolean permissionMemberBreak = true;
-    private boolean permissionMemberInteract = true;
-
-    private boolean permissionOfficerPlace = true;
-    private boolean permissionOfficerBreak = true;
-    private boolean permissionOfficerInteract = true;
-
     private double level = 0;
     private int topPlace = 0;
 
@@ -69,6 +65,13 @@ public class Island {
     private double bankBalance;
 
     private List<IslandWarp> islandWarps = new ArrayList<>();
+
+    private ArrayList<Perms> visitorPerms = new ArrayList<>();
+    private ArrayList<Perms> memberPerms = new ArrayList<>();
+    private ArrayList<Perms> officerPerms = new ArrayList<>();
+    private ArrayList<Perms> coOwnerPerms = new ArrayList<>();
+
+    private ArrayList<Rules> islandRules = new ArrayList<>();
 
     public Island(String schematic, double x, double y, double z, UUID ownerUUID, List<UUID> coownerList, List<UUID> officerList, List<UUID> memberList, int protectionRadius, String name, double bankBalance) {
         this.centerX = x;
@@ -106,8 +109,76 @@ public class Island {
             }.runTaskLater(SkyBlock.getInstance(), 10L);
         }
 
+       this.visitorPerms = SkyBlock.getInstance().getIslandUtils().buildDefaultPerms(Role.VISITOR);
+       this.memberPerms = SkyBlock.getInstance().getIslandUtils().buildDefaultPerms(Role.MEMBER);
+       this.officerPerms = SkyBlock.getInstance().getIslandUtils().buildDefaultPerms(Role.OFFICER);
+       this.coOwnerPerms = SkyBlock.getInstance().getIslandUtils().buildDefaultPerms(Role.COOWNER);
+
+       this.islandRules = SkyBlock.getInstance().getIslandUtils().buildDefaultRules();
+
         setTopPlace(Storage.currentTop);
         Storage.currentTop++;
+    }
+
+    public ArrayList<Perms> getPerms(Role role){
+        if (role.equals(Role.VISITOR)){
+            return visitorPerms;
+        }
+        if (role.equals(Role.MEMBER)){
+            return memberPerms;
+        }
+        if (role.equals(Role.OFFICER)){
+            return officerPerms;
+        }
+        if (role.equals(Role.COOWNER)){
+            return coOwnerPerms;
+        }
+        return new ArrayList<>();
+    }
+
+    public ArrayList<Rules> getIslandRules() {
+        return islandRules;
+    }
+
+    public void modifyRules(Rule rule, boolean allow){
+        for (Rules rules : getIslandRules()){
+            if (rules.getRule().equals(rule)){
+                rules.setAllow(allow);
+            }
+        }
+    }
+
+    public boolean hasRule(Rule rule){
+        for (Rules rules : getIslandRules()) {
+            if (rules.getRule().equals(rule)) {
+                return rules.isAllow();
+            }
+        }
+        return false;
+    }
+
+    public void modifyPerms(Role role, Perm perm, boolean allow){
+        for (Perms perms : getPerms(role)){
+            if (perms.getPerm().equals(perm)){
+                perms.setAllow(allow);
+            }
+        }
+    }
+
+    public boolean hasPerm(Role role, Perm perm){
+        if (role.equals(Role.OWNER)){
+            return true;
+        }
+        for (Perms perms : getPerms(role)){
+            if (perms.getPerm().equals(perm)){
+                return perms.isAllow();
+            }
+        }
+        return false;
+    }
+
+    public void setIslandRules(ArrayList<Rules> islandRules) {
+        this.islandRules = islandRules;
     }
 
     public void createBank(String base64){
@@ -297,7 +368,7 @@ public class Island {
     }
 
     public double getWorth() {
-        return (getBlockWorth() + getSpawnerWorth());
+        return (getBlockWorth() + getSpawnerWorth() + getBankBalance());
     }
 
 
@@ -432,6 +503,13 @@ public class Island {
         Player p = Bukkit.getPlayer(inviter);
         if (!isInvited(target)){
 
+            Role role = SkyBlock.getInstance().getIslandUtils().getRole(p.getUniqueId(), getIslandInstance());
+            if (!hasPerm(role, Perm.INVITE)){
+                //return it
+                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+                return;
+            }
+
             IslandInviteEvent inviteEvent = new IslandInviteEvent(getIslandInstance(), inviter, target);
             Bukkit.getPluginManager().callEvent(inviteEvent);
 
@@ -465,6 +543,17 @@ public class Island {
     }
 
     public void kick(UUID kicker, UUID target) {
+
+        Player p = Bukkit.getPlayer(kicker);
+
+        Role role = SkyBlock.getInstance().getIslandUtils().getRole(p.getUniqueId(), getIslandInstance());
+        if (!hasPerm(role, Perm.KICK)){
+            //return it
+            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+            return;
+        }
+
+
         IslandKickEvent kickEvent = new IslandKickEvent(getIslandInstance(), kicker, target);
         Bukkit.getPluginManager().callEvent(kickEvent);
 
@@ -562,6 +651,14 @@ public class Island {
 
     public void demote(UUID admin, UUID target){
         Player adminPlayer = Bukkit.getPlayer(admin);
+
+        Role role = SkyBlock.getInstance().getIslandUtils().getRole(adminPlayer.getUniqueId(), getIslandInstance());
+        if (!hasPerm(role, Perm.DEMOTE_COOWNER) || !hasPerm(role, Perm.DEMOTE_OFFICER)){
+            //return it
+            adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+            return;
+        }
+
         if (!getMemberList().contains(target) && !getOfficerList().contains(target)){
             adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNoPlayer"));
             return;
@@ -653,6 +750,14 @@ public class Island {
 
     public void promote(UUID admin, UUID target){
         Player adminPlayer = Bukkit.getPlayer(admin);
+
+        Role role = SkyBlock.getInstance().getIslandUtils().getRole(adminPlayer.getUniqueId(), getIslandInstance());
+        if (!hasPerm(role, Perm.PROMOTE_MEMBER) || !hasPerm(role, Perm.PROMOTE_OFFICER)){
+            //return it
+            adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noPermissionIsland"));
+            return;
+        }
+
         if (!getMemberList().contains(target) && !getOfficerList().contains(target)){
             adminPlayer.sendMessage(SkyBlock.getInstance().getUtils().getMessage("demotedNoPlayer"));
             return;
@@ -828,50 +933,6 @@ public class Island {
         this.protectionRadius = protectionRadius;
     }
 
-    public boolean canMemberBreak(){
-        return permissionMemberBreak;
-    }
-    public boolean canMemberPlace(){
-        return permissionMemberPlace;
-    }
-    public boolean canMemberInteract(){
-        return permissionMemberInteract;
-    }
-
-    public boolean canOfficerBreak(){
-        return permissionOfficerBreak;
-    }
-    public boolean canOfficerPlace(){
-        return permissionOfficerPlace;
-    }
-    public boolean canOfficerInteract(){
-        return permissionOfficerInteract;
-    }
-
-    public void setPermissionMemberBreak(boolean permissionMemberBreak) {
-        this.permissionMemberBreak = permissionMemberBreak;
-    }
-
-    public void setPermissionMemberInteract(boolean permissionMemberInteract) {
-        this.permissionMemberInteract = permissionMemberInteract;
-    }
-
-    public void setPermissionMemberPlace(boolean permissionMemberPlace) {
-        this.permissionMemberPlace = permissionMemberPlace;
-    }
-
-    public void setPermissionOfficerBreak(boolean permissionOfficerBreak) {
-        this.permissionOfficerBreak = permissionOfficerBreak;
-    }
-
-    public void setPermissionOfficerInteract(boolean permissionOfficerInteract) {
-        this.permissionOfficerInteract = permissionOfficerInteract;
-    }
-
-    public void setPermissionOfficerPlace(boolean permissionOfficerPlace) {
-        this.permissionOfficerPlace = permissionOfficerPlace;
-    }
-
     public void setCenterX(double centerX) {
         this.centerX = centerX;
     }
@@ -888,28 +949,35 @@ public class Island {
         this.islandInstance = islandInstance;
     }
 
-    public boolean isPermissionMemberBreak() {
-        return permissionMemberBreak;
+    public ArrayList<Perms> getCoOwnerPerms() {
+        return coOwnerPerms;
     }
 
-    public boolean isPermissionMemberInteract() {
-        return permissionMemberInteract;
+    public ArrayList<Perms> getMemberPerms() {
+        return memberPerms;
     }
 
-    public boolean isPermissionMemberPlace() {
-        return permissionMemberPlace;
+    public ArrayList<Perms> getOfficerPerms() {
+        return officerPerms;
     }
 
-    public boolean isPermissionOfficerBreak() {
-        return permissionOfficerBreak;
+    public ArrayList<Perms> getVisitorPerms() {
+        return visitorPerms;
     }
 
-    public boolean isPermissionOfficerPlace() {
-        return permissionOfficerPlace;
+    public void setCoOwnerPerms(ArrayList<Perms> coOwnerPerms) {
+        this.coOwnerPerms = coOwnerPerms;
     }
 
-    public boolean isPermissionOfficerInteract() {
-        return permissionOfficerInteract;
+    public void setMemberPerms(ArrayList<Perms> memberPerms) {
+        this.memberPerms = memberPerms;
     }
 
+    public void setOfficerPerms(ArrayList<Perms> officerPerms) {
+        this.officerPerms = officerPerms;
+    }
+
+    public void setVisitorPerms(ArrayList<Perms> visitorPerms) {
+        this.visitorPerms = visitorPerms;
+    }
 }

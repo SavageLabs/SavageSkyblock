@@ -9,10 +9,17 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.savage.skyblock.SkyBlock;
 
+import static org.savage.skyblock.island.upgrades.UpgradesUI.createFadedItem;
+
 public class DeleteIsland implements Listener {
 
     public static void openDelete(Player p){
         Inventory i = Bukkit.createInventory(null, SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("delete-island.rows") * 9, SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("delete-island.name")));
+
+        for (String s : SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("delete-island.faded-slots").split(",")){
+            int slot = Integer.parseInt(s);
+            i.setItem(slot -1, createFadedItem());
+        }
 
         i.setItem(SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("delete-island.confirm.slot") - 1, SkyBlock.getInstance().getUtils().createItem(SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("delete-island.confirm.item-id"), 0, SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("delete-island.confirm.item-name"), SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getStringList("delete-island.confirm.item-lore"), 1));
         i.setItem(SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("delete-island.deny.slot") - 1, SkyBlock.getInstance().getUtils().createItem(SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("delete-island.deny.item-id"), 0, SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("delete-island.deny.item-name"), SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getStringList("delete-island.deny.item-lore"), 1));

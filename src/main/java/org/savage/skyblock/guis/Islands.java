@@ -14,10 +14,17 @@ import org.savage.skyblock.island.MemoryPlayer;
 
 import java.util.List;
 
+import static org.savage.skyblock.island.upgrades.UpgradesUI.createFadedItem;
+
 public class Islands implements Listener {
 
     public static void openIslands(Player p) {
         Inventory i = Bukkit.createInventory(null, SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("islands.rows") * 9, SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("islands.name")));
+
+        for (String s : SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("islands.faded-slots").split(",")){
+            int slot = Integer.parseInt(s);
+            i.setItem(slot -1, createFadedItem());
+        }
 
         int m = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getConfigurationSection("islands.items").getKeys(false).size();
         for (int a = 1; a <= m; a++) {

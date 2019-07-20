@@ -1,7 +1,9 @@
 package org.savage.skyblock;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.upgrades.Upgrade;
 
@@ -12,13 +14,26 @@ import java.util.UUID;
 
 public class Placeholder {
 
-    public static int getIslandTopPlacement(String placeholderString) {
+    public static int getIslandTopPlacement(String placeholderString, Player p) {
         placeholderString = ChatColor.stripColor(SkyBlock.getInstance().getUtils().color(placeholderString));
-        if (placeholderString.contains("%top-")) {
-            //contains the placeholder, we need to figure out the number in it
-            placeholderString = placeholderString.substring(placeholderString.lastIndexOf("%top-"));
-            return SkyBlock.getInstance().getUtils().getIntegersFromString(placeholderString);
-        }
+
+            if (placeholderString.contains("%top-")) {
+                //if (placeholderString.contains("%top-me%")){
+                //    Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                //    if (island != null){
+                //        //Bukkit.broadcastMessage("TTTT: "+island.getTopPlace());
+                //        //return island.getTopPlace();
+                //    }
+                //}
+                //contains the placeholder, we need to figure out the number in it
+                // placeholderString = placeholderString.substring(placeholderString.lastIndexOf("%top-"));
+                // placeholderString = placeholderString.substring(placeholderString.lastIndexOf("%"));
+                placeholderString = placeholderString.split("%top-")[1];
+
+                placeholderString = placeholderString.split("%")[0];
+
+                return SkyBlock.getInstance().getUtils().getIntegersFromString(placeholderString);
+            }
         return 1;
     }
 
@@ -74,7 +89,7 @@ public class Placeholder {
                 if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
                     s = s.replace("%cost%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max")).replace("$", "");
                 } else {
-                    s = s.replace("%cost%", (Upgrade.Upgrades.getTierCost(upgrade, island.getUpgradeTier(upgrade)) + 1) + "");
+                    s = s.replace("%cost%", (Upgrade.Upgrades.getTierCost(upgrade, island.getUpgradeTier(upgrade)+1) + ""));
                 }
             }
 
@@ -111,7 +126,7 @@ public class Placeholder {
             if ((island.getUpgradeTier(upgrade) + 1) > Upgrade.Upgrades.getMaxTier(upgrade)) {
                 s = s.replace("%cost%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.max")).replace("$", "");
             } else {
-                s = s.replace("%cost%", (Upgrade.Upgrades.getTierCost(upgrade, island.getUpgradeTier(upgrade)) + 1) + "");
+                s = s.replace("%cost%", (Upgrade.Upgrades.getTierCost(upgrade, island.getUpgradeTier(upgrade)+1) + ""));
             }
         }
 
@@ -122,9 +137,9 @@ public class Placeholder {
         if (island != null) {
             s = s.replace("%owner%", SkyBlock.getInstance().getUtils().getNameFromUUID(island.getOwnerUUID()));
             s = s.replace("%level%", island.getLevel() + "");
-            s = s.replace("%worth%", island.getWorth() + "");
-            s = s.replace("%block-worth%", island.getBlockWorth() + "");
-            s = s.replace("%spawner-worth%", island.getSpawnerWorth() + "");
+            s = s.replace("%worth%", Utils.numberFormat.formatDbl(island.getWorth()));
+            s = s.replace("%block-worth%", Utils.numberFormat.formatDbl(island.getBlockWorth()));
+            s = s.replace("%spawner-worth%", Utils.numberFormat.formatDbl(island.getSpawnerWorth()));
 
             s = s.replace("{island-name}", island.getName());
             s = s.replace("{island-level}", island.getLevel() + "");

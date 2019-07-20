@@ -11,7 +11,7 @@ scoreboard-rows:
   - ' '
   - '&7Island: &c%island%'
   - '&7Player: &c%player%'
-  - '&7Money: &a$&c%money%'
+  - '&7Money: &a$&l%money%'
   - ' '
   - '&7IS-Bank: &a$&l%is-bank%'
   - '&7IS-TOP:&a #&l%is-top%'

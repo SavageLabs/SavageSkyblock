@@ -13,14 +13,21 @@ import org.savage.skyblock.island.Island;
 
 import java.util.List;
 
+import static org.savage.skyblock.island.upgrades.UpgradesUI.createFadedItem;
+
 public class ISTop implements Listener {
 
     public static void openISTop(Player p) {
         Inventory i = Bukkit.createInventory(null, SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("istop.rows") * 9, SkyBlock.getInstance().getUtils().color(SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("istop.name")));
 
+        for (String s : SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("istop.faded-slots").split(",")){
+            int slot = Integer.parseInt(s);
+            i.setItem(slot -1, createFadedItem());
+        }
+
         int m = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getConfigurationSection("istop.items").getKeys(false).size();
         for (int a = 1; a <= m; a++) {
-            String id = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("istop.items." + a + ".item-id");
+            String id = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("istop.items." + a + ".item-id").toUpperCase();
             String name = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getString("istop.items." + a + ".item-name");
             int slot = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("istop.items." + a + ".slot");
             int data = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getInt("istop.items." + a + ".item-data");
@@ -29,9 +36,12 @@ public class ISTop implements Listener {
 
             boolean placement = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getBoolean("istop.items." + a + ".is-placement");
 
+            String owner = "";
+
             if (placement) {
                 lore = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getStringList("istop.placement-item.item-lore");
-                int placementNum = Placeholder.getIslandTopPlacement(name);
+                int placementNum = Placeholder.getIslandTopPlacement(name, p);
+                //Bukkit.broadcastMessage("place: "+placementNum);
                 Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromPlacement(placementNum);
 
                 lore = Placeholder.convertPlaceholders(lore, island);
@@ -41,14 +51,29 @@ public class ISTop implements Listener {
                 } else {
                     name = name.replace("%top-" + placementNum + "%", SkyBlock.getInstance().getUtils().getSettingString("invalid-island-top-name-placeholders"));
                 }
+                if (island != null) {
+                    if (id.contains("HEAD") || id.contains("SKULL")) {
+                        if (island.getOwnerUUID() != null && Bukkit.getPlayer(island.getOwnerUUID()) != null) {
+                            owner = Bukkit.getPlayer(island.getOwnerUUID()).getName();
+                        } else {
+                            owner = Bukkit.getOfflinePlayer(island.getOwnerUUID()).getName();
+                        }
+                    }
+                }
 
             } else {
                 lore = SkyBlock.getInstance().getFileManager().getGuis().getFileConfig().getStringList("istop.items." + a + ".item-lore");
             }
 
 
-            ItemStack item = SkyBlock.getInstance().getUtils().createItem(id, data, name, lore, 1);
-            i.setItem(slot - 1, item);
+            if (!owner.equalsIgnoreCase("")){
+                //create skull
+                ItemStack item = SkyBlock.getInstance().getUtils().createHead(owner, id, data, name, lore, 1);
+                i.setItem(slot - 1, item);
+            }else{
+                ItemStack item = SkyBlock.getInstance().getUtils().createItem(id, data, name, lore, 1);
+                i.setItem(slot - 1, item);
+            }
         }
 
         p.openInventory(i);

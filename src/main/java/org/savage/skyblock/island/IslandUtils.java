@@ -2,16 +2,38 @@ package org.savage.skyblock.island;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.savage.skyblock.API.IslandCreateEvent;
 import org.savage.skyblock.API.IslandCreatedEvent;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
+import org.savage.skyblock.island.permissions.Perm;
+import org.savage.skyblock.island.permissions.Perms;
+import org.savage.skyblock.island.permissions.Role;
+import org.savage.skyblock.island.rules.Rule;
+import org.savage.skyblock.island.rules.Rules;
 import org.savage.skyblock.island.warps.IslandWarp;
 
 import java.util.*;
 
 public class IslandUtils {
+
+    public Role getRole(UUID uuid, Island island){
+        if (isOwner(uuid, island)){
+            return Role.OWNER;
+        }
+        if (isCoOwner(uuid, island)){
+            return Role.COOWNER;
+        }
+        if (isOfficer(uuid, island)){
+            return Role.OFFICER;
+        }
+        if (isMember(uuid, island)){
+            return Role.MEMBER;
+        }
+        return Role.VISITOR;
+    }
 
     public Location getIslandSpawn() {
         String s = SkyBlock.getInstance().getConfig().getString("settings.island-spawn");
@@ -29,7 +51,6 @@ public class IslandUtils {
                     Location location = SkyBlock.getInstance().getUtils().generateIslandLocation(Storage.minLocation(), Storage.maxLocation());
                     Island island = new Island(schematicName, location.getBlockX(), location.getBlockY(), location.getBlockZ(), p.getUniqueId(), new ArrayList<>(),
                             new ArrayList<>(), new ArrayList<>(), SkyBlock.getInstance().getUtils().getSettingInt("default-protection-radius"), p.getName(), 0);
-
                     p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("createIsland"));
 
                     Bukkit.getPluginManager().callEvent(new IslandCreatedEvent(p.getUniqueId(), island));
@@ -52,14 +73,6 @@ public class IslandUtils {
             }
         }
         return null;
-    }
-
-    public boolean hasAdminPermissions(Player p, Island island){
-        return isOwner(p.getUniqueId(), island) || isCoOwner(p.getUniqueId(), island);
-    }
-
-    public boolean hasModPermissions(Player p, Island island){
-        return hasAdminPermissions(p, island) || isOfficer(p.getUniqueId(), island);
     }
 
     public Island getIslandFromLocation(Location location) {
@@ -171,6 +184,7 @@ public class IslandUtils {
             island.setBlockWorth(0);
             island.setSpawnerWorth(0);
 
+
             Iterator it = island.getBlocks().entrySet().iterator();
             while (it.hasNext()) {
                 Map.Entry pair = (Map.Entry)it.next();
@@ -226,4 +240,28 @@ public class IslandUtils {
         fakeChunkList.clear();
 
     }
+
+    public ArrayList<Perms> buildDefaultPerms(Role role){
+        FileConfiguration f = SkyBlock.getInstance().getFileManager().getPermissions().getFileConfig();
+        ArrayList<Perms> perms = new ArrayList<>();
+        for (Role r : Role.values()){
+            if (role.equals(r)){
+                for (Perm perm : Perm.values()){
+                    perms.add(new Perms(perm, f.getBoolean("default-permissions."+r.name().toUpperCase()+"."+perm.name().toUpperCase())));
+                }
+            }
+        }
+        return perms;
+    }
+
+    public ArrayList<Rules> buildDefaultRules(){
+        FileConfiguration f = SkyBlock.getInstance().getFileManager().getRules().getFileConfig();
+        ArrayList<Rules> rules = new ArrayList<>();
+        for (Rule r : Rule.values()){
+            // perms.add(new Perms(perm, f.getBoolean("default-permissions."+r.name().toUpperCase()+"."+perm.name().toUpperCase())));
+            rules.add(new Rules(r, f.getBoolean("default-rules."+r.name())));
+        }
+        return rules;
+    }
+
 }

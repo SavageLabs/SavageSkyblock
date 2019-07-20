@@ -1,0 +1,44 @@
+# Island Rules.yml #
+
+placeholders:
+  allowed: '&a&lALLOWED'
+  denied: '&c&lDENIED'
+
+allowed-glow: true # when a rule is allowed, should the item glow?
+
+rule-items:
+  ISLAND_LOCK:
+    item-id: 'iron_fence'
+    item-data: 0
+    name: '&7&lIsland Lock'
+    lore:
+      - '&7Allow other users to teleport to your Island?'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  MOB_SPAWNING:
+    item-id: 'mob_spawner'
+    item-data: 0
+    name: '&e&lMob Spawning'
+    lore:
+      - '&7Allow mobs to spawn on this Island?'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+  PVP:
+    item-id: 'diamond_sword'
+    item-data: 0
+    name: '&c&lPVP'
+    lore:
+      - '&7Allow your Island members to PVP on this Island?'
+      - ''
+      - '&7 - Status: %status%'
+      - '&7&oClick to toggle allowed/denied'
+
+
+
+default-rules:
+
+  ISLAND_LOCK: false
+  MOB_SPAWNING: true
+  PVP: false
