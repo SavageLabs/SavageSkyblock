@@ -108,7 +108,7 @@ public class IslandCommands implements CommandExecutor {
                         }
                     }
 
-                    if (arg1.equalsIgnoreCase("balance")){
+                    if (arg1.equalsIgnoreCase("balance") || arg1.equalsIgnoreCase("bal")){
                         //send the island balance
                         Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
                         if (island != null){
