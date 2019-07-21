@@ -31,7 +31,6 @@ public class NMSHandler_v1_10_R1 extends NMSHandler {
 
     public void calculate(Chunk chunk, Island island) {
 
-        List<org.bukkit.Material> tileEntities = SkyBlock.getInstance().getReflectionManager().tileEntities;
 
         final CraftChunk craftChunk = (CraftChunk) chunk;
 
@@ -49,7 +48,7 @@ public class NMSHandler_v1_10_R1 extends NMSHandler {
                         for (int z = minZ; z <= maxZ; ++z) {
                             org.bukkit.block.Block block = chunk.getBlock(x, y, z);
                             if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
-                                if (!tileEntities.contains(block.getType())) {
+                                if (!ReflectionManager.tileEntities.contains(block.getType())) {
                                     String type = block.getType().name().toUpperCase();
                                     if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)){
                                         island.addBlockCount(type, false, 1);
