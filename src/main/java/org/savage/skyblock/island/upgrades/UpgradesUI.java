@@ -23,8 +23,8 @@ import java.util.UUID;
 public class UpgradesUI implements Listener {
 
     public static ItemStack createFadedItem(){
-        String id = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("faded-item.item-id");
-        int data = SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getInt("faded-item.item-data");
+        String id = SkyBlock.getInstance().getConfig().getString("settings.faded-item.item-id");
+        int data = SkyBlock.getInstance().getConfig().getInt("settings.faded-item.item-data");
 
         ItemStack item = Materials.requestXMaterial(id, (byte)data).parseItem();
         ItemMeta meta = item.getItemMeta();
