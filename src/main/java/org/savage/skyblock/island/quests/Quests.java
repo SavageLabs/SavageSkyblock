@@ -324,7 +324,7 @@ public class Quests {
                         quest.addRequirement(requirement);
                     }
                     if (debug){
-                        SkyBlock.getInstance().getUtils().log("Loaded Quest: " + questName + ", " + questID + " : Requirements = " + quest.getRequirements().toString());
+                        //SkyBlock.getInstance().getUtils().log("Loaded Quest: " + questName + ", " + questID + " : Requirements = " + quest.getRequirements().toString());
                     }
                 }
             }
