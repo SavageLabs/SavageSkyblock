@@ -128,7 +128,7 @@ public class IslandCommands implements CommandExecutor {
                         }
                     }
 
-                    if (arg1.equalsIgnoreCase("upgrades")){
+                    if (arg1.equalsIgnoreCase("upgrades") || arg1.equalsIgnoreCase("upgrade")){
                         if (SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId()) != null){
                             UpgradesUI.openUpgradesUI(p);
                         }else{

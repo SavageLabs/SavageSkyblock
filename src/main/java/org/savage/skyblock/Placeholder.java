@@ -37,6 +37,10 @@ public class Placeholder {
         return 1;
     }
 
+    private static String convertOreName(String oreName){
+        return SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.materials."+oreName.toLowerCase());
+    }
+
     public static List<String> convertPlaceholders(List<String> originalList, Island island, Upgrade upgrade){
         if (island == null) return SkyBlock.getInstance().getUtils().color(originalList);
 
@@ -62,9 +66,12 @@ public class Placeholder {
 
             if (s.contains("currentUpgrade%")) {
                 for (Material material: map.keySet()){
+                    if (material == null) continue;
                     int chance = map.get(material);
                     String ss = s;
-                    ss = ss.replace(n+"currentUpgrade%", currentUpgrade.replace("%material%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.materials."+material.name().toLowerCase())).replace("%chance%", chance+""));
+                    String oreName = convertOreName(material.name());
+                    if (oreName == null) continue;
+                    ss = ss.replace(n+"currentUpgrade%", currentUpgrade.replace("%material%", oreName).replace("%chance%", chance+""));
                     newList.add(ss);
                 }
                 t = true;
@@ -76,9 +83,13 @@ public class Placeholder {
                     newList.add(ss);
                 }else{
                     for (Material material : map2.keySet()) {
+                        if (material == null) continue;
                         int chance = map2.get(material);
                         String ss = s;
-                        ss = ss.replace(n+"nextUpgrade%", nextUpgrade.replace("%material%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.materials."+material.name().toLowerCase())).replace("%chance%", chance+""));
+                        String oreName = convertOreName(material.name());
+                        if (oreName == null) continue;
+                        ss = ss.replace(n+"nextUpgrade%", nextUpgrade.replace("%material%", oreName).replace("%chance%", chance+""));
+                     //   ss = ss.replace(n+"nextUpgrade%", nextUpgrade.replace("%material%", SkyBlock.getInstance().getFileManager().getUpgrades().getFileConfig().getString("placeholders.materials."+material.name().toLowerCase())).replace("%chance%", chance+""));
                         newList.add(ss);
                     }
                 }
