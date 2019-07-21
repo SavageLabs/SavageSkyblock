@@ -3,6 +3,11 @@
 
 settings:
 
+  faded-item:
+    glowing: true
+    item-id: 'stained_glass_pane'
+    item-data: 15
+
   config-version: 1.3 # DO NOT CHANGE THIS!!!
 
   debug: false # if you want debug messages in console enable this, if not set to "false"
@@ -13,7 +18,7 @@ settings:
 
   island-bank-name: '&aIsland Bank'
 
-  fast-break-permission: 'skyblock.fastbreak' # allows players to break blocks fast, similar to Creative Mode
+  fafst-break-permission: 'skyblock.fastbreak' # allows players to break blocks fast, similar to Creative Mode
 
   send-island-enter-message: true # send the "island-enter" message from messages.yml?
   send-island-leave-message: true # send the "island-leave" message from messages.yml?

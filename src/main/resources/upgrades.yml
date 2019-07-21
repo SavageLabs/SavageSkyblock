@@ -1,10 +1,5 @@
 #   SavageSkyBlock Upgrades   #
 
-faded-item:
-  glowing: true
-  item-id: 'stained_glass_pane'
-  item-data: 15
-
 placeholders:
   max: '&c&lMAX'
   generator-current-upgrade: '&7- &a%material% &9(&b%chance%&l%&9)'
