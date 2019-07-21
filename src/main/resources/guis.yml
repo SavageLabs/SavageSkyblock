@@ -63,8 +63,6 @@ island-perms:
           - '&7Click to modify the Co-Owner''s permissions on this Island!'
 
 
-
-
 island-warps:
   name: '&b&lIsland Warps &7(%warps% warps)'
   rows: 3
@@ -87,12 +85,14 @@ delete-island:
   confirm:
     slot: 1
     item-id: 'emerald_block'
+    item-data: 0
     item-name: '&aYes, delete my island!'
     item-lore:
       - '&aClicking this will delete your island!'
   deny:
     slot: 9
     item-id: 'barrier'
+    item-data: 0
     item-name: '&cNo, don''t  delete my island!'
     item-lore:
       - '&cClicking this will cancel deleting your island!'
