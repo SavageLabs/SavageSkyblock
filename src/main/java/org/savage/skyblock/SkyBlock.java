@@ -146,10 +146,11 @@ public class SkyBlock extends JavaPlugin {
 
         islandBoard.updateBoard();
 
-        PluginHook.registerMVdPlaceholders();
-
         if (PluginHook.isEnabled("PlaceholderAPI")){
             new PAPIExpansion(this).register();
+        }
+        if (PluginHook.isEnabled("MVdWPlaceholderAPI")){
+            MVdPlaceholders.registerMVdPlaceholders();
         }
 
         startTopTimer();
