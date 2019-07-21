@@ -262,12 +262,12 @@ istop:
   placement-item:
     item-lore:
       - '' # spacer
-      - '&aIsland Owner: &l%owner% TT'
+      - '&aIsland Owner: &l%owner%'
       - '&cLevel: &l%level% T'
       - ''
       - '&aWorth: $&l%worth% T'
-      - '&aValuable Blocks: $&l%block-worth% T'
-      - '&aValuable Spawners: $&l%spawner-worth% T'
+      - '&aValuable Blocks: $&l%block-worth%'
+      - '&aValuable Spawners: $&l%spawner-worth%'
       - ''
       - '&a&lOfficers:'
       - '&7- &a%officers%'
@@ -278,14 +278,14 @@ istop:
       slot: 5
       item-id: 'skull_item'
       item-data: 3 # player head
-      item-name: '&c&l#1. &7- &a(&l%top-1% Rank#1 &a) ttt'
+      item-name: '&c&l#1. &7- &a(&l%top-1%&a)'
       item-amount: 1
       is-placement: true
     2:
       slot: 13
       item-id: 'skull_item'
       item-data: 3 # player head
-      item-name: '&c&l#2. &7- &a(&l%top-2%&a) tt'
+      item-name: '&c&l#2. &7- &a(&l%top-2%&a)'
       item-amount: 1
       is-placement: true
     3:
