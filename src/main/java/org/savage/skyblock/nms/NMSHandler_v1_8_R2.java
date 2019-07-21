@@ -35,8 +35,6 @@ public class NMSHandler_v1_8_R2 extends NMSHandler {
 
         final CraftChunk craftChunk = (CraftChunk) chunk;
 
-        List<org.bukkit.Material> tileEntities = SkyBlock.getInstance().getReflectionManager().tileEntities;
-
         final int minX = chunk.getX() << 4;
         final int minZ = chunk.getZ() << 4;
         final int maxX = minX | 15;
@@ -51,7 +49,7 @@ public class NMSHandler_v1_8_R2 extends NMSHandler {
                         for (int z = minZ; z <= maxZ; ++z) {
                             org.bukkit.block.Block block = chunk.getBlock(x, y, z);
                             if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
-                                if (!tileEntities.contains(block.getType())) {
+                                if (!ReflectionManager.tileEntities.contains(block.getType())) {
                                     String type = block.getType().name().toUpperCase();
                                     if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)){
                                         island.addBlockCount(type, false, 1);

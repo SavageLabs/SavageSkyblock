@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.savage.skyblock.API.IslandUpgradeEvent;
 import org.savage.skyblock.Materials;
+import org.savage.skyblock.MultiMaterials;
 import org.savage.skyblock.Placeholder;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
@@ -26,7 +27,8 @@ public class UpgradesUI implements Listener {
         String id = SkyBlock.getInstance().getConfig().getString("settings.faded-item.item-id");
         int data = SkyBlock.getInstance().getConfig().getInt("settings.faded-item.item-data");
 
-        ItemStack item = Materials.requestXMaterial(id, (byte)data).parseItem();
+        ItemStack item = SkyBlock.getInstance().getUtils().getMultiVersionItem(id, data);
+       // ItemStack item = Materials.requestXMaterial(id, (byte)data).parseItem();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName(SkyBlock.getInstance().getUtils().color("&8"));
         meta.setLore(new ArrayList<>());

@@ -34,11 +34,18 @@ public class FileManager {
         permissions.setup(true, "");
         rules.setup(true, "");
 
-        if (!new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").exists()) {
-            new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").mkdir();
-        }
+       // if (!new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").exists()) {
+       //     new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").mkdir();
+       // }
 
+        File schemFolder = new File(SkyBlock.getInstance().getDataFolder()+"/Schematics");
         File questFolder = new File(SkyBlock.getInstance().getDataFolder()+"/Quests");
+
+        if (!schemFolder.exists()){
+            //create it
+            schemFolder.mkdir();
+            SkyBlock.getInstance().saveResource("Schematics/"+"default.schematic", false);
+        }
 
         if (!questFolder.exists()){
             questFolder.mkdir();//create the folder
