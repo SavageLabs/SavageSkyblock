@@ -5,7 +5,7 @@ settings:
 
   config-version: 1.3 # DO NOT CHANGE THIS!!!
 
-  debug: true # if you want debug messages in console enable this, if not set to "false"
+  debug: false # if you want debug messages in console enable this, if not set to "false"
 
   data-save-interval: 5 # in minutes
 
