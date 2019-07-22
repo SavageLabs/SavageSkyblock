@@ -1,8 +1,13 @@
 package org.savage.skyblock.filemanager;
 
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
+import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
+import org.apache.commons.io.FileUtils;
 import org.savage.skyblock.SkyBlock;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 public class FileManager {
 
@@ -34,21 +39,22 @@ public class FileManager {
         permissions.setup(true, "");
         rules.setup(true, "");
 
-       // if (!new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").exists()) {
-       //     new File(SkyBlock.getInstance().getDataFolder() + "/Schematics").mkdir();
-       // }
-
         File schemFolder = new File(SkyBlock.getInstance().getDataFolder()+"/Schematics");
         File questFolder = new File(SkyBlock.getInstance().getDataFolder()+"/Quests");
 
         if (!schemFolder.exists()){
-            //create it
             schemFolder.mkdir();
-            SkyBlock.getInstance().saveResource("Schematics/"+"default.schematic", false);
+           // SkyBlock.getInstance().saveResource("Schematics/"+"default.schematic", false);
+
+            try {
+                FileUtils.copyInputStreamToFile(SkyBlock.getInstance().getResource("default.schematic"), new File(schemFolder+"/default.schematic"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         if (!questFolder.exists()){
-            questFolder.mkdir();//create the folder
+            questFolder.mkdir();
             questFile.setup(true, "Quests");
             foreverQuestFile.setup(true, "Quests");
             dailyQuestFile.setup(true, "Quests");
