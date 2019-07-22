@@ -19,5 +19,4 @@ public class ReflectionManager {
             e.printStackTrace();
         }
     }
-
 }
