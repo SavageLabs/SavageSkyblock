@@ -45,13 +45,15 @@ public class FileManager {
         if (!schemFolder.exists()){
             schemFolder.mkdir();
            // SkyBlock.getInstance().saveResource("Schematics/"+"default.schematic", false);
-
+        }
+        if (!new File(schemFolder+"/default.schematic").exists()){
             try {
                 FileUtils.copyInputStreamToFile(SkyBlock.getInstance().getResource("default.schematic"), new File(schemFolder+"/default.schematic"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+
 
         if (!questFolder.exists()){
             questFolder.mkdir();
