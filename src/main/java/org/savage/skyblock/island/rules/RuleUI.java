@@ -1,16 +1,16 @@
 package org.savage.skyblock.island.rules;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.savage.skyblock.API.Glow;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
 
@@ -90,13 +90,16 @@ public class RuleUI implements Listener {
         String denied = f.getString("placeholders.denied");
 
         boolean glow = f.getBoolean("allowed-glow");
+        ItemMeta meta = temp.getItemMeta();
 
         for (String s : f.getStringList("rule-items."+rule.name().toUpperCase()+".lore")){
             if (s.contains("%status%")){
                 if (allow){
                     s = s.replace("%status%", allowed);
                     if (glow){
-                        Glow.addGlow(temp);
+
+                        meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+                       // Glow.addGlow(temp);
                     }
                 }else{
                     s = s.replace("%status%", denied);
@@ -104,7 +107,7 @@ public class RuleUI implements Listener {
             }
             lore.add(s);
         }
-        ItemMeta meta = temp.getItemMeta();
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS, ItemFlag.HIDE_ATTRIBUTES);
         meta.setDisplayName(SkyBlock.getInstance().getUtils().color(name));
         meta.setLore(SkyBlock.getInstance().getUtils().color(lore));
         temp.setItemMeta(meta);
