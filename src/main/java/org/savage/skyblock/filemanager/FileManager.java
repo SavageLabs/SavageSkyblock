@@ -1,13 +1,8 @@
 package org.savage.skyblock.filemanager;
 
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormat;
-import com.sk89q.worldedit.extent.clipboard.io.ClipboardFormats;
-import org.apache.commons.io.FileUtils;
 import org.savage.skyblock.SkyBlock;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 public class FileManager {
 
@@ -46,12 +41,17 @@ public class FileManager {
             schemFolder.mkdir();
            // SkyBlock.getInstance().saveResource("Schematics/"+"default.schematic", false);
         }
-        if (!new File(schemFolder+"/default.schematic").exists()){
-            try {
-                FileUtils.copyInputStreamToFile(SkyBlock.getInstance().getResource("default.schematic"), new File(schemFolder+"/default.schematic"));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        if (!new File(schemFolder+ "/Schematics/default.schematic").exists()){
+
+            SkyBlock.getInstance().saveResource("Schematics/default.schematic", false);
+
+           // File schemFile = SkyBlock.getInstance().getClass().getClassLoader().getResource("")
+
+            //try {
+            //    FileUtils.copyInputStreamToFile(SkyBlock.getInstance().getResource("default.schematic"), new File(schemFolder+"/default.schematic"));
+            //} catch (IOException e) {
+            //    e.printStackTrace();
+            //}
         }
 
 

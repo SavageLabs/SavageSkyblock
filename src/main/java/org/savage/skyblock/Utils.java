@@ -860,7 +860,7 @@ public class Utils {
             boolean allow = Boolean.parseBoolean(s.split("!")[1]);
             Perm perm = Perm.getPerm(permName);
             perms.add(new Perms(perm, allow));
-            System.out.print("\n loaded perm: "+perm.name()+", "+allow+"\n");
+           // System.out.print("\n loaded perm: "+perm.name()+", "+allow+"\n");
         }
         return perms;
     }
