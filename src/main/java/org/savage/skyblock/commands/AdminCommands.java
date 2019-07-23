@@ -29,6 +29,27 @@ public class AdminCommands implements CommandExecutor {
                         if (args[0].equalsIgnoreCase("reload")){
                             SkyBlock.getInstance().reloadConfig();
                             SkyBlock.getInstance().getFileManager().getData().loadFile(); //todo; might have to remove this if it overrides data saves
+                            SkyBlock.getInstance().getFileManager().getGuis().loadFile();
+                            SkyBlock.getInstance().getFileManager().getQuestFile().loadFile();
+                            SkyBlock.getInstance().getFileManager().getMessages().loadFile();
+                            SkyBlock.getInstance().getFileManager().getUpgrades().loadFile();
+                            SkyBlock.getInstance().getFileManager().getWorth().loadFile();
+                            SkyBlock.getInstance().getFileManager().getScoreboard().loadFile();
+                            SkyBlock.getInstance().getFileManager().getPermissions().loadFile();
+                            SkyBlock.getInstance().getFileManager().getRules().loadFile();
+
+                            // quests
+
+                            SkyBlock.getInstance().getFileManager().getDailyQuestFile().loadFile();
+                            SkyBlock.getInstance().getFileManager().getForeverQuestFile().loadFile();
+                            SkyBlock.getInstance().getFileManager().getWeeklyQuestFile().loadFile();
+                            SkyBlock.getInstance().getFileManager().getMonthlyQuestFile().loadFile();
+
+
+
+
+
+
                             p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("reload"));
 
                             Bukkit.getScheduler().cancelTasks(SkyBlock.getInstance());
