@@ -17,7 +17,7 @@ public class CScoreboard {
 
   private final String name, criterion;
 
-    private final Scoreboard bukkitScoreboard;
+    private Scoreboard bukkitScoreboard;
     private final Objective obj;
      String title;
      private Row[] rows = new Row[0];
@@ -40,6 +40,12 @@ public class CScoreboard {
         this.title = title;
 
         this.obj.setDisplayName(title);
+    }
+
+    public void remove(Player player){
+        //delete the scoreboard instance
+        player.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard()); // remove
+        this.bukkitScoreboard = null;
     }
 
     public void display(Player player){
@@ -140,10 +146,11 @@ public class CScoreboard {
             this.message = message;
 
             if(scoreboard.finished){
-                final String[] parts = splitStringWithChatcolorInHalf(message);
-
-                this.team.setPrefix(parts[0]);
-                this.team.setSuffix(parts[1]);
+               // final String[] parts = splitStringWithChatcolorInHalf(message);
+                //this.team.setPrefix("69");
+                this.team.setSuffix(message);
+                //this.team.setPrefix(parts[0]);
+                //this.team.setSuffix(parts[1]);
             }
         }
 

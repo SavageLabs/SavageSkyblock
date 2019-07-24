@@ -40,32 +40,33 @@ public class NMSHandler_v1_13_R2 extends NMSHandler {
         final int maxY = chunk.getWorld().getMaxHeight();
         final int maxZ = minZ | 15;
 
-
-        new Thread(new Runnable() {
-            public void run(){
-                for (int x = minX; x <= maxX; ++x) {
-                    for (int y = 0; y <= maxY; ++y) {
-                        for (int z = minZ; z <= maxZ; ++z) {
-                            try {
-                                org.bukkit.block.Block block = chunk.getWorld().getBlockAt(x,y,z);
-                                if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
-                                    if (!ReflectionManager.tileEntities.contains(block.getType())) {
-                                        String type = block.getType().name().toUpperCase();
-                                        if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)) {
-                                            island.addBlockCount(type, false, 1);
-                                            // System.out.print("\n\n\n "+type+":"+island.getBlockCount(new FakeItem("DIAMOND_BLOCK", false))+"   \n\n\n");
+        try {
+            new Thread(new Runnable() {
+                public void run() {
+                    for (int x = minX; x <= maxX; ++x) {
+                        for (int y = 0; y <= maxY; ++y) {
+                            for (int z = minZ; z <= maxZ; ++z) {
+                                try {
+                                    org.bukkit.block.Block block = chunk.getWorld().getBlockAt(x, y, z);
+                                    if (block != null && !block.getType().equals(org.bukkit.Material.AIR)) {
+                                        if (!ReflectionManager.tileEntities.contains(block.getType())) {
+                                            String type = block.getType().name().toUpperCase();
+                                            if (SkyBlock.getInstance().getIslandUtils().hasWorth(type, false)) {
+                                                island.addBlockCount(type, false, 1);
+                                                // System.out.print("\n\n\n "+type+":"+island.getBlockCount(new FakeItem("DIAMOND_BLOCK", false))+"   \n\n\n");
+                                            }
                                         }
                                     }
+                                } catch (IllegalArgumentException e) {
+                                    e.printStackTrace();
+                                    return;
                                 }
-                            }catch(IllegalArgumentException e){
-                                e.printStackTrace();
-                                return;
                             }
                         }
                     }
                 }
-            }
-        }).start();
+            }).start();
+        }catch(IllegalStateException e){ }
 
 
                 for (final Map.Entry<BlockPosition, net.minecraft.server.v1_13_R2.TileEntity> entry : craftChunk.getHandle().tileEntities.entrySet()) {

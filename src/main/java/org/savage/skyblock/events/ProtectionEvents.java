@@ -2,6 +2,7 @@ package org.savage.skyblock.events;
 
 import org.bukkit.block.*;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -29,16 +30,18 @@ public class ProtectionEvents implements Listener {
     @EventHandler (priority = EventPriority.HIGHEST)
     public void mobSpawning(EntitySpawnEvent e){
         Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(e.getEntity().getLocation());
-        if (island == null) return;
-        if (island.hasRule(Rule.MOB_SPAWNING)){
-            e.setCancelled(true);
+        if (e.getEntity() instanceof LivingEntity) {
+            if (island == null) return;
+            if (!island.hasRule(Rule.MOB_SPAWNING)) {
+                e.setCancelled(true);
+            }
         }
     }
     @EventHandler (priority = EventPriority.HIGHEST)
     public void mobSpawning(SpawnerSpawnEvent e){
         Island island = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(e.getEntity().getLocation());
         if (island == null) return;
-        if (island.hasRule(Rule.MOB_SPAWNING)){
+        if (!island.hasRule(Rule.MOB_SPAWNING)){
             e.setCancelled(true);
         }
     }
