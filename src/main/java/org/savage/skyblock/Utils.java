@@ -898,13 +898,13 @@ public class Utils {
 
     public static class numberFormat{
 
-        private static final Pattern REGEX = compile("(\\d+(?:\\.\\d+)?)([KMG]?)");
-        private static final String[] KMG = new String[] {"", "K", "M", "G"};
+        private static final Pattern REGEX = compile("(\\d+(?:\\.\\d+)?)([KMB]?)");
+        private static final String[] KMB = new String[] {"", "K", "M", "B"};
 
         public static String formatDbl(double d) {
             int i = 0;
             while (d >= 1000) { i++; d /= 1000; }
-            return round(d, 2) + KMG[i];
+            return round(d, 2) + KMB[i];
         }
 
         public static double parseDbl(String s) {
@@ -912,7 +912,7 @@ public class Utils {
             if (!m.matches()) throw new RuntimeException("Invalid number format " + s);
             int i = 0;
             long scale = 1;
-            while (!m.group(2).equals(KMG[i])) { i++; scale *= 1000; }
+            while (!m.group(2).equals(KMB[i])) { i++; scale *= 1000; }
             return parseDouble(m.group(1)) * scale;
         }
 

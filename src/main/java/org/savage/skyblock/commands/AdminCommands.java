@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.Storage;
 import org.savage.skyblock.island.Island;
+import org.savage.skyblock.island.MemoryPlayer;
 
 public class AdminCommands implements CommandExecutor {
 
@@ -45,7 +46,13 @@ public class AdminCommands implements CommandExecutor {
                             SkyBlock.getInstance().getFileManager().getWeeklyQuestFile().loadFile();
                             SkyBlock.getInstance().getFileManager().getMonthlyQuestFile().loadFile();
 
-
+                            //destroy all of the memoryplayer's scoreboards so we reload them
+                            for (MemoryPlayer memoryPlayer : Storage.memoryPlayerList){
+                                if (memoryPlayer.getScoreboard() != null){
+                                    memoryPlayer.getScoreboard().remove(memoryPlayer.getPlayer());
+                                }
+                                memoryPlayer.setScoreboard(null);
+                            }
 
 
 
@@ -61,6 +68,7 @@ public class AdminCommands implements CommandExecutor {
                             SkyBlock.getInstance().startTopTimer();
                             SkyBlock.getInstance().startCalculationTimer();
                             SkyBlock.getInstance().startCacheTimer();
+                            SkyBlock.getInstance().getIslandBoard().updateBoard();
 
                         }
                         if (args[0].equalsIgnoreCase("setspawn")) {
