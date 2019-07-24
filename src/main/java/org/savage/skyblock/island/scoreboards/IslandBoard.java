@@ -2,6 +2,7 @@ package org.savage.skyblock.island.scoreboards;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -15,7 +16,7 @@ public class IslandBoard {
 
 
     public void createScoreBoard(MemoryPlayer memoryPlayer){
-        CScoreboard scoreboard = new CScoreboard("name", "criterion", "title");
+        CScoreboard scoreboard = new CScoreboard("a", "b", "c");
         FileConfiguration f = SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig();
 
         String title = f.getString("scoreboard-title");
@@ -54,8 +55,9 @@ public class IslandBoard {
                         oldMessage = SkyBlock.getInstance().getUtils().color(oldMessage);
 
                         if (PAPI){
-                            oldMessage = PlaceholderAPI.setPlaceholders(p, oldMessage); // for PAPI
-                           // Bukkit.broadcastMessage("papi: "+oldMessage);
+                            //Bukkit.broadcastMessage("old1:" +oldMessage);
+                            oldMessage = PlaceholderAPI.setPlaceholders(p, oldMessage);
+                           // Bukkit.broadcastMessage("old2:" +oldMessage);
                         }
 
                         if (MVdW){
