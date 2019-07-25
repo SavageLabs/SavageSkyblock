@@ -31,7 +31,7 @@ public class NMSHandler_v1_13_R1 extends NMSHandler {
     }
 
     public void calculate(Chunk chunk, Island island) {
-        final CraftChunk craftChunk = (CraftChunk) chunk;
+        final CraftChunk craftChunk = (CraftChunk )chunk;
 
         final int minX = chunk.getX() << 4;
         final int minZ = chunk.getZ() << 4;
