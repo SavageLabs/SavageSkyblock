@@ -80,7 +80,9 @@ public class IslandBoard {
 
                         oldMessage = SkyBlock.getInstance().getUtils().color(oldMessage);
 
-                        if (MultiMaterials.mc17 || MultiMaterials.mc18){
+                        String ver = SkyBlock.getInstance().getReflectionManager().nmsHandler.getVersion();
+
+                        if (ver.contains("1_8") || ver.contains("1_9") || ver.contains("1_10") || ver.contains("1_11") || ver.contains("1_12")){
                             if (oldMessage.length() > 16){
                                 oldMessage = oldMessage.substring(0, Math.min(oldMessage.length(), 16));
                             }
