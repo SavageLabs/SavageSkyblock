@@ -623,6 +623,9 @@ public class Island {
                     if (m != null){
                         m.setIsland(null);
                     }
+
+                    SkyBlock.getInstance().getIslandUtils().resetQuestData(uuid);
+
                     if (Bukkit.getPlayer(uuid) != null && Bukkit.getPlayer(uuid).isOnline()) {
                         Player p = Bukkit.getPlayer(uuid);
                         p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("deletedIsland"));

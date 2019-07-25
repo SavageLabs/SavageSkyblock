@@ -172,6 +172,12 @@ public class IslandUtils {
         return null;
     }
 
+    public void resetQuestData(UUID uuid){
+        MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(uuid);
+        if (memoryPlayer != null) {
+            memoryPlayer.setCompletedQuests(new ArrayList<>());
+        }
+    }
 
 
     public void calculateIslandTop() {
@@ -238,7 +244,6 @@ public class IslandUtils {
             SkyBlock.getInstance().getReflectionManager().nmsHandler.calculate(island.getLocation().getWorld().getChunkAt(chunk.getX(), chunk.getZ()), island);
         }
         fakeChunkList.clear();
-
     }
 
     public ArrayList<Perms> buildDefaultPerms(Role role){
