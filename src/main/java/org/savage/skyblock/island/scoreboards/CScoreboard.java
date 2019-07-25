@@ -146,11 +146,11 @@ public class CScoreboard {
             this.message = message;
 
             if(scoreboard.finished){
-               // final String[] parts = splitStringWithChatcolorInHalf(message);
-                //this.team.setPrefix("69");
-                this.team.setSuffix(message);
-                //this.team.setPrefix(parts[0]);
-                //this.team.setSuffix(parts[1]);
+               final String[] parts = splitStringWithChatcolorInHalf(message);
+             //  this.team.setPrefix("69");
+             //   this.team.setSuffix(message);
+                this.team.setPrefix(parts[0]);
+                this.team.setSuffix(parts[1]);
             }
         }
 

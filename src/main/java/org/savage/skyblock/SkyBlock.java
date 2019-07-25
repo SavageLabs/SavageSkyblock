@@ -144,7 +144,7 @@ public class SkyBlock extends JavaPlugin {
 
         getQuests().loadQuests(); // load Quests
 
-        islandBoard.updateBoard();
+        islandBoard.updateBoardTimer();
 
         if (PluginHook.isEnabled("PlaceholderAPI")){
             new PAPIExpansion(this).register();

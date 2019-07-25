@@ -68,7 +68,7 @@ public class AdminCommands implements CommandExecutor {
                             SkyBlock.getInstance().startTopTimer();
                             SkyBlock.getInstance().startCalculationTimer();
                             SkyBlock.getInstance().startCacheTimer();
-                            SkyBlock.getInstance().getIslandBoard().updateBoard();
+                            SkyBlock.getInstance().getIslandBoard().updateBoardTimer();
 
                         }
                         if (args[0].equalsIgnoreCase("setspawn")) {
