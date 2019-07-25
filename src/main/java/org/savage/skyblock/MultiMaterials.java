@@ -62,7 +62,7 @@ public class MultiMaterials {
             }
         } else {
             if (!mc17) {
-                BANNER = Material.valueOf("BANNER");
+                BANNER = SkyBlock.getInstance().getUtils().getMultiVersionItem("BANNER", 0).getType();
             }
             CROPS = Material.valueOf("CROPS");
             SUGAR_CANE_BLOCK = Material.valueOf("SUGAR_CANE_BLOCK");
