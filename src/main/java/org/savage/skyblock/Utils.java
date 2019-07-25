@@ -201,7 +201,7 @@ public class Utils {
         SkyBlock.getInstance().getFileManager().getPlayerData().saveFile();
     }
 
-    public void loadPlayer(UUID pUUID){
+    public MemoryPlayer loadPlayer(UUID pUUID, boolean temp){
         List<String> data = SkyBlock.getInstance().getFileManager().getPlayerData().getFileConfig().getStringList("players");
         MemoryPlayer memoryPlayer = null;
         if (!hasMemoryPlayer(pUUID)) {
@@ -284,7 +284,7 @@ public class Utils {
                     }catch(ArrayIndexOutOfBoundsException e){ }
 
                     //create memory player
-                    memoryPlayer = new MemoryPlayer(uuid);
+                    memoryPlayer = new MemoryPlayer(uuid, temp);
 
                     memoryPlayer.setPlayerKills(playerKills);
                     memoryPlayer.setMobKills(mobKills);
@@ -319,7 +319,7 @@ public class Utils {
         }
         if (memoryPlayer == null){
             //couldn't find any data to load. we make new
-            memoryPlayer = new MemoryPlayer(pUUID);
+            memoryPlayer = new MemoryPlayer(pUUID, temp);
             Island island = SkyBlock.getInstance().getIslandUtils().getIsland(pUUID);
             if (island != null){
                 memoryPlayer.setIsland(island);
@@ -329,6 +329,7 @@ public class Utils {
             }
             memoryPlayer.setResets(0);
         }
+        return memoryPlayer;
     }
 
 
@@ -698,6 +699,14 @@ public class Utils {
             }
         }
         return null;
+    }
+
+    public MemoryPlayer getMemoryPlayerTemp(UUID uuid){
+        if (!hasMemoryPlayer(uuid)){
+            return loadPlayer(uuid, true);
+        }else{
+            return getMemoryPlayer(uuid);
+        }
     }
 
     public boolean hasPermissionAtleast(UUID uuid, String permissionBase){ // uses the cache class

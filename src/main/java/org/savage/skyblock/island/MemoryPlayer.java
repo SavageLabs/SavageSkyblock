@@ -36,9 +36,11 @@ public class MemoryPlayer {
 
     private int resets;
 
-    public MemoryPlayer(UUID uuid){
+    public MemoryPlayer(UUID uuid, boolean temp){
         this.uuid = uuid;
-        Storage.memoryPlayerList.add(this);
+        if (!temp) {
+            Storage.memoryPlayerList.add(this);
+        }
     }
 
     public List<Quest> getCompletedQuests() {

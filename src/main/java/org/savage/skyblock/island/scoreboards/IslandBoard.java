@@ -47,33 +47,34 @@ public class IslandBoard {
         }.runTaskTimer(SkyBlock.getInstance(), 0, SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getInt("scoreboard-update-time"));
     }
 
-    public void updateBoard(MemoryPlayer memoryPlayer){
-        String none = SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getString("placeholders.none");
+    public void updateBoard(MemoryPlayer memoryPlayer) {
+        if (SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getBoolean("scoreboard-enabled")) {
+            String none = SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getString("placeholders.none");
             Player p = memoryPlayer.getPlayer();
             if (p == null) return;
             CScoreboard scoreboard = memoryPlayer.getScoreboard();
-            if (scoreboard == null){
+            if (scoreboard == null) {
                 createScoreBoard(memoryPlayer);
                 scoreboard = memoryPlayer.getScoreboard();
             }
-            for (CScoreboard.Row row: scoreboard.getRows()){
+            for (CScoreboard.Row row : scoreboard.getRows()) {
                 String oldMessage = row.getOriginalMessage();
                 oldMessage = SkyBlock.getInstance().getUtils().color(oldMessage);
-                if (PAPI){
+                if (PAPI) {
                     oldMessage = PlaceholderAPI.setPlaceholders(p, oldMessage);
                 }
-                if (MVdW){
+                if (MVdW) {
                     oldMessage = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(p, oldMessage); // for MVdW
                 }
                 oldMessage = oldMessage.replace("%player%", p.getName());
                 double bal = SkyBlock.getInstance().getUtils().getBalance(p.getUniqueId());
                 oldMessage = oldMessage.replace("%money%", Utils.numberFormat.formatDbl(bal));
-                if (memoryPlayer.getIsland() != null){
+                if (memoryPlayer.getIsland() != null) {
                     oldMessage = oldMessage.replace("%island%", memoryPlayer.getIsland().getName());
-                    oldMessage = oldMessage.replace("%is-top%", memoryPlayer.getIsland().getTopPlace()+"");
+                    oldMessage = oldMessage.replace("%is-top%", memoryPlayer.getIsland().getTopPlace() + "");
                     oldMessage = oldMessage.replace("%is-worth%", Utils.numberFormat.formatDbl(memoryPlayer.getIsland().getWorth()));
                     oldMessage = oldMessage.replace("%is-bank%", Utils.numberFormat.formatDbl(memoryPlayer.getIsland().getBankBalance()));
-                }else{
+                } else {
                     oldMessage = oldMessage.replace("%island%", none);
                     oldMessage = oldMessage.replace("%is-top%", none);
                     oldMessage = oldMessage.replace("%is-worth%", none);
@@ -81,11 +82,16 @@ public class IslandBoard {
                 }
                 oldMessage = SkyBlock.getInstance().getUtils().color(oldMessage);
 
-                if (oldMessage.length() > 25){
+                if (oldMessage.length() > 25) {
                     oldMessage = oldMessage.substring(0, Math.min(oldMessage.length(), 25));
                 }
 
                 row.setMessage(oldMessage);
             }
+        }else{
+            if (memoryPlayer.getScoreboard() != null){
+                memoryPlayer.getScoreboard().remove(memoryPlayer.getPlayer());
+            }
         }
+    }
     }
