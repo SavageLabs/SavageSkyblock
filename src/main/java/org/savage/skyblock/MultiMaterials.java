@@ -5,7 +5,7 @@ import org.savage.skyblock.nms.Version;
 
 public class MultiMaterials {
 
-    public static Material SUGAR_CANE_BLOCK, BANNER, CROPS, REDSTONE_LAMP_ON,
+    public static Material SUGAR_CANE_BLOCK, CROPS, REDSTONE_LAMP_ON,
             STAINED_GLASS, STATIONARY_WATER, STAINED_CLAY, WOOD_BUTTON,
             SOIL, MOB_SPANWER, THIN_GLASS, IRON_FENCE, NETHER_FENCE, FENCE,
             WOODEN_DOOR, TRAP_DOOR, FENCE_GATE, BURNING_FURNACE, DIODE_BLOCK_OFF,
@@ -34,7 +34,7 @@ public class MultiMaterials {
         }
 
         if (mc113 || mc114) {
-            BANNER = Materials.BLACK_BANNER.parseMaterial();
+            //BANNER = Materials.BLACK_BANNER.parseMaterial();
             CROPS = Material.valueOf("LEGACY_CROPS");
             SUGAR_CANE_BLOCK = Material.valueOf("LEGACY_SUGAR_CANE_BLOCK");
             REDSTONE_LAMP_ON = Material.valueOf("LEGACY_REDSTONE_LAMP_ON");
@@ -62,7 +62,7 @@ public class MultiMaterials {
             }
         } else {
             if (!mc17) {
-                BANNER = SkyBlock.getInstance().getUtils().getMultiVersionItem("BANNER", 0).getType();
+                //BANNER = SkyBlock.getInstance().getUtils().getMultiVersionItem("BANNER", 0).getType();
             }
             CROPS = Material.valueOf("CROPS");
             SUGAR_CANE_BLOCK = Material.valueOf("SUGAR_CANE_BLOCK");
