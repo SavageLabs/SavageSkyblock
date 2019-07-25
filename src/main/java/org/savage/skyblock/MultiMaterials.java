@@ -15,6 +15,7 @@ public class MultiMaterials {
     public static boolean mc114 = false;
     public static boolean mc17 = false;
     public static boolean mc18 = false;
+    public static boolean mc12 = false;
 
     public static void setupMultiversionMaterials() {
 
@@ -25,6 +26,9 @@ public class MultiMaterials {
         }
         if (version.startsWith("18")){
             mc18 = true;
+        }
+        if (version.startsWith("12")){
+            mc12 = true;
         }
         if (version.startsWith("113")){
             mc113 = true;
