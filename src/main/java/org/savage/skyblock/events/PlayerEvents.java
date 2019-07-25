@@ -144,7 +144,7 @@ public class PlayerEvents implements Listener {
     public void joinEvent(PlayerJoinEvent e){
         Player p = e.getPlayer();
 
-       SkyBlock.getInstance().getUtils().loadPlayer(p.getUniqueId()); // load the memory player from file
+       SkyBlock.getInstance().getUtils().loadPlayer(p.getUniqueId(), false); // load the memory player from file
 
         Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
         Island island1 = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation());
