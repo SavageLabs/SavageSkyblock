@@ -6,10 +6,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.savage.skyblock.PluginHook;
-import org.savage.skyblock.SkyBlock;
-import org.savage.skyblock.Storage;
-import org.savage.skyblock.Utils;
+import org.savage.skyblock.*;
 import org.savage.skyblock.island.MemoryPlayer;
 
 public class IslandBoard {
@@ -83,8 +80,14 @@ public class IslandBoard {
 
                         oldMessage = SkyBlock.getInstance().getUtils().color(oldMessage);
 
-                        if (oldMessage.length() > 25){
-                            oldMessage = oldMessage.substring(0, Math.min(oldMessage.length(), 25));
+                        if (MultiMaterials.mc17 || MultiMaterials.mc18){
+                            if (oldMessage.length() > 16){
+                                oldMessage = oldMessage.substring(0, Math.min(oldMessage.length(), 16));
+                            }
+                        }else{
+                            if (oldMessage.length() > 25){
+                                oldMessage = oldMessage.substring(0, Math.min(oldMessage.length(), 25));
+                            }
                         }
 
                         row.setMessage(oldMessage);
