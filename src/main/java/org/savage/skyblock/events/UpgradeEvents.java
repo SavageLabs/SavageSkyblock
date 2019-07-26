@@ -1,4 +1,5 @@
 package org.savage.skyblock.events;
+import org.bukkit.Bukkit;
 import org.bukkit.CropState;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -44,6 +45,7 @@ public class UpgradeEvents implements Listener {
                         if (randomNum <= chance) {
                             //do this material
                             blockTo.setType(material);
+                            e.setCancelled(true);
                             return;
                         }
                     }
