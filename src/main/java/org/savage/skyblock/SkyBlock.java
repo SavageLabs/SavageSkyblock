@@ -351,9 +351,7 @@ public class SkyBlock extends JavaPlugin {
                             Island is = SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(p.getLocation());
                             if (is != null && getReflectionManager().nmsHandler != null){
                                 String ver = getReflectionManager().nmsHandler.getVersion();
-                                if (!ver.equalsIgnoreCase("1_14_R1") && !ver.equalsIgnoreCase("1_12_R1") && !ver.equalsIgnoreCase("1_13_R1") && !ver.equalsIgnoreCase("1_13_R2")){
-                                    SkyBlock.getInstance().getReflectionManager().nmsHandler.sendBorder(p, island.getCenterX(), island.getCenterZ(), island.getProtectionRadius());
-                                }
+                                   // SkyBlock.getInstance().getReflectionManager().nmsHandler.sendBorder(p, island.getCenterX(), island.getCenterZ(), island.getProtectionRadius());
                             }
                         }
                     }
