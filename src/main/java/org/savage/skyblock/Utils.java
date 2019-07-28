@@ -752,8 +752,6 @@ public class Utils {
         }
     }
 
-
-
     public String itemStackArrayToBase64(ItemStack[] items) throws IllegalStateException {
         try {
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
