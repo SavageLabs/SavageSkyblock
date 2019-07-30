@@ -10,7 +10,6 @@ import org.savage.skyblock.island.MemoryPlayer;
 public class IslandBoard {
 
     public boolean PAPI = PluginHook.isEnabled("PlaceholderAPI");
-    public boolean MVdW = PluginHook.isEnabled("MVdWPlaceholderAPI");
 
     public void createScoreBoard(MemoryPlayer memoryPlayer){
         CScoreboard scoreboard = new CScoreboard("a", "b", "c");
@@ -38,7 +37,6 @@ public class IslandBoard {
             @Override
             public void run() {
                 PAPI = PluginHook.isEnabled("PlaceholderAPI");
-                MVdW = PluginHook.isEnabled("MVdWPlaceholderAPI");
 
                 for (MemoryPlayer memoryPlayer : Storage.memoryPlayerList) {
                     updateBoard(memoryPlayer);
@@ -60,12 +58,11 @@ public class IslandBoard {
             for (CScoreboard.Row row : scoreboard.getRows()) {
                 String oldMessage = row.getOriginalMessage();
                 oldMessage = SkyBlock.getInstance().getUtils().color(oldMessage);
+
                 if (PAPI) {
                     oldMessage = PlaceholderAPI.setPlaceholders(p, oldMessage);
                 }
-                if (MVdW) {
-                    oldMessage = be.maximvdw.placeholderapi.PlaceholderAPI.replacePlaceholders(p, oldMessage); // for MVdW
-                }
+
                 oldMessage = oldMessage.replace("%player%", p.getName());
                 double bal = SkyBlock.getInstance().getUtils().getBalance(p.getUniqueId());
                 oldMessage = oldMessage.replace("%money%", Utils.numberFormat.formatDbl(bal));
