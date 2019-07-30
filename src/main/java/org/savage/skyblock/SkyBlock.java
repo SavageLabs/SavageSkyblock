@@ -149,9 +149,6 @@ public class SkyBlock extends JavaPlugin {
         if (PluginHook.isEnabled("PlaceholderAPI")){
             new PAPIExpansion(this).register();
         }
-        if (PluginHook.isEnabled("MVdWPlaceholderAPI")){
-            MVdPlaceholders.registerMVdPlaceholders();
-        }
 
         startTopTimer();
         startCalculationTimer();
