@@ -34,6 +34,8 @@ import static java.util.regex.Pattern.compile;
 
 public class Utils {
 
+    public String version = "";
+
     public void log(String message){
         Bukkit.getLogger().info("\n"+message+"\n");
     }
@@ -905,13 +907,13 @@ public class Utils {
 
     public static class numberFormat{
 
-        private static final Pattern REGEX = compile("(\\d+(?:\\.\\d+)?)([KMB]?)");
-        private static final String[] KMB = new String[] {"", "K", "M", "B"};
+        private static final Pattern REGEX = compile("(\\d+(?:\\.\\d+)?)([KMBT]?)");
+        private static final String[] KMBT = new String[] {"", "K", "M", "B", "T"};
 
         public static String formatDbl(double d) {
             int i = 0;
             while (d >= 1000) { i++; d /= 1000; }
-            return round(d, 2) + KMB[i];
+            return round(d, 2) + KMBT[i];
         }
 
         public static double parseDbl(String s) {
@@ -919,7 +921,7 @@ public class Utils {
             if (!m.matches()) throw new RuntimeException("Invalid number format " + s);
             int i = 0;
             long scale = 1;
-            while (!m.group(2).equals(KMB[i])) { i++; scale *= 1000; }
+            while (!m.group(2).equals(KMBT[i])) { i++; scale *= 1000; }
             return parseDouble(m.group(1)) * scale;
         }
 

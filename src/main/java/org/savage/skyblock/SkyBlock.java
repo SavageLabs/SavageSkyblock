@@ -144,6 +144,8 @@ public class SkyBlock extends JavaPlugin {
 
         getQuests().loadQuests(); // load Quests
 
+        utils.version = reflectionManager.nmsHandler.getVersion();
+
         islandBoard.updateBoardTimer();
 
         if (PluginHook.isEnabled("PlaceholderAPI")){
