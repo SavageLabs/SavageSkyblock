@@ -345,159 +345,164 @@ public class Utils {
         //layout: ownerUUID;member1,member2;x;y;z;protectionRadius
         List<String> data = SkyBlock.getInstance().getFileManager().getData().getFileConfig().getStringList("data");
 
-        for (String islandData : data){
-            String[] l = islandData.split(";");
-            UUID ownerUUID = UUID.fromString(l[0]);
-            double x = parseDouble(l[4]);
-            double y = parseDouble(l[5]);
-            double z = parseDouble(l[6]);
-            int protectionRadius = Integer.parseInt(l[7]);
-            String home = l[8];
-            String biome = l[9];
-
-            String name = l[10];
-            HashMap<Upgrade, Integer> upgradesMap = new HashMap<>();
-
-            ArrayList<Perms> visitorPerms = new ArrayList<>();
-            ArrayList<Perms> memberPerms =  new ArrayList<>();
-            ArrayList<Perms> officerPerms = new ArrayList<>();
-            ArrayList<Perms> coOwnerPerms = new ArrayList<>();
-            ArrayList<Rules> rulesList = new ArrayList<>();
-
-            Location homeLocation = null;
-
-            if (deserializeLocation(home) != null && !home.equalsIgnoreCase("")){
-                homeLocation = deserializeLocation(home);
-            }
-
-
-            String[] l2 = l[1].split(",");
-            String[] l3 = l[2].split(",");
-            String[] l4 = l[3].split(",");
-
-            List<UUID> memberList = new ArrayList<>();
-            List<UUID> officerList = new ArrayList<>();
-            List<UUID> coOwnerList = new ArrayList<>();
-
-            if (!Arrays.asList(l2).isEmpty()) {
-                for (String s : l2) {
-                    if (!s.equalsIgnoreCase("")) {
-                        memberList.add(UUID.fromString(s));
-                    }
-                }
-            }
-            if (!Arrays.asList(l3).isEmpty()) {
-                for (String s : l3) {
-                    if (!s.equalsIgnoreCase("")) {
-                        officerList.add(UUID.fromString(s));
-                    }
-                }
-            }
-            if (!Arrays.asList(l4).isEmpty()) {
-                for (String s : l4) {
-                    if (!s.equalsIgnoreCase("")) {
-                        coOwnerList.add(UUID.fromString(s));
-                    }
-                }
-            }
-
+        for (String islandData : data) {
             try {
-                String upgradeString = l[11];
-                if (!upgradeString.equalsIgnoreCase("")) {
-                    for (String upgrades : upgradeString.split(",")) {
-                        int id = Integer.parseInt(upgrades.split("!")[0]);
-                        int tier = Integer.parseInt(upgrades.split("!")[1]);
-                        upgradesMap.put(Upgrade.Upgrades.getUpgrade(id), tier);
+                String[] l = islandData.split(";");
+                UUID ownerUUID = UUID.fromString(l[0]);
+                double x = parseDouble(l[4]);
+                double y = parseDouble(l[5]);
+                double z = parseDouble(l[6]);
+                int protectionRadius = Integer.parseInt(l[7]);
+                String home = l[8];
+                String biome = l[9];
+
+                String name = l[10];
+                HashMap<Upgrade, Integer> upgradesMap = new HashMap<>();
+
+                ArrayList<Perms> visitorPerms = new ArrayList<>();
+                ArrayList<Perms> memberPerms = new ArrayList<>();
+                ArrayList<Perms> officerPerms = new ArrayList<>();
+                ArrayList<Perms> coOwnerPerms = new ArrayList<>();
+                ArrayList<Rules> rulesList = new ArrayList<>();
+
+                Location homeLocation = null;
+
+                if (deserializeLocation(home) != null && !home.equalsIgnoreCase("")) {
+                    homeLocation = deserializeLocation(home);
+                }
+
+
+                String[] l2 = l[1].split(",");
+                String[] l3 = l[2].split(",");
+                String[] l4 = l[3].split(",");
+
+                List<UUID> memberList = new ArrayList<>();
+                List<UUID> officerList = new ArrayList<>();
+                List<UUID> coOwnerList = new ArrayList<>();
+
+                if (!Arrays.asList(l2).isEmpty()) {
+                    for (String s : l2) {
+                        if (!s.equalsIgnoreCase("")) {
+                            memberList.add(UUID.fromString(s));
+                        }
                     }
                 }
-            }catch(ArrayIndexOutOfBoundsException e){}
-
-            double bankBalance = parseDouble(l[12]);
-
-            Island island = new Island("", x, y, z, ownerUUID, coOwnerList, officerList, memberList, protectionRadius, name, bankBalance);
-
-            String bankData = l[13];
-            if (!bankData.equalsIgnoreCase("")){
-                //try to convert it
-                island.createBank(bankData);
-            }
-
-            try {
-                String islandWarpString = l[14];
-
-                String visitorPermsString = l[15];
-                String memberPermsString = l[16];
-                String officerPermsString = l[17];
-                String coownerPermsString = l[18];
-
-                String ruleString = l[19];
-
-                if (!ruleString.equalsIgnoreCase("")){
-                    rulesList = deserializeRuleList(ruleString);
+                if (!Arrays.asList(l3).isEmpty()) {
+                    for (String s : l3) {
+                        if (!s.equalsIgnoreCase("")) {
+                            officerList.add(UUID.fromString(s));
+                        }
+                    }
+                }
+                if (!Arrays.asList(l4).isEmpty()) {
+                    for (String s : l4) {
+                        if (!s.equalsIgnoreCase("")) {
+                            coOwnerList.add(UUID.fromString(s));
+                        }
+                    }
                 }
 
-                if (!visitorPermsString.equalsIgnoreCase("")){
-                    visitorPerms = deserializePermList(visitorPermsString);
-                }
-                if (!memberPermsString.equalsIgnoreCase("")){
-                    memberPerms = deserializePermList(memberPermsString);
-                }
-                if (!officerPermsString.equalsIgnoreCase("")){
-                    officerPerms = deserializePermList(officerPermsString);
-                }
-                if (!coownerPermsString.equalsIgnoreCase("")){
-                    coOwnerPerms = deserializePermList(coownerPermsString);
+                try {
+                    String upgradeString = l[11];
+                    if (!upgradeString.equalsIgnoreCase("")) {
+                        for (String upgrades : upgradeString.split(",")) {
+                            int id = Integer.parseInt(upgrades.split("!")[0]);
+                            int tier = Integer.parseInt(upgrades.split("!")[1]);
+                            upgradesMap.put(Upgrade.Upgrades.getUpgrade(id), tier);
+                        }
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
                 }
 
-                if (!islandWarpString.equalsIgnoreCase("")) {
+                double bankBalance = parseDouble(l[12]);
 
-                    if (islandWarpString.contains(":")) {
-                        //has multiple island warps
-                        String[] warpList = islandWarpString.split(":");
-                        for (String warp : warpList) {
-                            String warpName = warp.split("!")[0];
-                            String warpLocation = warp.split("!")[1];
+                Island island = new Island("", x, y, z, ownerUUID, coOwnerList, officerList, memberList, protectionRadius, name, bankBalance);
 
+                String bankData = l[13];
+                if (!bankData.equalsIgnoreCase("")) {
+                    //try to convert it
+                    island.createBank(bankData);
+                }
+
+                try {
+                    String islandWarpString = l[14];
+
+                    String visitorPermsString = l[15];
+                    String memberPermsString = l[16];
+                    String officerPermsString = l[17];
+                    String coownerPermsString = l[18];
+
+                    String ruleString = l[19];
+
+                    if (!ruleString.equalsIgnoreCase("")) {
+                        rulesList = deserializeRuleList(ruleString);
+                    }
+
+                    if (!visitorPermsString.equalsIgnoreCase("")) {
+                        visitorPerms = deserializePermList(visitorPermsString);
+                    }
+                    if (!memberPermsString.equalsIgnoreCase("")) {
+                        memberPerms = deserializePermList(memberPermsString);
+                    }
+                    if (!officerPermsString.equalsIgnoreCase("")) {
+                        officerPerms = deserializePermList(officerPermsString);
+                    }
+                    if (!coownerPermsString.equalsIgnoreCase("")) {
+                        coOwnerPerms = deserializePermList(coownerPermsString);
+                    }
+
+                    if (!islandWarpString.equalsIgnoreCase("")) {
+
+                        if (islandWarpString.contains(":")) {
+                            //has multiple island warps
+                            String[] warpList = islandWarpString.split(":");
+                            for (String warp : warpList) {
+                                String warpName = warp.split("!")[0];
+                                String warpLocation = warp.split("!")[1];
+
+                                IslandWarp islandWarp = new IslandWarp(island, warpName, deserializeLocation(warpLocation));
+                                island.addIslandWarp(islandWarp);
+                            }
+                        } else {
+                            //only has 1 island warp
+                            String warpName = islandWarpString.split("!")[0];
+                            String warpLocation = islandWarpString.split("!")[1];
                             IslandWarp islandWarp = new IslandWarp(island, warpName, deserializeLocation(warpLocation));
                             island.addIslandWarp(islandWarp);
                         }
+                    }
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+
+
+                island.setVisitorPerms(visitorPerms);
+                island.setMemberPerms(memberPerms);
+                island.setOfficerPerms(officerPerms);
+                island.setCoOwnerPerms(coOwnerPerms);
+
+                island.setIslandRules(rulesList);
+
+                island.setUpgradeMap(upgradesMap);
+
+                if (name.equalsIgnoreCase("")) {
+                    if (!SkyBlock.getInstance().getIslandUtils().isIslandName(getNameFromUUID(ownerUUID))) {
+                        island.setName(getNameFromUUID(ownerUUID));
                     } else {
-                        //only has 1 island warp
-                        String warpName = islandWarpString.split("!")[0];
-                        String warpLocation = islandWarpString.split("!")[1];
-                        IslandWarp islandWarp = new IslandWarp(island, warpName, deserializeLocation(warpLocation));
-                        island.addIslandWarp(islandWarp);
+                        //taken
+                        island.setName(getNameFromUUID(ownerUUID) + "-1");
                     }
                 }
-            }catch(ArrayIndexOutOfBoundsException e){
-                e.printStackTrace();
-            }
 
-
-            island.setVisitorPerms(visitorPerms);
-            island.setMemberPerms(memberPerms);
-            island.setOfficerPerms(officerPerms);
-            island.setCoOwnerPerms(coOwnerPerms);
-
-            island.setIslandRules(rulesList);
-
-            island.setUpgradeMap(upgradesMap);
-
-            if (name.equalsIgnoreCase("")) {
-                if (!SkyBlock.getInstance().getIslandUtils().isIslandName(getNameFromUUID(ownerUUID))){
-                    island.setName(getNameFromUUID(ownerUUID));
-                }else{
-                    //taken
-                    island.setName(getNameFromUUID(ownerUUID)+"-1");
+                if (homeLocation != null) {
+                    island.setHome(homeLocation);
+                } else {
+                    island.setHome(island.getLocation());
                 }
+                //island.setBiome(Biome.valueOf(biome));
+            }catch(ArrayIndexOutOfBoundsException e){
+                System.out.println("\n\nERROR: Could not Load this Island! Try removing ALL island data if you were on an older version previously...\n\n");
             }
-
-            if (homeLocation != null){
-                island.setHome(homeLocation);
-            }else{
-                island.setHome(island.getLocation());
-            }
-            //island.setBiome(Biome.valueOf(biome));
         }
     }
 
