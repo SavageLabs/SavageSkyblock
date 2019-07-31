@@ -1,6 +1,7 @@
 package org.savage.skyblock.island.scoreboards;
 
 import jdk.nashorn.internal.objects.annotations.Getter;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -8,6 +9,9 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
+import org.savage.skyblock.SkyBlock;
+import org.savage.skyblock.Utils;
+import org.savage.skyblock.island.MemoryPlayer;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -17,6 +21,8 @@ public class CScoreboard {
 
   private final String name, criterion;
 
+  private MemoryPlayer memoryPlayer;
+
     private Scoreboard bukkitScoreboard;
     private final Objective obj;
      String title;
@@ -24,16 +30,54 @@ public class CScoreboard {
     private List<Row> rowCache = new ArrayList<>();
     private boolean finished = false;
 
-    public CScoreboard(String name, String criterion, String title){
+    public CScoreboard(String name, String criterion, String title, MemoryPlayer memoryPlayer){
         this.name = name;
         this.criterion = criterion;
         this.title = title;
+        this.memoryPlayer = memoryPlayer;
 
         this.bukkitScoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         this.obj = this.bukkitScoreboard.registerNewObjective(name, criterion);
 
         this.obj.setDisplaySlot(DisplaySlot.SIDEBAR);
         this.obj.setDisplayName(title);
+    }
+
+    public void update(){
+        if (getMemoryPlayer().getPlayer() == null){
+            return;
+        }
+
+        Player p = getMemoryPlayer().getPlayer();
+
+        if (SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getBoolean("scoreboard-enabled")) {
+            String none = SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getString("placeholders.none");
+            if (p == null) return;
+            CScoreboard scoreboard = memoryPlayer.getScoreboard();
+            if (scoreboard == null) {
+                SkyBlock.getInstance().getIslandBoard().createScoreBoard(memoryPlayer);
+                scoreboard = memoryPlayer.getScoreboard();
+            }
+            for (CScoreboard.Row row : scoreboard.getRows()) {
+                String oldMessage = row.getOriginalMessage();
+
+                oldMessage = SkyBlock.getInstance().getIslandBoard().convertPlaceholders(getMemoryPlayer(), oldMessage);
+
+                row.setMessage(oldMessage);
+            }
+        }else{
+            if (memoryPlayer.getScoreboard() != null){
+                memoryPlayer.getScoreboard().remove(memoryPlayer.getPlayer());
+            }
+        }
+    }
+
+    public MemoryPlayer getMemoryPlayer() {
+        return memoryPlayer;
+    }
+
+    public void setMemoryPlayer(MemoryPlayer memoryPlayer) {
+        this.memoryPlayer = memoryPlayer;
     }
 
     public void setTitle(String title){
@@ -146,9 +190,24 @@ public class CScoreboard {
             this.message = message;
 
             if(scoreboard.finished){
+                message = SkyBlock.getInstance().getIslandBoard().convertPlaceholders(scoreboard.getMemoryPlayer(), message);
+
                final String[] parts = splitStringWithChatcolorInHalf(message);
-             //  this.team.setPrefix("69");
-             //   this.team.setSuffix(message);
+
+                final int mid = message.length() / 2; //get the middle of the String
+               // String[] parts = {message.substring(0, mid),message.substring(mid)};
+
+                String ver = SkyBlock.getInstance().getUtils().version;
+
+                if (!(ver.equalsIgnoreCase("1_13_R1") || ver.equalsIgnoreCase("1_13_R2") || ver.equalsIgnoreCase("1_14_R1"))){
+                    if (parts[0].length() > 16) {
+                        parts[0] = parts[0].substring(0, Math.min(parts[0].length(), 16));
+                    }
+                    if (parts[1].length() > 16) {
+                        parts[1] = parts[1].substring(0, Math.min(parts[1].length(), 16));
+                    }
+                }
+
                 this.team.setPrefix(parts[0]);
                 this.team.setSuffix(parts[1]);
             }
