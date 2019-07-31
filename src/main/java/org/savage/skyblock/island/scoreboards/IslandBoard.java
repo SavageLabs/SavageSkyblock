@@ -67,20 +67,26 @@ public class IslandBoard {
                 double bal = SkyBlock.getInstance().getUtils().getBalance(p.getUniqueId());
                 oldMessage = oldMessage.replace("%money%", Utils.numberFormat.formatDbl(bal));
                 if (memoryPlayer.getIsland() != null) {
-                    oldMessage = oldMessage.replace("%island%", memoryPlayer.getIsland().getName());
+                    oldMessage = oldMessage.replace("%is-name%", memoryPlayer.getIsland().getName());
+                    oldMessage = oldMessage.replace("%is-owner%", memoryPlayer.getIsland().getOwnersName());
                     oldMessage = oldMessage.replace("%is-top%", memoryPlayer.getIsland().getTopPlace() + "");
-                    oldMessage = oldMessage.replace("%is-worth%", Utils.numberFormat.formatDbl(memoryPlayer.getIsland().getWorth()));
-                    oldMessage = oldMessage.replace("%is-bank%", Utils.numberFormat.formatDbl(memoryPlayer.getIsland().getBankBalance()));
+                    oldMessage = oldMessage.replace("%is-worth_total%", Utils.numberFormat.formatDbl(memoryPlayer.getIsland().getWorth()));
+                    oldMessage = oldMessage.replace("%is-worth_bank%", Utils.numberFormat.formatDbl(memoryPlayer.getIsland().getBankBalance()));
+                    oldMessage = oldMessage.replace("%is-worth_blocks%", Utils.numberFormat.formatDbl(memoryPlayer.getIsland().getBlockWorth()));
+                    oldMessage = oldMessage.replace("%is-worth_spawners%", Utils.numberFormat.formatDbl(memoryPlayer.getIsland().getSpawnerWorth()));
                 } else {
-                    oldMessage = oldMessage.replace("%island%", none);
+                    oldMessage = oldMessage.replace("%is-name%", none);
+                    oldMessage = oldMessage.replace("%is-owner%", none);
                     oldMessage = oldMessage.replace("%is-top%", none);
-                    oldMessage = oldMessage.replace("%is-worth%", none);
-                    oldMessage = oldMessage.replace("%is-bank%", none);
+                    oldMessage = oldMessage.replace("%is-worth_total%", none);
+                    oldMessage = oldMessage.replace("%is-worth_bank%", none);
+                    oldMessage = oldMessage.replace("%is-worth_blocks%", none);
+                    oldMessage = oldMessage.replace("%is-worth_spawners%", none);
                 }
                 oldMessage = SkyBlock.getInstance().getUtils().color(oldMessage);
 
-                if (oldMessage.length() > 25) {
-                    oldMessage = oldMessage.substring(0, Math.min(oldMessage.length(), 25));
+                if (oldMessage.length() > 32) {
+                    oldMessage = oldMessage.substring(0, Math.min(oldMessage.length(), 32));
                 }
 
                 row.setMessage(oldMessage);

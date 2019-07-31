@@ -6,14 +6,27 @@ scoreboard-enabled: true # set to false to disable scoreboard for everyone
 
 placeholders:
   none: '&c&lN/A'
+  # Integrated placeholders are:
+  # %is-name%
+  # %is-worth_total%
+  # %is-worth_bank%
+  # %is-worth_blocks%
+  # %is-worth_spawners%
+  # %is-top%
+  # %is-owner%
+
+  # PAPI placeholders @ http://wiki.prosavage.net/display/savageskyblock/Placeholders
 
 scoreboard-rows:
   - ' '
-  - '&7Island: &c%island%'
+  - '&7Island: &c%is-name%'
+  - '&7Island Owner: &c%is-owner%'
   - '&7Player: &c%player%'
   - '&7Money: &a$&l%money%'
   - ' '
-  - '&7IS-Bank: &a$&l%is-bank%'
+  - '&7IS-Bank: &a$&l%is-worth_bank%'
   - '&7IS-TOP:&a #&l%is-top%'
-  - '&7IS-Worth: &a$&l%is-worth%'
+  - '&7IS-Worth Total: &a$&l%is-worth_total%'
+  - '&7IS-Worth Blocks: &a$&l%is-worth_blocks%'
+  - '&7IS-Worth Spawners: &a$&l%is-worth_spawners%'
   - ' '

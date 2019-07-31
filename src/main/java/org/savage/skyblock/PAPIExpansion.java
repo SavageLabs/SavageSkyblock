@@ -1,6 +1,7 @@
 package org.savage.skyblock;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
@@ -114,14 +115,20 @@ public class PAPIExpansion extends PlaceholderExpansion {
             Island island = memoryPlayer.getIsland();
 
             // %someplugin_placeholder1%
-            if (identifier.equals("island")) {
+            if (identifier.equals("is-name")) {
                 if (island != null){
                     return island.getName();
                 }
                 return none;
             }
+            if (identifier.equals("is-owner")) {
+                if (island != null){
+                    return island.getOwnersName();
+                }
+                return none;
+            }
 
-            if (identifier.equals("is-bank")) {
+            if (identifier.equals("is-worth_bank")) {
                 if (island != null){
                     return SkyBlock.getInstance().getUtils().formatNumber(island.getBankBalance()+"");
                 }
@@ -134,12 +141,25 @@ public class PAPIExpansion extends PlaceholderExpansion {
                 }
                 return none;
             }
-            if (identifier.equals("is-worth")) {
+            if (identifier.equals("is-worth_total")) {
                 if (island != null){
                     return SkyBlock.getInstance().getUtils().formatNumber(island.getWorth()+"");
                 }
                 return "0";
             }
+            if (identifier.equals("is-worth_blocks")) {
+                if (island != null){
+                    return SkyBlock.getInstance().getUtils().formatNumber(island.getBlockWorth()+"");
+                }
+                return "0";
+            }
+            if (identifier.equals("is-worth_spawners")) {
+                if (island != null){
+                    return SkyBlock.getInstance().getUtils().formatNumber(island.getSpawnerWorth()+"");
+                }
+                return "0";
+            }
+
 
             // We return null if an invalid placeholder (f.e. %someplugin_placeholder3%)
             // was provided
