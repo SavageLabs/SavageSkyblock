@@ -120,6 +120,10 @@ public class Island {
         Storage.currentTop++;
     }
 
+    public String getOwnersName(){
+        return Bukkit.getOfflinePlayer(getOwnerUUID()).getName();
+    }
+
     public ArrayList<Perms> getPerms(Role role){
         if (role.equals(Role.VISITOR)){
             return visitorPerms;
