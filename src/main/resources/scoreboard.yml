@@ -3,6 +3,8 @@
 scoreboard-title: '&c&lSavageSkyBlock'
 scoreboard-update-time: 5 # in ticks, 20 ticks = 1 second, 5 ticks = 0.25 seconds
 scoreboard-enabled: true # set to false to disable scoreboard for everyone
+scoreboard-worlds:
+  - 'skyBlock'
 
 placeholders:
   none: '&c&lN/A'

@@ -18,10 +18,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.savage.skyblock.API.IslandEnterTerritoryEvent;
 import org.savage.skyblock.API.IslandLeaveTerritoryEvent;
 import org.savage.skyblock.API.IslandTeleportEvent;
@@ -33,6 +30,17 @@ import org.savage.skyblock.island.MemoryPlayer;
 import java.util.List;
 
 public class PlayerEvents implements Listener {
+
+    @EventHandler
+    public void leave(PlayerQuitEvent e){
+        MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(e.getPlayer().getUniqueId());
+        if (memoryPlayer != null) {
+            if (memoryPlayer.getScoreboard() != null) {
+                memoryPlayer.getScoreboard().remove(e.getPlayer());
+                memoryPlayer.setScoreboard(null);
+            }
+        }
+    }
 
     @EventHandler
     public void teleportEvent(PlayerTeleportEvent e){
