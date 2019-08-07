@@ -3,6 +3,8 @@
 
 settings:
 
+  world-name: 'skyBlock'
+
   faded-item:
     glowing: true
     item-id: 'stained_glass_pane'

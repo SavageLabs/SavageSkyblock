@@ -22,7 +22,7 @@ public class Storage {
     public static List<Island> islandList = new ArrayList<>();
     public static List<MemoryPlayer> memoryPlayerList = new ArrayList<>();
 
-    private static World skyBlockWorld = Bukkit.getWorld("skyBlock");
+    private static World skyBlockWorld = Bukkit.getWorld(SkyBlock.getInstance().getConfig().getString("settings.world-name"));
 
     public static World getSkyBlockWorld() {
         return skyBlockWorld;

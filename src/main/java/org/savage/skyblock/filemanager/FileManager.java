@@ -3,6 +3,7 @@ package org.savage.skyblock.filemanager;
 import org.savage.skyblock.SkyBlock;
 
 import java.io.*;
+import java.net.URISyntaxException;
 
 public class FileManager {
 
@@ -24,6 +25,12 @@ public class FileManager {
 
     public void setup() {
 
+        //try {
+        //    fileUpdate.updateFile(new File(SkyBlock.getInstance().getClass().getResource("config.yml").getPath()), new File(SkyBlock.getInstance().getDataFolder() + "/config.yml"));
+        //}catch(NullPointerException e){
+        //    e.printStackTrace();
+        //}
+
         data.setup(false, "");
         worth.setup(true, "");
         guis.setup(true, "");
@@ -41,7 +48,7 @@ public class FileManager {
             schemFolder.mkdir();
            // SkyBlock.getInstance().saveResource("Schematics/"+"default.schematic", false);
         }
-        if (!new File(schemFolder+ "/Schematics/default.schematic").exists()){
+        if (!new File(schemFolder+ "Schematics/default.schematic").exists()){
 
             SkyBlock.getInstance().saveResource("Schematics/default.schematic", false);
 
