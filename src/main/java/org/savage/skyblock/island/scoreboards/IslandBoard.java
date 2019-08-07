@@ -40,11 +40,27 @@ public class IslandBoard {
             @Override
             public void run() {
                 PAPI = PluginHook.isEnabled("PlaceholderAPI");
+                boolean enabled = SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getBoolean("scoreboard-enabled");
 
-                for (MemoryPlayer memoryPlayer : Storage.memoryPlayerList) {
-                    updateBoard(memoryPlayer);
+                if (enabled) {
+                    for (MemoryPlayer memoryPlayer : Storage.memoryPlayerList) {
+                        if (memoryPlayer.getPlayer() != null && Storage.scoreboard_worlds.contains(memoryPlayer.getPlayer().getWorld().getName())) {
+                            updateBoard(memoryPlayer);
+                        }else{
+                            memoryPlayer.getScoreboard().remove(memoryPlayer.getPlayer());
+                            memoryPlayer.setScoreboard(null);
+                        }
+                    }
+                }else{
+                    for (MemoryPlayer memoryPlayer : Storage.memoryPlayerList) {
+                        if (memoryPlayer.getScoreboard() != null){
+                            memoryPlayer.getScoreboard().remove(memoryPlayer.getPlayer());
+                            memoryPlayer.setScoreboard(null);
+                        }
+                    }
                 }
             }
+
         }.runTaskTimer(SkyBlock.getInstance(), 0, SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getInt("scoreboard-update-time"));
     }
 

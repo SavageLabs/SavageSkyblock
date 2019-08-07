@@ -50,21 +50,6 @@ public class IslandCommands implements CommandExecutor {
                         }
                     }
 
-                    if (arg1.equalsIgnoreCase("leave") || arg1.equalsIgnoreCase("quit")){
-                        //let them leave the island
-                        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
-                        if (island != null){
-                            if (!island.getOwnerUUID().equals(p.getUniqueId())){
-                                //is not owner, then we can leave freely
-                                island.leave(p.getUniqueId());
-                            }else{
-                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("isOwner"));
-                            }
-                        }else{
-                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noIsland"));
-                        }
-                    }
-
                     if (arg1.equalsIgnoreCase("quests") || arg1.equalsIgnoreCase("quest")){
                         QuestUI.openQuestMenuUI(p);
                     }
@@ -267,6 +252,22 @@ public class IslandCommands implements CommandExecutor {
 
                         }else{
                             p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notInIsland"));
+                        }
+                    }
+
+
+                    if (arg1.equalsIgnoreCase("leave") || arg1.equalsIgnoreCase("quit")){
+                        //let them leave the island
+                        Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
+                        if (island != null){
+                            if (!island.getOwnerUUID().equals(p.getUniqueId())){
+                                //is not owner, then we can leave freely
+                                island.leave(p.getUniqueId());
+                            }else{
+                                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("isOwner"));
+                            }
+                        }else{
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("noIsland"));
                         }
                     }
                 }

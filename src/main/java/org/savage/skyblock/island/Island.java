@@ -461,25 +461,6 @@ public class Island {
         return false;
     }
 
-    public boolean hasPlayersInIsland(){
-        List<UUID> uuids = new ArrayList<>();
-        uuids.add(getOwnerUUID());
-        uuids.addAll(getOfficerList());
-        uuids.addAll(getMemberList());
-        uuids.addAll(getCoownerList());
-        for (UUID uuid : uuids){
-            if (Bukkit.getPlayer(uuid) != null && Bukkit.getPlayer(uuid).isOnline()){
-                if (SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(Bukkit.getPlayer(uuid).getLocation()) != null) {
-                    if (SkyBlock.getInstance().getIslandUtils().getIslandFromLocation(Bukkit.getPlayer(uuid).getLocation()).equals(getIslandInstance())) {
-                        //in the island
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
     public void unload(){
         //unload the island data from ram, no deleting anything
         Storage.islandList.remove(getIslandInstance());
@@ -487,14 +468,20 @@ public class Island {
     }
 
     public boolean join(UUID joiner){
-        if (!getMemberList().contains(joiner) && !getOfficerList().contains(joiner)){
-
+        if (!getAllPlayers().contains(joiner)){
             IslandJoinEvent joinEvent = new IslandJoinEvent(getIslandInstance(), joiner);
             Bukkit.getPluginManager().callEvent(joinEvent);
             if (!joinEvent.isCancelled()) {
                 if (!getMemberList().contains(joiner)){
                     this.memberList.add(joiner);
-                    SkyBlock.getInstance().getUtils().getMemoryPlayer(joiner).setIsland(islandInstance);
+                    MemoryPlayer memoryPlayer = SkyBlock.getInstance().getUtils().getMemoryPlayer(joiner);
+                    if (memoryPlayer == null){
+                        memoryPlayer = SkyBlock.getInstance().getUtils().loadPlayer(joiner, false);
+                    }
+                    if (memoryPlayer != null){
+                        memoryPlayer.setIsland(islandInstance);
+                    }
+                    //SkyBlock.getInstance().getUtils().getMemoryPlayer(joiner).setIsland(islandInstance);
                 }
                 removeInvite(joiner);
                 return true;

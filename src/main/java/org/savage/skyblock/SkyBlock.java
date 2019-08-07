@@ -1,11 +1,9 @@
 package org.savage.skyblock;
 
-import com.sun.jna.Memory;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachmentInfo;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -30,6 +28,7 @@ import org.savage.skyblock.island.upgrades.Upgrade;
 import org.savage.skyblock.island.upgrades.UpgradesUI;
 import org.savage.skyblock.island.warps.WarpUI;
 import org.savage.skyblock.nms.ReflectionManager;
+import org.savage.skyblock.placeholderAddons.PAPIExpansion;
 import org.savage.skyblock.worldedit.WorldEditPersistence;
 
 import java.util.ArrayList;
@@ -145,6 +144,8 @@ public class SkyBlock extends JavaPlugin {
         getQuests().loadQuests(); // load Quests
 
         utils.version = reflectionManager.nmsHandler.getVersion();
+
+        Storage.scoreboard_worlds = getFileManager().getScoreboard().getFileConfig().getStringList("scoreboard-worlds");
 
         islandBoard.updateBoardTimer();
 
@@ -287,7 +288,11 @@ public class SkyBlock extends JavaPlugin {
                                 if (perm.toLowerCase().startsWith(permBase.toLowerCase())){
                                     //since the original permission starts with the perm we want to cache, that's our permBase
                                     //starts with it, we know we got a permission we want to cache...
-                                    int value = getUtils().getIntegersFromString(perm);
+                                    int value = 0;
+                                    try{
+                                        value = getUtils().getIntegersFromString(perm);
+                                    }catch(NumberFormatException e){}
+
                                     if (value > 0) {
                                         //value at the end of the permission is valid so we're goochi
                                         if (memoryPlayer.hasPermission(permBase)) {

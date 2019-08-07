@@ -89,7 +89,7 @@ permission-items:
       - '&7 - Status: %status%'
       - '&7&oClick to toggle allowed/denied'
   MANAGE_PERMISSIONS:
-    item-id: 'diode'
+    item-id: 'redstone'
     item-data: 0
     name: '&c&lManage Permissions'
     lore:

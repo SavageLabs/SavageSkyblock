@@ -1,8 +1,9 @@
-package org.savage.skyblock;
+package org.savage.skyblock.placeholderAddons;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.savage.skyblock.PluginHook;
+import org.savage.skyblock.SkyBlock;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.MemoryPlayer;
 
@@ -160,9 +161,6 @@ public class PAPIExpansion extends PlaceholderExpansion {
                 return "0";
             }
 
-
-            // We return null if an invalid placeholder (f.e. %someplugin_placeholder3%)
-            // was provided
         }
         return null;
     }

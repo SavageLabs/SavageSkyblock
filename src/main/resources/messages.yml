@@ -31,6 +31,12 @@ messages:
 
   reload: '&aReloaded the config.yml and the prices.yml files!'
 
+
+  #### new island command messages ####
+
+
+
+
   ##########################################################################################
   #This is the island message section
   createIsland: '&aYou have created an island!'

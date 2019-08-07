@@ -39,6 +39,8 @@ public class AdminCommands implements CommandExecutor {
                             SkyBlock.getInstance().getFileManager().getPermissions().loadFile();
                             SkyBlock.getInstance().getFileManager().getRules().loadFile();
 
+                            Storage.scoreboard_worlds = SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getStringList("scoreboard-worlds");
+
                             // quests
 
                             SkyBlock.getInstance().getFileManager().getDailyQuestFile().loadFile();
