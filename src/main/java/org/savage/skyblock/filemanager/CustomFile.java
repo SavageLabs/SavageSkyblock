@@ -3,8 +3,10 @@ package org.savage.skyblock.filemanager;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.savage.skyblock.SkyBlock;
 
+import javax.print.URIException;
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 
 public class CustomFile {
 
@@ -31,6 +33,16 @@ public class CustomFile {
                     e.printStackTrace();
                 }
             }
+        }else{
+            //already exists, try to update
+            /*
+            try {
+                fileUpdate.updateFile(new File(SkyBlock.getInstance().getClass().getResource(file.getName()).toURI()), new File(SkyBlock.getInstance().getDataFolder()+"/"+file.getName()));
+            }catch(URISyntaxException e){
+                e.printStackTrace();
+            }
+            
+             */
         }
         loadFile();
     }
