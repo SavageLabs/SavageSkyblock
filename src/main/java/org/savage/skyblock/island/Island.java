@@ -362,6 +362,22 @@ public class Island {
         }
     }
 
+    public List<Player> getAllPlayersOnline(){
+        List<Player> players = new ArrayList<>();
+        List<UUID> l = new ArrayList<>();
+        l.addAll(getOfficerList());
+        l.addAll(getMemberList());
+        l.addAll(getCoownerList());
+        l.add(getOwnerUUID());
+        for (UUID u : l){
+            Player p = Bukkit.getPlayer(u);
+            if (p != null && p.isOnline()){
+                players.add(p);
+            }
+        }
+        return players;
+    }
+
     public List<UUID> getAllPlayers(){
         List<UUID> l = new ArrayList<>();
         l.addAll(getOfficerList());

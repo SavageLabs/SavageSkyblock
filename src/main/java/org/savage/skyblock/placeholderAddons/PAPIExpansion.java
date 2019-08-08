@@ -123,6 +123,12 @@ public class PAPIExpansion extends PlaceholderExpansion {
                 }
                 return none;
             }
+            if (identifier.equals("is-count-online")){
+                if (island != null){
+                    return island.getAllPlayersOnline().size()+"";
+                }
+                return none;
+            }
 
             if (identifier.equals("is-name")) {
                 if (island != null){
