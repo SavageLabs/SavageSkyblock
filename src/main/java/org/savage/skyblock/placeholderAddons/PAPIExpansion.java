@@ -116,6 +116,14 @@ public class PAPIExpansion extends PlaceholderExpansion {
             Island island = memoryPlayer.getIsland();
 
             // %someplugin_placeholder1%
+
+            if (identifier.equals("is-count")){
+                if (island != null){
+                    return island.getAllPlayers().size()+"";
+                }
+                return none;
+            }
+
             if (identifier.equals("is-name")) {
                 if (island != null){
                     return island.getName();
