@@ -11,6 +11,8 @@ import java.util.*;
 
 public class Storage {
 
+    public static List<UUID> scoreboard_toggled = new ArrayList<>();
+
     public static List<String> permissionToCache = Arrays.asList("skyblock.block.hopper", "skyblock.block.spawner", "skyblock.members", "skyblock.protection", "skyblock.resets");
 
     public static List<String> scoreboard_worlds = new ArrayList<>();

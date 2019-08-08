@@ -25,12 +25,6 @@ public class FileManager {
 
     public void setup() {
 
-        //try {
-        //    fileUpdate.updateFile(new File(SkyBlock.getInstance().getClass().getResource("config.yml").getPath()), new File(SkyBlock.getInstance().getDataFolder() + "/config.yml"));
-        //}catch(NullPointerException e){
-        //    e.printStackTrace();
-        //}
-
         data.setup(false, "");
         worth.setup(true, "");
         guis.setup(true, "");
@@ -46,19 +40,9 @@ public class FileManager {
 
         if (!schemFolder.exists()){
             schemFolder.mkdir();
-           // SkyBlock.getInstance().saveResource("Schematics/"+"default.schematic", false);
         }
         if (!new File(schemFolder+ "Schematics/default.schematic").exists()){
-
             SkyBlock.getInstance().saveResource("Schematics/default.schematic", false);
-
-           // File schemFile = SkyBlock.getInstance().getClass().getClassLoader().getResource("")
-
-            //try {
-            //    FileUtils.copyInputStreamToFile(SkyBlock.getInstance().getResource("default.schematic"), new File(schemFolder+"/default.schematic"));
-            //} catch (IOException e) {
-            //    e.printStackTrace();
-            //}
         }
 
 

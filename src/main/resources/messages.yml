@@ -192,6 +192,9 @@ messages:
   island-locked: '&cThis island is currently locked! You cannot teleport to it.'
   island-teleport: '&aYou have teleported to Island: %island%!'
 
+  scoreboard-on: '&aTurned Island Scoreboard back on!'
+  scoreboard-off: '&cTurned Island Scoreboard off!'
+
 
   ##########################################################################################
 
