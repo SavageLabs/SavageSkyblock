@@ -6,10 +6,12 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Score;
 import org.savage.skyblock.API.IslandTeleportEvent;
 import org.savage.skyblock.Placeholder;
 import org.savage.skyblock.PluginHook;
 import org.savage.skyblock.SkyBlock;
+import org.savage.skyblock.Storage;
 import org.savage.skyblock.guis.*;
 import org.savage.skyblock.island.Island;
 import org.savage.skyblock.island.permissions.Perm;
@@ -47,6 +49,16 @@ public class IslandCommands implements CommandExecutor {
                         String[] list = {"&a&lSavage SkyBlock", " ", "&bVersion: " + Bukkit.getPluginManager().getPlugin("SavageSkyBlock").getDescription().getVersion(), "&bBy: Trent™", " "};
                         for (String s : list) {
                             p.sendMessage(SkyBlock.getInstance().getUtils().color(s));
+                        }
+                    }
+
+                    if (arg1.equalsIgnoreCase("sb") || arg1.equalsIgnoreCase("scoreboard")){
+                        if (Storage.scoreboard_toggled.contains(p.getUniqueId())){
+                            Storage.scoreboard_toggled.remove(p.getUniqueId());
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("scoreboard-on"));
+                        }else{
+                            Storage.scoreboard_toggled.add(p.getUniqueId());
+                            p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("scoreboard-off"));
                         }
                     }
 
