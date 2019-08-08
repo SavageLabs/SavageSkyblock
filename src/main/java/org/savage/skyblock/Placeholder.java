@@ -1,6 +1,5 @@
 package org.savage.skyblock;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,16 +17,7 @@ public class Placeholder {
         placeholderString = ChatColor.stripColor(SkyBlock.getInstance().getUtils().color(placeholderString));
 
             if (placeholderString.contains("%top-")) {
-                //if (placeholderString.contains("%top-me%")){
-                //    Island island = SkyBlock.getInstance().getIslandUtils().getIsland(p.getUniqueId());
-                //    if (island != null){
-                //        //Bukkit.broadcastMessage("TTTT: "+island.getTopPlace());
-                //        //return island.getTopPlace();
-                //    }
-                //}
-                //contains the placeholder, we need to figure out the number in it
-                // placeholderString = placeholderString.substring(placeholderString.lastIndexOf("%top-"));
-                // placeholderString = placeholderString.substring(placeholderString.lastIndexOf("%"));
+
                 placeholderString = placeholderString.split("%top-")[1];
 
                 placeholderString = placeholderString.split("%")[0];

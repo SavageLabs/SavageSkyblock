@@ -51,7 +51,6 @@ public class CScoreboard {
         Player p = getMemoryPlayer().getPlayer();
 
         if (SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getBoolean("scoreboard-enabled")) {
-            String none = SkyBlock.getInstance().getFileManager().getScoreboard().getFileConfig().getString("placeholders.none");
             if (p == null) return;
             CScoreboard scoreboard = memoryPlayer.getScoreboard();
             if (scoreboard == null) {
