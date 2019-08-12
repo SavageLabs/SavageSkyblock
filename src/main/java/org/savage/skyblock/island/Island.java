@@ -20,10 +20,7 @@ import org.savage.skyblock.island.upgrades.Upgrade;
 import org.savage.skyblock.island.warps.IslandWarp;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class Island {
 
@@ -308,12 +305,21 @@ public class Island {
     }
 
     public boolean blocksHas(FakeItem fakeItem) {
-        for (FakeItem fakeItems : blocks.keySet()) {
+        for (Iterator<FakeItem> i = blocks.keySet().iterator(); i.hasNext();) {
+            FakeItem item = i.next();
+            if (fakeItem.equals(item)) {
+                return true;
+            }
+        }
+        return false;
+
+       /* for (FakeItem fakeItems : blocks.keySet()) {
             if (fakeItem.equals(fakeItems)) {
                 return true;
             }
         }
         return false;
+        */
     }
 
     public int getBlockCount(FakeItem fakeItem) {
