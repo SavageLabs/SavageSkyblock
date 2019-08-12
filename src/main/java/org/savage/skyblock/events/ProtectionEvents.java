@@ -93,7 +93,6 @@ public class ProtectionEvents implements Listener {
                     p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notYours"));
                 }
             }
-
     }
 
     @EventHandler (priority = EventPriority.HIGHEST)
@@ -121,9 +120,16 @@ public class ProtectionEvents implements Listener {
             if (island == null) return;
             Role role = SkyBlock.getInstance().getIslandUtils().getRole(p.getUniqueId(), island);
             if (role == null) return;
-            if (!island.hasPerm(role, Perm.MOB_ATTACK)) {
-                e.setCancelled(true);
-                p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notYours"));
+            if (entity instanceof Player){
+                if (!island.hasRule(Rule.PVP)) {
+                    e.setCancelled(true);
+                    //p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notYours"));
+                }
+            }else {
+                if (!island.hasPerm(role, Perm.MOB_ATTACK)) {
+                    e.setCancelled(true);
+                    p.sendMessage(SkyBlock.getInstance().getUtils().getMessage("notYours"));
+                }
             }
         }
     }
